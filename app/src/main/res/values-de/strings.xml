@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">Free Budget</string>
+    <string name="title_activity_main">Übersicht</string>
+    <string name="title_activity_transaction">Neue Bewegung</string>
+    <string name="title_activity_all_transactions">Alle Bewegungen</string>
+
+    <string name="activity_main_header">Monatsübersicht</string>
+    <string name="activity_main_receipts">Einnahmen</string>
+    <string name="activity_main_spending">Ausgaben</string>
+    <string name="activity_main_total">Summe</string>
+    <string name="activity_main_transactions">Bewegungen</string>
+
+    <string name="activity_transaction_name">Bezeichnung</string>
+    <string name="activity_transaction_amount">Betrag</string>
+    <string name="activity_transaction_freq">Wiederholung</string>
+    <string name="activity_transaction_save">Speichern</string>
+    <string name="activity_transaction_saveAclose">Übernehmen</string>
+    <string name="activity_transaction_copy">Kopieren</string>
+    <string name="activity_transaction_delete">Löschen</string>
+    <string name="activity_transaction_not_define">nicht festgelegt</string>
+    <string name="activity_transaction_month_not_define">Monat eingeben</string>
+    <string name="activity_transaction_month_a_year_not_define">Monat und Jahr eingeben</string>
+    <string name="prev">zurück</string>
+    <string name="next">vor</string>
+    <string name="app_settings">Einstellungen</string>
+    <string name="app_settings_sort">Sortieren nach</string>
+    <string name="app_settings_sort_name">Bezeichnung</string>
+    <string name="app_settings_sort_cost">Betrag</string>
+    <string name="app_settings_sort_year_month">Jahr und Monat</string>
+    <string name="app_settings_sort_desc">absteigende Reihenfolge</string>
+    <string name="app_settings_save">Speichern</string>
+    <string name="app_settings_sort_notsort">nicht sortieren</string>
+    <string name="app_settings_sort_abs_cost">absolute Betrag</string>
+    <string name="menu_import_csv">CSV importieren</string>
+    <string name="menu_export_csv">CSV exportieren</string>
+    <string name="title_activity_open_file">Datei öffnen</string>
+    <string name="manage_regular">Reguläre Bewegungen verwalten</string>
+    <string name="new_regular_transaction">Neue reguläre Bewegung</string>
+    <string name="day">Tag</string>
+    <string name="activity_category">category</string>
+</resources>

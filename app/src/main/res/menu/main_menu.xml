@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_all_entry"
+        android:icon="@drawable/ic_menu_gallery"
+        android:orderInCategory="1"
+        android:title="@string/title_activity_all_transactions" />
+    <item
+        android:id="@+id/action_manage_regular"
+        android:orderInCategory="1"
+        android:title="@string/manage_regular" />
+    <item
+        android:id="@+id/action_import_csv"
+        android:orderInCategory="2"
+        android:title="@string/menu_import_csv" />
+    <item
+        android:id="@+id/action_export_csv"
+        android:orderInCategory="2"
+        android:title="@string/menu_export_csv" />
+
+ </menu>
