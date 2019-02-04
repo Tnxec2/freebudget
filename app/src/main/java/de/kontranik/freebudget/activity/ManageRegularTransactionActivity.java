@@ -10,25 +10,34 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.DragEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import de.kontranik.freebudget.OnSwipeTouchListener;
+import de.kontranik.freebudget.service.FileService;
+import de.kontranik.freebudget.service.OnSwipeTouchListener;
 import de.kontranik.freebudget.R;
+import de.kontranik.freebudget.adapter.RegularTransactionAdapter;
 import de.kontranik.freebudget.database.DatabaseAdapter;
 import de.kontranik.freebudget.model.RegularTransaction;
 
+import static de.kontranik.freebudget.activity.OpenFileActivity.RESULT_FILENAME;
 import static de.kontranik.freebudget.activity.RegularTransactionActivity.MONTH;
 import static de.kontranik.freebudget.activity.RegularTransactionActivity.TRANS_STAT;
 
 public class ManageRegularTransactionActivity extends AppCompatActivity {
+
+    static final int RESULT_OPEN_FILENAME = 234;
 
     private ListView listView_Transactions;
     private TextView textView_Month;
@@ -80,7 +89,7 @@ public class ManageRegularTransactionActivity extends AppCompatActivity {
             }
         });
 
-        listView_Transactions.setOnTouchListener(new OnSwipeTouchListener(ManageRegularTransactionActivity.this){
+        mainLayout.setOnTouchListener(new OnSwipeTouchListener(ManageRegularTransactionActivity.this){
             public void onSwipeLeft(){
                 nextMonth();
             }
@@ -198,12 +207,42 @@ public class ManageRegularTransactionActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.manageregulartransaction_menu, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch(id){
+            case R.id.action_import_csv :
+                Intent open_import = new Intent(this, OpenFileActivity.class);
+                this.startActivityForResult(open_import, RESULT_OPEN_FILENAME);
+                return true;
+            case R.id.action_export_csv :
+                try {
+                    FileService.exportFileRegular("export_freebudget_regular_transaction", this);
+                } catch (IOException e) {
+                    //e.printStackTrace();
+                    Toast.makeText(this, this.getResources().getString(R.string.exportFail, e.getLocalizedMessage()),
+                            Toast.LENGTH_LONG).show();
+                }
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
     public void onResume() {
         super.onResume();
         DatabaseAdapter adapter = new DatabaseAdapter(this);
         adapter.open();
 
-        List<RegularTransaction> transactions = adapter.getTransactions(month);
+        List<RegularTransaction> transactions = adapter.getRegular(month);
 
         // set list adapter
         transactionAdapter = new RegularTransactionAdapter(this,
@@ -213,6 +252,31 @@ public class ManageRegularTransactionActivity extends AppCompatActivity {
         listView_Transactions.setAdapter(transactionAdapter);
 
         adapter.close();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        switch (requestCode) {
+            case RESULT_OPEN_FILENAME:
+                if (resultCode == RESULT_OK) {
+                    String fileName = data.getStringExtra(RESULT_FILENAME);
+
+                    Toast.makeText(this,
+                            this.getResources().getString(R.string.importFromFile, fileName),
+                            Toast.LENGTH_SHORT).show();
+
+                    try {
+                        FileService.importFileRegular(fileName, this);
+                        this.getTransactions();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Toast.makeText(this, this.getResources().getString(R.string.importFail, e.getMessage()),
+                                Toast.LENGTH_LONG).show();
+                    }
+                }
+                break;
+        }
     }
 
     public void prevMonth(View view){
@@ -242,25 +306,25 @@ public class ManageRegularTransactionActivity extends AppCompatActivity {
         DatabaseAdapter adapter = new DatabaseAdapter(this);
         adapter.open();
 
-        List<RegularTransaction> transactions = adapter.getTransactions(this.month);
+        List<RegularTransaction> transactions = adapter.getRegular(this.month);
 
         // set list adapter
         transactionAdapter = new RegularTransactionAdapter(this,
                 R.layout.layout_regular_transaction_item,
                 transactions);
 
-        double cost;
+        double amount;
         double receipts = 0;
         double spending = 0;
         double total = 0;
         for (RegularTransaction transaction: transactions) {
-            cost = transaction.getAmount();
-            if (cost > 0) {
-                receipts += cost;
+            amount = transaction.getAmount();
+            if (amount > 0) {
+                receipts += amount;
             } else {
-                spending += Math.abs(cost);
+                spending += Math.abs(amount);
             }
-            total += cost;
+            total += amount;
         }
 
         textView_spending.setText(String.format(Locale.getDefault(),"%1$,.2f", spending));

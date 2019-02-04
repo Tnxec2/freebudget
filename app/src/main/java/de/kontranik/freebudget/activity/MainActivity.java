@@ -1,61 +1,101 @@
 package de.kontranik.freebudget.activity;
 
+import android.annotation.SuppressLint;
+import android.content.ClipData;
 import android.content.Intent;
-import android.os.Environment;
+import android.os.Build;
+import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.ContextMenu;
+import android.view.DragEvent;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import de.kontranik.freebudget.OnSwipeTouchListener;
 import de.kontranik.freebudget.R;
+import de.kontranik.freebudget.adapter.TransactionAdapter;
 import de.kontranik.freebudget.database.DatabaseAdapter;
 import de.kontranik.freebudget.model.Transaction;
+import de.kontranik.freebudget.service.PlanRegular;
 
 public class MainActivity extends AppCompatActivity {
 
     private ListView listView_Transactions;
     private TextView textView_Year, textView_Month;
-    private TextView textView_receipts, textView_spending, textView_total;
-    private int year, month;
-    private String[] months;
-    TransactionAdapter transactionAdapter;
-    static final int RESULT_OPEN_FILENAME = 123;
+    private TextView textView_receipts_planed, textView_spending_planed, textView_total_planed;
+    private TextView textView_receipts_fact, textView_spending_fact, textView_total_fact;
+    private Button btn_planRegular;
+    private FloatingActionButton fab_add, fab_add_plus, fab_add_minus, fab_add_plus_planed, fab_add_minus_planed;
 
+    private int year, month;
+
+    private String[] months;
+
+    List<Transaction> transactionList = new ArrayList<>();
+    TransactionAdapter transactionAdapter;
+
+    Boolean isMove;
+
+    static final int RESULT_CODE = 123;
+
+    public static final String TRANS_STAT = "TRANS_STAT";
+    public static final String TRANS_STAT_PLUS = "plus";
+    public static final String TRANS_STAT_MINUS = "minus";
+    public static final String TRANS_TYP = "TRANS_TYP";
+    public static final String TRANS_TYP_PLANED = "planed";
+    public static final String TRANS_TYP_FACT= "fact";
+
+    double amount_planed, amount_fact;
+    double receipts_planed = 0;
+    double receipts_fact = 0;
+    double spending_planed = 0;
+    double spending_fact = 0;
+    double total_planed = 0;
+    double total_fact = 0;
+
+    boolean showOnlyPlaned = false;
+
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         setTitle(R.string.title_activity_main);
-        listView_Transactions = (ListView)findViewById(R.id.listView_transactions);
-        textView_Month = (TextView)findViewById(R.id.textView_Month);
-        textView_Year = (TextView)findViewById(R.id.textView_Year);
+        listView_Transactions = findViewById(R.id.listView_transactions);
+        textView_Month = findViewById(R.id.textView_Month);
+        textView_Year = findViewById(R.id.textView_Year);
 
-        textView_receipts = (TextView)findViewById(R.id.textView_receipts);
-        textView_spending = (TextView)findViewById(R.id.textView_spending);
-        textView_total = (TextView)findViewById(R.id.textView_total);
+        textView_receipts_planed = findViewById(R.id.textView_receipts_planed);
+        textView_receipts_fact = findViewById(R.id.textView_receipts_fact);
+        textView_spending_planed = findViewById(R.id.textView_spending_planed);
+        textView_spending_fact = findViewById(R.id.textView_spending_fact);
+        textView_total_planed = findViewById(R.id.textView_total_planed);
+        textView_total_fact = findViewById(R.id.textView_total_fact);
 
-        LinearLayout mainLayout = (LinearLayout) findViewById(R.id.mainlayout);
+        btn_planRegular = findViewById(R.id.btn_planRegular);
+
+        fab_add = findViewById(R.id.fab_add);
+        fab_add_plus = findViewById(R.id.fab_add_plus);
+        fab_add_minus = findViewById(R.id.fab_add_minus);
+        fab_add_plus_planed = findViewById(R.id.fab_add_plus_planed);
+        fab_add_minus_planed = findViewById(R.id.fab_add_minus_planed);
 
         this.months = getResources().getStringArray(R.array.months);
 
@@ -69,30 +109,199 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Transaction entry = transactionAdapter.getItem(position);
-                if(entry!=null) {
-                    Intent intent = new Intent(getApplicationContext(), TransactionActivity.class);
-                    intent.putExtra("id", entry.getId());
-                    intent.putExtra("click", 25);
-                    startActivity(intent);
+                editTransaction(entry);
+            }
+        });
+
+        // set list adapter
+        transactionAdapter = new TransactionAdapter(this,
+                R.layout.layout_transaction_item,
+                transactionList);
+
+        // set adapter
+        listView_Transactions.setAdapter(transactionAdapter);
+        // Register the ListView  for Context menu
+        registerForContextMenu(listView_Transactions);
+
+
+        fab_add.setOnTouchListener(new View.OnTouchListener () {
+            public boolean onTouch (View view, MotionEvent motionEvent){
+                isMove = false;
+                if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
+                    ClipData data = ClipData.newPlainText("", "");
+                    fab_add.setImageResource(R.drawable.ic_euro_symbol_white_24dp);
+                    View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        view.startDragAndDrop(data, shadowBuilder, view, 0);
+                    } else {
+                        //noinspection deprecation
+                        view.startDrag(data, shadowBuilder, view, 0);
+                    }
+                    fab_add_plus.setVisibility(View.VISIBLE);
+                    fab_add_minus.setVisibility(View.VISIBLE);
+                    fab_add_plus_planed.setVisibility(View.VISIBLE);
+                    fab_add_minus_planed.setVisibility(View.VISIBLE);
+                    fab_add.setVisibility(View.INVISIBLE);
+                    isMove = true;
+                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    if(!isMove) {
+                        add(TRANS_STAT_MINUS, TRANS_TYP_FACT);
+                    }
+                } else if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    fab_add_plus.setVisibility(View.VISIBLE);
+                    fab_add_minus.setVisibility(View.VISIBLE);
+                    fab_add_plus_planed.setVisibility(View.VISIBLE);
+                    fab_add_minus_planed.setVisibility(View.VISIBLE);
+                    fab_add.setVisibility(View.VISIBLE);
                 }
+                return true;
             }
         });
 
-        mainLayout.setOnTouchListener(new OnSwipeTouchListener(MainActivity.this){
-            public void onSwipeLeft(){
-                nextMonth();
+        listView_Transactions.setOnDragListener(new View.OnDragListener() {
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+                int action = event.getAction();
+                switch (action) {
+                    case DragEvent.ACTION_DRAG_STARTED:
+                        break;
+                    case DragEvent.ACTION_DRAG_ENTERED:
+                        break;
+                    case DragEvent.ACTION_DRAG_EXITED:
+                        break;
+                    case DragEvent.ACTION_DROP:
+                        setNormalStat();
+                        break;
+                    case DragEvent.ACTION_DRAG_ENDED:
+                        setNormalStat();
+                        break;
+                    default:
+                        break;
+                }
+                return true;
             }
-            public void onSwipeRight(){
-                prevMonth();
+        });
+        fab_add_plus.setOnDragListener(new View.OnDragListener() {
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+                int action = event.getAction();
+                switch (action) {
+                    case DragEvent.ACTION_DRAG_STARTED:
+                        break;
+                    case DragEvent.ACTION_DRAG_ENTERED:
+                        break;
+                    case DragEvent.ACTION_DRAG_EXITED:
+                        break;
+                    case DragEvent.ACTION_DROP:
+                        add(TRANS_STAT_PLUS, TRANS_TYP_FACT);
+                        break;
+                    case DragEvent.ACTION_DRAG_ENDED:
+                        break;
+                    default:
+                        break;
+                }
+                return true;
+            }
+        });
+        fab_add_minus.setOnDragListener(new View.OnDragListener() {
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+                int action = event.getAction();
+                switch (action) {
+                    case DragEvent.ACTION_DRAG_STARTED:
+                        // do nothing
+                        break;
+                    case DragEvent.ACTION_DRAG_ENTERED:
+                        break;
+                    case DragEvent.ACTION_DRAG_EXITED:
+                        break;
+                    case DragEvent.ACTION_DROP:
+                        add(TRANS_STAT_MINUS, TRANS_TYP_FACT);
+                        break;
+                    case DragEvent.ACTION_DRAG_ENDED:
+                        break;
+                    default:
+                        break;
+                }
+                return true;
+            }
+        });
+        fab_add_plus_planed.setOnDragListener(new View.OnDragListener() {
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+                int action = event.getAction();
+                switch (action) {
+                    case DragEvent.ACTION_DRAG_STARTED:
+                        break;
+                    case DragEvent.ACTION_DRAG_ENTERED:
+                        break;
+                    case DragEvent.ACTION_DRAG_EXITED:
+                        break;
+                    case DragEvent.ACTION_DROP:
+                        add(TRANS_STAT_PLUS, TRANS_TYP_PLANED);
+                        break;
+                    case DragEvent.ACTION_DRAG_ENDED:
+                        break;
+                    default:
+                        break;
+                }
+                return true;
+            }
+        });
+        fab_add_minus_planed.setOnDragListener(new View.OnDragListener() {
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+                int action = event.getAction();
+                switch (action) {
+                    case DragEvent.ACTION_DRAG_STARTED:
+                        // do nothing
+                        break;
+                    case DragEvent.ACTION_DRAG_ENTERED:
+                        break;
+                    case DragEvent.ACTION_DRAG_EXITED:
+                        break;
+                    case DragEvent.ACTION_DROP:
+                        add(TRANS_STAT_MINUS, TRANS_TYP_PLANED);
+                        break;
+                    case DragEvent.ACTION_DRAG_ENDED:
+                        break;
+                    default:
+                        break;
+                }
+                return true;
             }
         });
 
+        // getTransactions();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
         getMenuInflater().inflate(R.menu.main_menu, menu);
+
+        MenuItem item = menu.findItem(R.id.app_bar_switch);
+        item.setActionView(R.layout.switch_item);
+
+        final Switch mySwitch = item.getActionView().findViewById(R.id.switch_id);
+        mySwitch.setText(R.string.all);
+
+        mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // do something based on isChecked
+                showOnlyPlaned = isChecked;
+
+                if ( showOnlyPlaned) {
+                    mySwitch.setText(R.string.only_planed);
+                } else {
+                    mySwitch.setText(R.string.all);
+                }
+
+                getTransactions();
+            }
+        });
+
         return true;
     }
 
@@ -102,62 +311,13 @@ public class MainActivity extends AppCompatActivity {
         Intent intent;
         switch(id){
             case R.id.action_all_entry :
-                intent = new Intent(this, AllTransactionsActivity.class);
+                intent = new Intent(this, ManagePlanedTransactionsActivity.class);
                 startActivity(intent);
                 return true;
             case R.id.action_manage_regular :
                 intent = new Intent( this, ManageRegularTransactionActivity.class);
                 startActivity(intent);
                 return true;
-            case R.id.action_import_csv :
-                Intent open_import = new Intent(this, OpenFileActivity.class);
-                this.startActivityForResult(open_import, RESULT_OPEN_FILENAME);
-                return true;
-            case R.id.action_export_csv :
-                DatabaseAdapter adapter = new DatabaseAdapter(this);
-                adapter.open();
-
-                List<Transaction> transactions = adapter.getTransactions(this);
-
-                DateFormat df2 = new SimpleDateFormat("dd-MM-yyyy_HH-mm-ss", Locale.getDefault());
-
-                String FILENAME = "export_" + df2.format(new Date())+ ".csv";
-                File directory = Environment.getExternalStorageDirectory();
-                File file_export = new File(directory, FILENAME);
-                try {
-                    FileWriter out = new FileWriter(file_export);
-
-                    for (Transaction tr: transactions) {
-                        // long id,
-                        // String name,
-                        // String type,
-                        // double cost,
-                        // String freq,
-                        // int year,
-                        // int month,
-                        // long date
-                        out.append(
-                                    tr.getDescription() + ";" +
-                                    String.valueOf(tr.getAmount_fact()) + ";" +
-                                    String.valueOf(tr.getYear()) + ";" +
-                                    String.valueOf(tr.getMonth()) + ";" +
-                                    String.valueOf(tr.getDate_fact()) + "\n"
-                        );
-                    }
-
-                    out.close();
-                    adapter.close();
-                    Toast.makeText(getApplicationContext(),
-                            "export OK to file:\n " +  file_export,
-                            Toast.LENGTH_LONG).show();
-                    return true;
-                } catch (Exception e) {
-                    Toast.makeText(getApplicationContext(),
-                            "export error.\n" + e ,
-                            Toast.LENGTH_LONG).show();
-                    Log.d("NIK", e.toString());
-                    return false;
-                }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -170,54 +330,70 @@ public class MainActivity extends AppCompatActivity {
 
     public void getTransactions () {
 
-        DatabaseAdapter adapter = new DatabaseAdapter(this);
-        adapter.open();
+        DatabaseAdapter dbAdapter = new DatabaseAdapter(this);
+        dbAdapter.open();
 
-        List<Transaction> transactions = adapter.getTransactions(this.year, this.month);
+        /*
+         * damit ListAdapter mitkriegt, dass die Liste geändert wurde,
+         * muss diese Liste hier zuerst geputzt werden
+         * und danach neue Liste ge-added werden
+         */
 
-        // set list adapter
-        transactionAdapter = new TransactionAdapter(this,
-                                            R.layout.layout_transaction_item,
-                                            transactions);
+        transactionList.clear();
+        //transactionList.addAll( dbAdapter.getTransactions(this.year, this.month, this.showOnlyPlaned) );
 
-        double cost;
-        double receipts = 0;
-        double spending = 0;
-        double total = 0;
-        for (Transaction transaction: transactions) {
-            cost = transaction.getAmount_fact();
-            if (cost > 0) {
-                receipts += cost;
-            } else {
-                spending += Math.abs(cost);
+        List<Transaction> dbTransactions = dbAdapter.getTransactions(this.year, this.month, false) ;
+
+        for (Transaction transaction: dbTransactions) {
+            amount_planed = transaction.getAmount_planed();
+            if (amount_planed > 0) receipts_planed += amount_planed;
+            else spending_planed += Math.abs(amount_planed);
+            total_planed = total_planed + amount_planed;
+
+            amount_fact = transaction.getAmount_fact();
+            if (amount_fact > 0) receipts_fact += amount_fact;
+            else spending_fact += Math.abs(amount_fact);
+            total_fact += amount_fact;
+
+            /*
+             * bereits gebuchte Transactionen überlesen
+             */
+            if ( !showOnlyPlaned || transaction.getAmount_fact() == 0 ) {
+                transactionList.add(transaction);
             }
-            total += cost;
         }
 
-        textView_spending.setText(String.format(Locale.getDefault(),"%1$,.2f", spending));
-        textView_receipts.setTextColor(ContextCompat.getColor(this, R.color.colorGreen));
-        textView_receipts.setText(String.format(Locale.getDefault(),"%1$,.2f", receipts));
-        textView_spending.setTextColor(ContextCompat.getColor(this, R.color.colorRed));
-        textView_total.setText(String.format(Locale.getDefault(),"%1$,.2f", total));
-        if (total > 0) {
-            textView_total.setTextColor(ContextCompat.getColor(this, R.color.colorGreen));
+        setSummen();
+
+        dbAdapter.close();
+
+        //
+        if ( transactionList.size() == 0) {
+            btn_planRegular.setVisibility(View.VISIBLE);
         } else {
-            textView_total.setTextColor(ContextCompat.getColor(this, R.color.colorRed));
+            btn_planRegular.setVisibility(View.GONE);
         }
 
-        // set adapter
-        listView_Transactions.setAdapter(transactionAdapter);
-        adapter.close();
+        // und den Adapter aktualisieren
+        transactionAdapter.notifyDataSetChanged();
     }
 
     public void prevYear(View view){
+        prevYear();
+    }
+
+    public void nextYear(View view){
+        nextYear();
+    }
+
+    public void prevYear(){
         if (this.year == 2000 ) return;
         this.year = this.year - 1;
         this.textView_Year.setText(String.format(Locale.getDefault(),"%d", this.year));
         this.getTransactions();
     }
 
-    public void nextYear(View view){
+    public void nextYear(){
         if (this.year == 2100 ) return;
         this.year = this.year + 1;
         this.textView_Year.setText(String.format(Locale.getDefault(),"%d", this.year));
@@ -233,106 +409,129 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void prevMonth(){
-        if (this.month == 1 ) return;
-        this.month = this.month - 1;
-        this.textView_Month.setText(this.months[this.month]);
-        this.getTransactions();
+        if (this.month == 1 ) {
+            this.month = 12;
+            this.textView_Month.setText(this.months[this.month]);
+            prevYear();
+        } else {
+            this.month = this.month - 1;
+            this.textView_Month.setText(this.months[this.month]);
+            this.getTransactions();
+        }
     }
     public void nextMonth(){
-        if (this.month == 12 ) return;
-        this.month = this.month + 1;
-        this.textView_Month.setText(this.months[this.month]);
-        this.getTransactions();
+        if (this.month == 12 ) {
+            this.month = 1;
+            this.textView_Month.setText(this.months[this.month]);
+            nextYear();
+        } else {
+            this.month = this.month + 1;
+            this.textView_Month.setText(this.months[this.month]);
+            this.getTransactions();
+        }
+    }
+
+    public void planRegular(View view) {
+        PlanRegular.setRegularToPlaned(this, year, month);
+        getTransactions();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        int s_id ;
-        String s_name;
-        Double s_cost ;
-        String s_freq ;
-        Long s_date ;
-        int s_year;
-        int s_month;
-        boolean import_status = true;
         DatabaseAdapter adapter = new DatabaseAdapter(this);
         switch (requestCode) {
-            case RESULT_OPEN_FILENAME:
+            case RESULT_CODE:
                 if (resultCode == RESULT_OK) {
-                    String fileName = data.getStringExtra("fileName");
-                    //String shortFileName = data.getStringExtra("shortFileName");
-
-                    Toast.makeText(this,
-                            "import to file: " + fileName,
-                            Toast.LENGTH_SHORT).show();
-
-                    FileReader file;
-                    try {
-                        file = new FileReader(fileName);
-                        BufferedReader buffer = new BufferedReader(file);
-                        String line ;
-                        adapter.open();
-                        while (( line = buffer.readLine()) != null) {
-                            String[] str = line.split(";");
-                            if (str.length == 7) {
-                                Transaction transaction;
-                                // long id,
-                                // String name,
-                                // String type,
-                                // double cost,
-                                // String freq,
-                                // int year,
-                                // int month,
-                                // long date
-                                 try {
-                                    s_id = 0;
-                                    s_name = str[0];
-                                    s_cost = Double.valueOf(str[2].replace(',','.'));
-                                    s_freq = str[3];
-                                     if( !s_freq.equals("m") && !s_freq.equals("y") && !s_freq.equals("o") ) continue; //fehler
-                                    s_year = Integer.valueOf(str[4]);
-                                     if(s_year < 0) continue; //fehler
-                                    s_month = Integer.valueOf(str[5]);
-                                     if(s_month < 0 || s_month > 12) continue; //fehler
-                                    s_date = Long.valueOf(str[6]);
-
-                                    /*
-                                    transaction = new Transaction(
-                                        ???
-                                    );
-                                    adapter.insert(transaction);
-                                    */
-                                } catch (Exception e) {
-                                    Toast.makeText(getApplicationContext(),
-                                            "File read error\n" + e.toString() ,
-                                            Toast.LENGTH_SHORT).show();
-                                }
-                            } else {
-                                Toast.makeText(getApplicationContext(),
-                                        "File read error. Line:\n" + line ,
-                                        Toast.LENGTH_SHORT).show();
-                                import_status = false;
-                            }
-                        }
-                        adapter.close();
-                        if (import_status) {
-                            Toast.makeText(getApplicationContext(),
-                                    "Import ok",
-                                    Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(getApplicationContext(),
-                                    "Import fail",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        Toast.makeText(getApplicationContext(),"File read error: " + fileName +
-                                ". Format: name; type (r / o); cost; freq (o / m / y); year; month; date (0)",
-                                Toast.LENGTH_LONG).show();
-                    }
-
                 }
                 break;
+        }
+    }
+
+    public void add(String transStat, String planed){
+        setNormalStat();
+        Intent intent = new Intent(this, TransactionActivity.class);
+        intent.putExtra(TRANS_STAT, transStat);
+        intent.putExtra(TRANS_TYP, planed);
+        startActivity(intent);
+    }
+
+    private void setNormalStat(){
+        fab_add.setImageResource(R.drawable.ic_add_white_24dp);
+        fab_add.setVisibility(View.VISIBLE);
+        fab_add_plus.setVisibility(View.INVISIBLE);
+        fab_add_minus.setVisibility(View.INVISIBLE);
+        fab_add_plus_planed.setVisibility(View.INVISIBLE);
+        fab_add_minus_planed.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo)
+    {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.transaction_list_popup_menu, menu);
+
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item){
+
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        int listPosition = info.position;
+
+        Transaction transaction = transactionList.get(listPosition);
+        if(item.getItemId()==R.id.popup_edit){
+            editTransaction(transaction);
+        }
+        else if(item.getItemId()==R.id.popup_delete){
+            deleteTransaction(transaction);
+        }else{
+            return false;
+        }
+        return true;
+    }
+
+    private void editTransaction(Transaction entry) {
+        if(entry!=null) {
+            Intent intent = new Intent(getApplicationContext(), TransactionActivity.class);
+            intent.putExtra("id", entry.getId());
+            intent.putExtra("click", 25);
+            startActivity(intent);
+        }
+    }
+
+    private void deleteTransaction(Transaction entry) {
+        DatabaseAdapter databaseAdapter = new DatabaseAdapter(this);
+        databaseAdapter.open();
+        databaseAdapter.deleteTransaction(entry.getId());
+        databaseAdapter.close();
+    }
+
+    private void setSummen() {
+        textView_spending_planed.setText(String.format(Locale.getDefault(),"%1$,.2f", spending_planed));
+        textView_spending_planed.setTextColor(ContextCompat.getColor(this, R.color.colorRed));
+
+        textView_spending_fact.setText(String.format(Locale.getDefault(),"%1$,.2f", spending_fact));
+        textView_spending_fact.setTextColor(ContextCompat.getColor(this, R.color.colorRed));
+
+        textView_receipts_planed.setText(String.format(Locale.getDefault(),"%1$,.2f", receipts_planed));
+        textView_receipts_planed.setTextColor(ContextCompat.getColor(this, R.color.colorGreen));
+
+        textView_receipts_fact.setText(String.format(Locale.getDefault(),"%1$,.2f", receipts_fact));
+        textView_receipts_fact.setTextColor(ContextCompat.getColor(this, R.color.colorGreen));
+
+        textView_total_fact.setText(String.format(Locale.getDefault(),"%1$,.2f", total_fact));
+        textView_total_planed.setText(String.format(Locale.getDefault(),"%1$,.2f", total_planed));
+
+        if (total_planed > 0) {
+            textView_total_planed.setTextColor(ContextCompat.getColor(this, R.color.colorGreen));
+        } else {
+            textView_total_planed.setTextColor(ContextCompat.getColor(this, R.color.colorRed));
+        }
+        if (total_fact > 0) {
+            textView_total_fact.setTextColor(ContextCompat.getColor(this, R.color.colorGreen));
+        } else {
+            textView_total_fact.setTextColor(ContextCompat.getColor(this, R.color.colorRed));
         }
     }
 }

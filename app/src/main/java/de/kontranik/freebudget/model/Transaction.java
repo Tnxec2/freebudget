@@ -12,59 +12,46 @@ public class Transaction {
     private int day;
     private String description;
     private String category;
-    private long date_planed;
-    private long date_fact;
+    private long date;
     private double amount_planed;
     private double amount_fact;
     private long date_create;
     private RegularTransaction regular;
 
-    public Transaction(long id, long regular_id, String description, String category, long date_planed, long date_fact, double amount_planed, double amount_fact, long date_create) {
+    public Transaction(long id, long regular_id, String description, String category, long date, double amount_planed, double amount_fact, long date_create) {
         this.id = id;
         this.regular_id = regular_id;
         this.description = description;
         this.category = category;
-        this.date_planed = date_planed;
-        this.date_fact = date_fact;
+        this.date = date;
         this.amount_planed = amount_planed;
         this.amount_fact = amount_fact;
         this.date_create = date_create;
 
-        if ( date_fact > 0) {
+        if ( date > 0) {
             Calendar cal = Calendar.getInstance();
-            cal.setTimeInMillis(date_fact);
+            cal.setTimeInMillis(date);
             this.year  = cal.get(Calendar.YEAR);
-            this.month = cal.get(Calendar.MONTH);
-            this.day = cal.get(Calendar.DAY_OF_MONTH);
-        } else if ( date_planed > 0) {
-            Calendar cal = Calendar.getInstance();
-            cal.setTimeInMillis(date_planed);
-            this.year  = cal.get(Calendar.YEAR);
+            this.month = cal.get(Calendar.MONTH) + 1;
             this.day = cal.get(Calendar.DAY_OF_MONTH);
         }
     }
 
-    public Transaction(long id, long regular_id, String description, String category, long date_planed, long date_fact, double amount_planed, double amount_fact) {
+    public Transaction(long id, long regular_id, String description, String category, long date, double amount_planed, double amount_fact) {
         this.id = id;
         this.regular_id = regular_id;
         this.description = description;
         this.category = category;
-        this.date_planed = date_planed;
-        this.date_fact = date_fact;
+        this.date = date;
         this.amount_planed = amount_planed;
         this.amount_fact = amount_fact;
         this.date_create = new Date().getTime();
 
-        if ( date_fact > 0) {
+        if ( date > 0) {
             Calendar cal = Calendar.getInstance();
-            cal.setTimeInMillis(date_fact);
+            cal.setTimeInMillis(date);
             this.year  = cal.get(Calendar.YEAR);
-            this.month = cal.get(Calendar.MONTH);
-            this.day = cal.get(Calendar.DAY_OF_MONTH);
-        } else if ( date_planed > 0) {
-            Calendar cal = Calendar.getInstance();
-            cal.setTimeInMillis(date_planed);
-            this.year  = cal.get(Calendar.YEAR);
+            this.month = cal.get(Calendar.MONTH) + 1;
             this.day = cal.get(Calendar.DAY_OF_MONTH);
         }
     }
@@ -101,20 +88,8 @@ public class Transaction {
         this.category = category;
     }
 
-    public long getDate_planed() {
-        return date_planed;
-    }
-
-    public void setDate_planed(long date_planed) {
-        this.date_planed = date_planed;
-    }
-
-    public long getDate_fact() {
-        return date_fact;
-    }
-
-    public void setDate_fact(long date_fact) {
-        this.date_fact = date_fact;
+    public long getDate() {
+        return date;
     }
 
     public double getAmount_planed() {

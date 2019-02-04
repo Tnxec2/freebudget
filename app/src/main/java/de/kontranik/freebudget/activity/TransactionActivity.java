@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -11,34 +12,47 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.RadioButton;
+import android.widget.Switch;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import de.kontranik.freebudget.R;
+import de.kontranik.freebudget.service.SoftKeyboard;
 import de.kontranik.freebudget.database.DatabaseAdapter;
 import de.kontranik.freebudget.model.Category;
 import de.kontranik.freebudget.model.Transaction;
 
+import static de.kontranik.freebudget.activity.MainActivity.TRANS_STAT_MINUS;
+import static de.kontranik.freebudget.activity.MainActivity.TRANS_STAT_PLUS;
+import static de.kontranik.freebudget.activity.MainActivity.TRANS_TYP;
+import static de.kontranik.freebudget.activity.MainActivity.TRANS_TYP_PLANED;
+import static de.kontranik.freebudget.activity.ManagePlanedTransactionsActivity.TRANS_STAT;
 import static de.kontranik.freebudget.activity.CategoryListActivity.RESULT_CATEGORY;
 
 public class TransactionActivity extends AppCompatActivity {
 
     static final int PICK_CATEGORY_REQUEST = 123;  // The request code
 
-    private EditText descriptionBox;
-    private AutoCompleteTextView categoryBox;
-    private EditText amountBox;
-    private EditText dateBox;
-    private Button delButton, copyButton;
+    private EditText editTextDescription;
+    private AutoCompleteTextView acTextViewCategory;
+    private EditText editTextAmountPlanned, editTextAmountFact;
+    private EditText editTextDate;
+    private Button btnDelete, btnCopy;
+    ImageButton btn_copy_amount;
     private DatabaseAdapter dbAdapter;
     private long transactionID = 0;
     private RadioButton radioButtonReceipts, radioButtonSpending;
 
     DatePickerDialog datePickerDialog;
-    int year, month, day;
+    public int year, month, day;
+    public boolean planed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,14 +61,20 @@ public class TransactionActivity extends AppCompatActivity {
         setTitle(R.string.title_activity_transaction);
         setContentView(R.layout.activity_transaction);
 
-        descriptionBox = (EditText) findViewById(R.id.editText_description);
-        categoryBox = findViewById(R.id.acTextView_category);
-        amountBox = (EditText) findViewById(R.id.editText_amount);
-        delButton = (Button) findViewById(R.id.button_delete);
-        copyButton = (Button) findViewById(R.id.button_copy);
+        editTextDescription = findViewById(R.id.editText_description);
+
+        editTextDescription.requestFocus();
+        SoftKeyboard.showKeyboard(this);
+
+        acTextViewCategory = findViewById(R.id.acTextView_category);
+        editTextAmountPlanned = findViewById(R.id.editText_amount_planed);
+        editTextAmountFact = findViewById(R.id.editText_amount_fact);
+        btnDelete = findViewById(R.id.button_delete);
+        btnCopy = findViewById(R.id.button_copy);
+        btn_copy_amount = findViewById(R.id.btn_copy_amount);
 
         // initiate the date picker and a button
-        dateBox = (EditText) findViewById(R.id.editText_date);
+        editTextDate = findViewById(R.id.editText_date);
 
         dbAdapter = new DatabaseAdapter(this);
 
@@ -62,8 +82,8 @@ public class TransactionActivity extends AppCompatActivity {
         List<Category> categoryArrayList = dbAdapter.getAllCategory();
         ArrayAdapter<Category> adapter = new ArrayAdapter<Category>(
                 this, android.R.layout.simple_dropdown_item_1line, categoryArrayList);
-        categoryBox.setAdapter(adapter);
-        categoryBox.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        acTextViewCategory.setAdapter(adapter);
+        acTextViewCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
@@ -81,14 +101,16 @@ public class TransactionActivity extends AppCompatActivity {
         radioButtonSpending = (RadioButton) findViewById(R.id.radioButton_spending);
 
         // perform click event on edit text
-        dateBox.setOnClickListener(new View.OnClickListener() {
+        editTextDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // calender class's instance and get current date , month and year from calender
-                final Calendar c = Calendar.getInstance();
-                year = c.get(Calendar.YEAR); // current year
-                month = c.get(Calendar.MONTH); // current month
-                day = c.get(Calendar.DAY_OF_MONTH); // current day
+                if ( day == 0 ) {
+                    final Calendar c = Calendar.getInstance();
+                    year = c.get(Calendar.YEAR); // current year
+                    month = c.get(Calendar.MONTH) + 1; // current month
+                    day = c.get(Calendar.DAY_OF_MONTH); // current day
+                }
                 // date picker dialog
                 datePickerDialog = new DatePickerDialog(TransactionActivity.this,
                         new DatePickerDialog.OnDateSetListener() {
@@ -97,10 +119,10 @@ public class TransactionActivity extends AppCompatActivity {
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
                                 // set day of month , month and year value in the edit text
-                                dateBox.setText(new StringBuilder().append(day).append("/")
-                                        .append(month).append("/").append(year));
+
+                                setDateBox(year, monthOfYear+1, dayOfMonth);
                             }
-                        }, year, month, day);
+                        }, year, month - 1, day);
                 datePickerDialog.show();
             }
         });
@@ -109,42 +131,67 @@ public class TransactionActivity extends AppCompatActivity {
         if (extras != null) {
             transactionID = extras.getLong("id");
         }
-        // if ID = 0, then create new transaction; else update
+        //
         if (transactionID > 0) {
-            // получаем элемент по id из бд
+            // get entry from db
             dbAdapter.open();
             Transaction transaction = dbAdapter.getTransaction(transactionID);
-            descriptionBox.setText(transaction.getDescription());
+            editTextDescription.setText(transaction.getDescription());
 
             Category category = dbAdapter.getCategory(transaction.getCategory());
-            categoryBox.setText(category.getName());
+            acTextViewCategory.setText(category.getName());
 
-            if (transaction.getAmount_fact() != 0) {
-                amountBox.setText(String.valueOf(Math.abs(transaction.getAmount_fact())));
+            editTextAmountFact.setText(String.valueOf(Math.abs(transaction.getAmount_fact())));
+            editTextAmountPlanned.setText(String.valueOf(Math.abs(transaction.getAmount_planed())));
+
+            SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+            long displayDate;
+            if (transaction.getDate() > 0) displayDate = transaction.getDate();
+            else displayDate = new Date().getTime();
+
+            if ( displayDate > 0) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(new Date(displayDate));
+                this.year = calendar.get(Calendar.YEAR);
+                this.month = calendar.get(Calendar.MONTH) + 1;
+                this.day = calendar.get(Calendar.DAY_OF_MONTH);
             }
+            setDateBox(year, month, day);
+
             if (transaction.getAmount_fact() > 0) {
                 radioButtonReceipts.setChecked(true);
             } else if (transaction.getAmount_fact() < 0 ) {
+                radioButtonSpending.setChecked(true);
+            } else if (transaction.getAmount_planed() > 0) {
+                radioButtonReceipts.setChecked(true);
+            } else if (transaction.getAmount_planed() < 0 ) {
                 radioButtonSpending.setChecked(true);
             }
 
             dbAdapter.close();
         } else {
-            String transStat = "";
+            String transStat = TRANS_STAT_MINUS;
+
             if (extras != null) {
-                transStat = extras.getString("TRANS_STAT");
+                if ( extras.containsKey(TRANS_STAT) ) transStat = extras.getString(TRANS_STAT);
+                if ( extras.containsKey(TRANS_TYP) ) planed = extras.getString(TRANS_TYP).equals(TRANS_TYP_PLANED);
             }
 
-            assert transStat != null;
-            if (transStat.equals("plus")) {
+            if (transStat != null && transStat.equals(TRANS_STAT_PLUS)) {
                 radioButtonReceipts.setChecked(true);
             } else {
                 radioButtonSpending.setChecked(true);
             }
-            // hide delete button
-            delButton.setVisibility(View.GONE);
-        }
 
+            // hide delete button
+            btnDelete.setVisibility(View.GONE);
+
+            Log.d("NIK", String.valueOf(planed));
+
+        }
+        editTextAmountPlanned.setEnabled(planed);
+        editTextAmountFact.setEnabled(!planed);
+        btn_copy_amount.setEnabled(!planed);
     }
 
     @Override
@@ -153,9 +200,16 @@ public class TransactionActivity extends AppCompatActivity {
         if (requestCode == PICK_CATEGORY_REQUEST) {
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
-                categoryBox.setText( data.getStringExtra(RESULT_CATEGORY) );
+                acTextViewCategory.setText( data.getStringExtra(RESULT_CATEGORY) );
             }
         }
+    }
+
+    private void setDateBox(int year, int month, int day) {
+        this.year = year;
+        this.month = month;
+        this.day = day;
+        editTextDate.setText( String.format("%02d/%02d/%04d", day, month, year) );
     }
 
     // find Index of Spinner by Value
@@ -174,36 +228,60 @@ public class TransactionActivity extends AppCompatActivity {
 
     public void saveAndClose(View view) {
         save(view);
+        SoftKeyboard.hideKeyboard(this);
         this.finish();
         //goHome();
     }
 
     public void save(View view){
 
-        String description = descriptionBox.getText().toString();
-        String categoryName = categoryBox.getText().toString();
-        double amount;
+        String description = editTextDescription.getText().toString();
+        String categoryName = acTextViewCategory.getText().toString();
+        double amountPlanned, amountFact;
         try {
-            amount = Double.parseDouble(amountBox.getText().toString());
+            amountPlanned = Double.parseDouble(editTextAmountPlanned.getText().toString());
             if(radioButtonReceipts.isChecked()) {
-                amount = Math.abs(amount);
+                amountPlanned = Math.abs(amountPlanned);
             } else if(radioButtonSpending.isChecked()) {
-                amount = 0 - Math.abs(amount);
+                amountPlanned = 0 - Math.abs(amountPlanned);
             }
         } catch (Exception e) {
-            amount = 0;
+            amountPlanned = 0;
+        }
+
+        try {
+            amountFact = Double.parseDouble(editTextAmountFact.getText().toString());
+            if(radioButtonReceipts.isChecked()) {
+                amountFact = Math.abs(amountFact);
+            } else if(radioButtonSpending.isChecked()) {
+                amountFact = 0 - Math.abs(amountFact);
+            }
+        } catch (Exception e) {
+            amountFact = 0;
         }
 
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, year);
-        cal.set(Calendar.MONTH, month);
+        cal.set(Calendar.MONTH, month - 1);
         cal.set(Calendar.DAY_OF_MONTH, day);
 
         dbAdapter.open();
 
-        Transaction entry =
-                new Transaction(
-                        transactionID, (long) 0, description, categoryName, cal.getTimeInMillis(), cal.getTimeInMillis(), amount, amount);
+        Transaction entry = new Transaction(
+                transactionID, (long) 0, description, categoryName, cal.getTimeInMillis(), amountPlanned, amountFact);
+
+        if ( planed ) {
+            entry.setAmount_planed( amountPlanned );
+        } else {
+            entry.setAmount_fact( amountFact );
+            if ( transactionID > 0) {
+                Transaction dbentry = dbAdapter.getTransaction(transactionID);
+                if (dbentry != null) {
+                    entry.setRegular_id(dbentry.getRegular_id());
+                    entry.setAmount_planed(dbentry.getAmount_planed());
+                }
+            }
+        }
 
         if (transactionID > 0) {
             dbAdapter.update(entry);
@@ -216,20 +294,22 @@ public class TransactionActivity extends AppCompatActivity {
 
     public void copy(View view){
         transactionID = 0;
-        delButton.setVisibility(View.GONE);
-        copyButton.setVisibility(View.GONE);
+        btnDelete.setVisibility(View.GONE);
+        btnCopy.setVisibility(View.GONE);
     }
 
     public void delete(View view){
         dbAdapter.open();
         dbAdapter.deleteTransaction(transactionID);
         dbAdapter.close();
+        SoftKeyboard.hideKeyboard(this);
         this.finish();
         //goHome();
     }
 
     private void goHome(){
         // zu Main-Activity
+        SoftKeyboard.hideKeyboard(this);
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(intent);
@@ -239,5 +319,9 @@ public class TransactionActivity extends AppCompatActivity {
         Intent intent = new Intent(this, CategoryListActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivityForResult(intent, PICK_CATEGORY_REQUEST );
+    }
+
+    public void copyAmount(View view) {
+        editTextAmountFact.setText( editTextAmountPlanned.getText() );
     }
 }

@@ -3,6 +3,8 @@
     <color name="colorAccent">#f9b90a</color>
     <color name="colorGreen">#4caf50</color>
     <color name="colorRed">#f44336</color>
+    <color name="colorGreenGray">#748F75</color>
+    <color name="colorRedGray">#886D6B</color>
     <color name="colorBackground">#F4F4F4</color>
     <color name="colorBackgroundCard">#FFFFFF</color>
 </resources>

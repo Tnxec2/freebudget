@@ -1,4 +1,4 @@
-package de.kontranik.freebudget.activity;
+package de.kontranik.freebudget.adapter;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
@@ -51,7 +51,9 @@ public class RegularTransactionAdapter extends ArrayAdapter<RegularTransaction> 
             viewHolder.amountView.setTextColor(
                     ContextCompat.getColor(parent.getContext(), R.color.colorRed));
         }
-        viewHolder.categoryView.setText(regularTransaction.toString());
+        viewHolder.categoryView.setText(
+                parent.getResources().getString(
+                        R.string.subTitleTransaction, String.valueOf(regularTransaction.getDay()), regularTransaction.getCategory()) );
 
         return convertView;
     }

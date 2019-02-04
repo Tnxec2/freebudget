@@ -1,4 +1,4 @@
-package de.kontranik.freebudget;
+package de.kontranik.freebudget.service;
 
 import android.content.Context;
 import android.view.GestureDetector;

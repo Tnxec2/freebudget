@@ -4,6 +4,11 @@ import de.kontranik.freebudget.database.DatabaseHelper;
 
 public class Config {
     // Einige Konstante für Einstellungen
+    public static final String DATE_LONG = "dd-MM-yyyy_HH-mm-ss";
+    public static final String DATE_SHORT = "dd-MM-yyyy";
+    public static final String CSV_DELIMITER = ";";
+    public static final String CSV_NEW_LINE = "\n";
+    public static final String CSV_CODE_PAGE = "UTF-8";
     public static final String PREFS_FILE = "Sort";
     public static final String PREF_ORDER_BY = "order_by";
     public static final String PREF_SORT_DESC = "Order_desc";

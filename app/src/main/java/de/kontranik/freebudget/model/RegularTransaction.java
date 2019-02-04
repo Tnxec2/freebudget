@@ -45,6 +45,15 @@ public class RegularTransaction {
         this.date_create = date_create;
     }
 
+    public RegularTransaction(int month, int day, String description, String category, double amount, long date_create) {
+        this.month = month;
+        this.day = day;
+        this.description = description;
+        this.category = category;
+        this.amount = amount;
+        this.date_create = date_create;
+    }
+
     public Long getId() {
         return id;
     }

@@ -2,10 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/action_config"
-        android:orderInCategory="1"
-        android:title="@string/app_settings" />
-    <item
         android:id="@+id/action_import_csv"
         android:orderInCategory="2"
         android:title="@string/menu_import_csv" />

@@ -8,27 +8,38 @@
 
     <EditText
         android:id="@+id/editText_description"
-        android:layout_width="411dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="9dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
         android:hint="@string/activity_transaction_name"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/linearLayout0"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editText_description">
 
         <AutoCompleteTextView
             android:id="@+id/acTextView_category"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:hint="@string/activity_category" />
 
         <Button
@@ -40,24 +51,81 @@
             android:text="select" />
     </LinearLayout>
 
-    <EditText
-        android:id="@+id/editText_amount"
-        android:layout_width="411dp"
+    <TextView
+        android:id="@+id/textView_amount_fact"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:hint="@string/activity_transaction_amount"
-        android:inputType="numberDecimal"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="@string/activity_transaction_amount_fact"
+        app:layout_constraintEnd_toStartOf="@id/textView_amount_planed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout0" />
+
+    <TextView
+        android:id="@+id/textView_amount_planed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:hint="@string/activity_transaction_amount_planed"
+        android:text="@string/activity_transaction_amount_planed"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/textView_amount_fact"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout0" />
+
+    <EditText
+        android:id="@+id/editText_amount_fact"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:hint="0"
+        android:inputType="numberDecimal"
+        app:layout_constraintEnd_toStartOf="@id/btn_copy_amount"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textView_amount_fact" />
+
+    <ImageButton
+        android:id="@+id/btn_copy_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="copyAmount"
+        android:src="@drawable/ic_copy_back"
+        app:layout_constraintEnd_toStartOf="@+id/editText_amount_planed"
+        app:layout_constraintStart_toEndOf="@+id/editText_amount_fact"
+        app:layout_constraintTop_toBottomOf="@+id/textView_amount_fact" />
+
+    <EditText
+        android:id="@+id/editText_amount_planed"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:hint="0"
+        android:textAlignment="viewEnd"
+        android:inputType="numberDecimal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/btn_copy_amount"
+        app:layout_constraintTop_toBottomOf="@+id/textView_amount_planed"
+
+        android:layout_gravity="end" />
+
 
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/editText_amount">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editText_amount_planed">
 
         <RadioGroup
             android:id="@+id/radioTrans"
@@ -94,7 +162,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:ems="10"
+            android:hint="@string/date"
             android:inputType="date" />
 
     </LinearLayout>
@@ -103,8 +171,14 @@
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout1">
 
         <Button
@@ -126,9 +200,13 @@
 
     <LinearLayout
         android:id="@+id/linearLayout3"
-        android:layout_width="411dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

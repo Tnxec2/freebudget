@@ -11,11 +11,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import java.util.List;
 
 import de.kontranik.freebudget.R;
+import de.kontranik.freebudget.service.SoftKeyboard;
 import de.kontranik.freebudget.database.DatabaseAdapter;
 import de.kontranik.freebudget.model.Category;
 import de.kontranik.freebudget.model.RegularTransaction;
@@ -50,6 +50,10 @@ public class RegularTransactionActivity extends AppCompatActivity {
         setTitle(R.string.new_regular_transaction);
 
         descriptionBox = (EditText) findViewById(R.id.editText_description_regular);
+
+        descriptionBox.requestFocus();
+        SoftKeyboard.showKeyboard(this  );
+
         categoryBox = (AutoCompleteTextView) findViewById(R.id.acTextView_category_regular);
 
         amountBox = (EditText) findViewById(R.id.editText_amount_regular);
@@ -93,7 +97,7 @@ public class RegularTransactionActivity extends AppCompatActivity {
         if (transactionID > 0) {
             // получаем элемент по id из бд
             dbAdapter.open();
-            RegularTransaction transaction = dbAdapter.getRegularTransaction(transactionID);
+            RegularTransaction transaction = dbAdapter.getRegularById(transactionID);
             if ( transaction != null) {
                 Category category = dbAdapter.getCategory(transaction.getCategory());
                 descriptionBox.setText(transaction.getDescription());
@@ -144,6 +148,7 @@ public class RegularTransactionActivity extends AppCompatActivity {
 
     public void saveAndClose (View view) {
         save(view);
+        SoftKeyboard.hideKeyboard(this);
         this.finish();
         //goHome();
     }
@@ -190,12 +195,14 @@ public class RegularTransactionActivity extends AppCompatActivity {
         dbAdapter.open();
         dbAdapter.deleteRegularTransaction(transactionID);
         dbAdapter.close();
+        SoftKeyboard.hideKeyboard(this);
         this.finish();
         //goHome();
     }
 
     private void goHome(){
         // zu Main-Activity
+        SoftKeyboard.hideKeyboard(this);
         Intent intent = new Intent(this, ManageRegularTransactionActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(intent);
