@@ -1,41 +1,64 @@
 package de.kontranik.freebudget.activity;
 
+import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.RadioButton;
 
-import de.kontranik.freebudget.config.Config;
 import de.kontranik.freebudget.R;
+import de.kontranik.freebudget.config.Config;
 
-public class ConfigActivity extends AppCompatActivity {
+/**
+ * A simple {@link Fragment} subclass.
+ * Activities that contain this fragment must implement the
+ * {@link SettingsFragment} interface
+ * to handle interaction events.
+ * Use the {@link SettingsFragment} factory method to
+ * create an instance of this fragment.
+ */
+public class SettingsFragment extends Fragment {
+
     SharedPreferences settings;
     RadioButton radioButton_Name, radioButton_Cost, radioButton_EditDate,
-                radioButton_notsort, radioButton_AbsCost;
+            radioButton_notsort, radioButton_AbsCost;
     CheckBox checkBox_Sortdesc;
     String order_by;
     Boolean sort_desc = false;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setTitle(R.string.app_settings);
-        setContentView(R.layout.activity_config);
-        settings = getSharedPreferences(Config.PREFS_FILE, MODE_PRIVATE);
+    public SettingsFragment() {
+        // Required empty public constructor
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        // gespeicherte Einstellungen holen
-        radioButton_Name = findViewById(R.id.radioButton_sort_name);
-        radioButton_Cost = findViewById(R.id.radioButton_sort_cost);
-        radioButton_AbsCost = findViewById(R.id.radioButton_sort_abscost);
-        radioButton_EditDate = findViewById(R.id.radioButton_sort_edit_date);
-        radioButton_notsort = findViewById(R.id.radioButton_sort_notsort);
-        checkBox_Sortdesc = findViewById(R.id.checkBox_sort_desc);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_settings, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        // Setup any handles to view objects here
+        // EditText etFoo = (EditText) view.findViewById(R.id.etFoo);
+
+        getActivity().setTitle("Settings");
+        radioButton_Name = (RadioButton) view.findViewById(R.id.radioButton_sort_name);
+        radioButton_Cost = (RadioButton) view.findViewById(R.id.radioButton_sort_cost);
+        radioButton_AbsCost = (RadioButton) view.findViewById(R.id.radioButton_sort_abscost);
+        radioButton_EditDate = (RadioButton) view.findViewById(R.id.radioButton_sort_edit_date);
+        radioButton_notsort = (RadioButton) view.findViewById(R.id.radioButton_sort_notsort);
+        checkBox_Sortdesc = (CheckBox) view.findViewById(R.id.checkBox_sort_desc);
 
         order_by = settings.getString(Config.PREF_ORDER_BY, Config.PREF_ORDER_BY_NOT_SORT);
         sort_desc = settings.getBoolean(Config.PREF_SORT_DESC, false);
@@ -59,6 +82,7 @@ public class ConfigActivity extends AppCompatActivity {
                 radioButton_Name.setChecked(true);
         }
         checkBox_Sortdesc.setChecked(sort_desc);
+
     }
 
     public void saveConfig(View view) {
@@ -85,6 +109,6 @@ public class ConfigActivity extends AppCompatActivity {
         prefEditor.putString(Config.PREF_ORDER_BY, order_by);
         prefEditor.putBoolean(Config.PREF_SORT_DESC, sort_desc);
         prefEditor.apply();
-        this.finish();
     }
+
 }

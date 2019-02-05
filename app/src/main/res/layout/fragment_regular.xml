@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/mainlayout_regular"
-    tools:context=".activity.ManageRegularTransactionActivity">
+    android:id="@+id/mainlayout_regular">
 
     <LinearLayout
         android:id="@+id/ll_summary"
@@ -24,10 +23,10 @@
             android:layout_height="wrap_content">
 
             <ImageButton
+                android:id="@+id/btn_prevMonth"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/prev"
-                android:onClick="prevMonth"
                 app:srcCompat="@drawable/ic_keyboard_arrow_left_white_24dp" />
 
             <Space
@@ -50,10 +49,10 @@
                 android:layout_weight="1" />
 
             <ImageButton
+                android:id="@+id/btn_nextMonth"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/next"
-                android:onClick="nextMonth"
                 app:srcCompat="@drawable/ic_keyboard_arrow_right_white_24dp" />
 
         </LinearLayout>

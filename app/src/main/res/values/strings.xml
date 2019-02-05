@@ -47,13 +47,33 @@
     <string name="wrongLineFormat">Wrong line format: %1$s</string>
     <string name="importFromFile">Import from file: %1$s</string>
     <string name="importFail">Import fail. Error: %1$s</string>
+    <string name="importOK">Import OK. File: %1$s</string>
     <string name="exportFail">Export fail. Error: %1$s</string>
+    <string name="exportOK">Export OK. File: %1$s</string>
     <string name="date">date</string>
     <string name="put_regular">put regular</string>
     <string name="activity_transaction_edit">Edit</string>
     <string name="only_planed">only planned</string>
     <string name="all">all</string>
     <string name="activity_transaction_amount">Amount</string>
+
+    <string-array name="navigation_drawer_items_array">
+        <item>overview</item>
+        <item>planned</item>
+        <item>regular</item>
+        <item>tools</item>
+        <item>settings</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="overview">Overview</string>
+    <string name="planned">Planned</string>
+    <string name="regular">Regular</string>
+    <string name="tools">Tools</string>
+    <string name="settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
 
 </resources>
 

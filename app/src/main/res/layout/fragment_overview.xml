@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainlayout"
-    >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
 
     <LinearLayout
         android:id="@+id/linearLayout1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorBackgroundCard"
         android:orientation="vertical"
         android:padding="8dp"
-        app:layout_constraintEnd_toStartOf="@id/linearLayout2"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
 
         <TextView
             android:layout_width="match_parent"
@@ -30,54 +33,16 @@
             android:layout_height="wrap_content">
 
             <ImageButton
+                android:id="@+id/btn_prevMonth"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/prev"
-                android:onClick="prevYear"
+                android:src="@drawable/ic_keyboard_arrow_left_white_24dp"
                 app:srcCompat="@drawable/ic_keyboard_arrow_left_white_24dp" />
 
             <Space
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <TextView
-                android:id="@+id/textView_Year"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="2017"
-                android:textAlignment="center"
-                android:textSize="24sp" />
-
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/next"
-                android:onClick="nextYear"
-                app:srcCompat="@drawable/ic_keyboard_arrow_right_white_24dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/prev"
-                android:onClick="prevMonth"
-                app:srcCompat="@drawable/ic_keyboard_arrow_left_white_24dp" />
-
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1" />
 
             <TextView
@@ -85,20 +50,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="7"
+                android:text="month"
                 android:textAlignment="center"
-                android:textSize="24sp" />
+                android:textSize="30sp" />
 
             <Space
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1" />
 
             <ImageButton
+                android:id="@+id/btn_nextMonth"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/next"
-                android:onClick="nextMonth"
+                android:src="@drawable/ic_keyboard_arrow_right_white_24dp"
                 app:srcCompat="@drawable/ic_keyboard_arrow_right_white_24dp" />
 
         </LinearLayout>
@@ -116,6 +82,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=""
+                    android:textAlignment="center"
                     android:textSize="18sp" />
 
                 <Space
@@ -241,28 +208,31 @@
 
     <LinearLayout
         android:id="@+id/linearLayout2"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/colorBackgroundCard"
         android:orientation="vertical"
-        android:padding="8dp"
+        android:paddingLeft="8dp"
+        android:paddingTop="8dp"
+        android:paddingRight="8dp"
+        android:paddingBottom="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/linearLayout1"
-        app:layout_constraintTop_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout1">
 
         <Button
             android:id="@+id/btn_planRegular"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="planRegular"
             android:text="@string/put_regular"
             android:visibility="gone" />
 
         <ListView
             android:id="@+id/listView_transactions"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent"
+            />
 
     </LinearLayout>
 
@@ -275,9 +245,9 @@
         android:layout_marginBottom="16dp"
         android:src="@drawable/ic_add_white_24dp"
         app:backgroundTint="@color/colorAccent"
-        app:rippleColor="#FFF"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:rippleColor="#FFF" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_add_plus"
@@ -296,6 +266,22 @@
         app:srcCompat="@drawable/ic_add_white_24dp" />
 
     <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_add_plus_planed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="invisible"
+        app:backgroundTint="@color/colorGreenGray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/fab_add_plus"
+        app:rippleColor="#FFF"
+        app:srcCompat="@drawable/ic_add_white_24dp" />
+
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_add_minus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -310,4 +296,22 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:rippleColor="#FFF"
         app:srcCompat="@drawable/ic_remove_white_24dp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_add_minus_planed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="invisible"
+        app:backgroundTint="@color/colorRedGray"
+        app:layout_constraintBottom_toTopOf="@+id/fab_add_minus"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:rippleColor="#FFF"
+        app:srcCompat="@drawable/ic_remove_white_24dp" />
+
+
 </android.support.constraint.ConstraintLayout>

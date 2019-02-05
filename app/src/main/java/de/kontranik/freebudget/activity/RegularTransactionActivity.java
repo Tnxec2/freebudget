@@ -39,6 +39,7 @@ public class RegularTransactionActivity extends AppCompatActivity {
     private RadioButton radioButtonReceipts, radioButtonSpending;
 
     private DatabaseAdapter dbAdapter;
+
     private long transactionID = 0;
 
     @Override
@@ -48,23 +49,23 @@ public class RegularTransactionActivity extends AppCompatActivity {
 
         setTitle(R.string.new_regular_transaction);
 
-        editTextDescription = findViewById(R.id.editText_description_regular);
+        editTextDescription = (EditText) findViewById(R.id.editText_description_regular);
 
         editTextDescription.requestFocus();
         SoftKeyboard.showKeyboard(this  );
 
-        acTextViewCategory = findViewById(R.id.acTextView_category_regular);
+        acTextViewCategory = (AutoCompleteTextView) findViewById(R.id.acTextView_category_regular);
 
-        editTextAmount = findViewById(R.id.editText_amount_regular);
-        editTextDay = findViewById(R.id.editText_day_regular);
-        spinnerMonth = findViewById(R.id.spinner_Month_regular);
-        buttonDelete = findViewById(R.id.button_delete_regular);
-        buttonCopy = findViewById(R.id.button_copy_regular);
+        editTextAmount = (EditText) findViewById(R.id.editText_amount_regular);
+        editTextDay = (EditText) findViewById(R.id.editText_day_regular);
+        spinnerMonth = (Spinner) findViewById(R.id.spinner_Month_regular);
+        buttonDelete = (Button) findViewById(R.id.button_delete_regular);
+        buttonCopy = (Button) findViewById(R.id.button_copy_regular);
 
         dbAdapter = new DatabaseAdapter(this);
 
-        radioButtonReceipts = findViewById(R.id.radioButton_receipts_regular);
-        radioButtonSpending = findViewById(R.id.radioButton_spending_regular);
+        radioButtonReceipts = (RadioButton) findViewById(R.id.radioButton_receipts_regular);
+        radioButtonSpending = (RadioButton) findViewById(R.id.radioButton_spending_regular);
 
         dbAdapter.open();
         List<Category> categoryArrayList = dbAdapter.getAllCategory();
@@ -196,14 +197,6 @@ public class RegularTransactionActivity extends AppCompatActivity {
         SoftKeyboard.hideKeyboard(this);
         this.finish();
         //goHome();
-    }
-
-    private void goHome(){
-        // zu Main-Activity
-        SoftKeyboard.hideKeyboard(this);
-        Intent intent = new Intent(this, ManageRegularTransactionActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        startActivity(intent);
     }
 
     public void selectCat(View view) {

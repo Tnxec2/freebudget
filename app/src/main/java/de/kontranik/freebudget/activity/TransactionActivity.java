@@ -16,23 +16,22 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.RadioButton;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import de.kontranik.freebudget.R;
+
 import de.kontranik.freebudget.service.SoftKeyboard;
 import de.kontranik.freebudget.database.DatabaseAdapter;
 import de.kontranik.freebudget.model.Category;
 import de.kontranik.freebudget.model.Transaction;
 
-import static de.kontranik.freebudget.activity.MainActivity.TRANS_STAT_MINUS;
-import static de.kontranik.freebudget.activity.MainActivity.TRANS_STAT_PLUS;
-import static de.kontranik.freebudget.activity.MainActivity.TRANS_TYP;
-import static de.kontranik.freebudget.activity.MainActivity.TRANS_TYP_PLANED;
-import static de.kontranik.freebudget.activity.ManagePlanedTransactionsActivity.TRANS_STAT;
+import static de.kontranik.freebudget.activity.OverviewFragment.TRANS_STAT_MINUS;
+import static de.kontranik.freebudget.activity.OverviewFragment.TRANS_STAT_PLUS;
+import static de.kontranik.freebudget.activity.OverviewFragment.TRANS_TYP;
+import static de.kontranik.freebudget.activity.OverviewFragment.TRANS_TYP_PLANED;
+import static de.kontranik.freebudget.activity.OverviewFragment.TRANS_STAT;
 import static de.kontranik.freebudget.activity.CategoryListActivity.RESULT_CATEGORY;
 
 public class TransactionActivity extends AppCompatActivity {
@@ -61,25 +60,27 @@ public class TransactionActivity extends AppCompatActivity {
         setTitle(R.string.title_activity_transaction);
         setContentView(R.layout.activity_transaction);
 
-        editTextDescription = findViewById(R.id.editText_description);
+        editTextDescription = (EditText) findViewById(R.id.editText_description);
 
         editTextDescription.requestFocus();
         SoftKeyboard.showKeyboard(this);
 
-        acTextViewCategory = findViewById(R.id.acTextView_category);
-        editTextAmountPlanned = findViewById(R.id.editText_amount_planed);
-        editTextAmountFact = findViewById(R.id.editText_amount_fact);
-        buttonDelete = findViewById(R.id.button_delete);
-        buttonCopy = findViewById(R.id.button_copy);
-        buttonCopyAmount = findViewById(R.id.btn_copy_amount);
+        acTextViewCategory = (AutoCompleteTextView) findViewById(R.id.acTextView_category);
+        editTextAmountPlanned = (EditText) findViewById(R.id.editText_amount_planed);
+        editTextAmountFact = (EditText) findViewById(R.id.editText_amount_fact);
+        buttonDelete = (Button) findViewById(R.id.button_delete);
+        buttonCopy = (Button) findViewById(R.id.button_copy);
+        buttonCopyAmount = (ImageButton) findViewById(R.id.btn_copy_amount);
 
         // initiate the date picker and a button
-        editTextDate = findViewById(R.id.editText_date);
+        editTextDate = (EditText) findViewById(R.id.editText_date);
 
         dbAdapter = new DatabaseAdapter(this);
 
         dbAdapter.open();
         List<Category> categoryArrayList = dbAdapter.getAllCategory();
+        dbAdapter.close();
+
         ArrayAdapter<Category> adapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_dropdown_item_1line, categoryArrayList);
         acTextViewCategory.setAdapter(adapter);
@@ -97,8 +98,8 @@ public class TransactionActivity extends AppCompatActivity {
             }
         });
 
-        radioButtonReceipts = findViewById(R.id.radioButton_receipts);
-        radioButtonSpending = findViewById(R.id.radioButton_spending);
+        radioButtonReceipts = (RadioButton) findViewById(R.id.radioButton_receipts);
+        radioButtonSpending = (RadioButton) findViewById(R.id.radioButton_spending);
 
         // perform click event on edit text
         editTextDate.setOnClickListener(new View.OnClickListener() {
@@ -304,14 +305,6 @@ public class TransactionActivity extends AppCompatActivity {
         SoftKeyboard.hideKeyboard(this);
         this.finish();
         //goHome();
-    }
-
-    private void goHome(){
-        // zu Main-Activity
-        SoftKeyboard.hideKeyboard(this);
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        startActivity(intent);
     }
 
     public void selectCat(View view) {

@@ -39,10 +39,10 @@ public class CategoryListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category_list);
 
-        categoryListView = findViewById(R.id.listView_categoryList);
-        categoryNameEditText = findViewById(R.id.editText_categoryName);
-        btn_Save = findViewById(R.id.btn_categorySave);
-        btn_Close = findViewById(R.id.btn_categoryClose);
+        categoryListView = (ListView) findViewById(R.id.listView_categoryList);
+        categoryNameEditText = (EditText) findViewById(R.id.editText_categoryName);
+        btn_Save = (Button) findViewById(R.id.btn_categorySave);
+        btn_Close = (Button) findViewById(R.id.btn_categoryClose);
 
         dbAdapter = new DatabaseAdapter(this);
 

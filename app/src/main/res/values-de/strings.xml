@@ -54,4 +54,11 @@
     <string name="only_planed">nur offene</string>
     <string name="all">alle</string>
     <string name="activity_transaction_amount">Betrag</string>
+    <string name="importOK">Import OK. Datei: %1$s</string>
+    <string name="exportOK">Export OK. Datei: %1$s</string>
+    <string name="overview">Übersicht</string>
+    <string name="planned">Geplante</string>
+    <string name="regular">Reguläre</string>
+    <string name="tools">Extras</string>
+    <string name="settings">Einstellungen</string>
 </resources>
