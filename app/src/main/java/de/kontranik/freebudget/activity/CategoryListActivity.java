@@ -22,8 +22,8 @@ public class CategoryListActivity extends AppCompatActivity {
 
     final static String RESULT_CATEGORY = "RESULT_MONTH";
 
-    private ListView categoryListView;
-    private EditText categoryNameEditText;
+    private ListView listViewCategory;
+    private EditText editTextCategory;
     private Button btn_Save, btn_Close;
 
     private Category category;
@@ -32,34 +32,34 @@ public class CategoryListActivity extends AppCompatActivity {
 
     private List<Category> categoryList;
 
-    private ArrayAdapter<Category> arrayAdapter;
+    private ArrayAdapter<Category> categoryArrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category_list);
 
-        categoryListView = (ListView) findViewById(R.id.listView_categoryList);
-        categoryNameEditText = (EditText) findViewById(R.id.editText_categoryName);
+        listViewCategory = (ListView) findViewById(R.id.listView_categoryList);
+        editTextCategory = (EditText) findViewById(R.id.editText_categoryName);
         btn_Save = (Button) findViewById(R.id.btn_categorySave);
         btn_Close = (Button) findViewById(R.id.btn_categoryClose);
 
         dbAdapter = new DatabaseAdapter(this);
 
         getCategory();
-        arrayAdapter = new ArrayAdapter(this,
+        categoryArrayAdapter = new ArrayAdapter(this,
                 android.R.layout.simple_list_item_1, categoryList);
         // устанавливаем для списка адаптер
-        categoryListView.setAdapter(arrayAdapter);
+        listViewCategory.setAdapter(categoryArrayAdapter);
 
-        categoryListView.setOnItemClickListener(new OnItemClickListener(){
+        listViewCategory.setOnItemClickListener(new OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id)
             {
                 // по позиции получаем выбранный элемент
                 String selectedItem = categoryList.get(position).getName();
                 // установка текста элемента TextView
-                categoryNameEditText.setText(selectedItem);
+                editTextCategory.setText(selectedItem);
                 dbAdapter.open();
                 category = dbAdapter.getCategory(selectedItem);
                 dbAdapter.close();
@@ -69,17 +69,18 @@ public class CategoryListActivity extends AppCompatActivity {
 
     public void getCategory() {
         dbAdapter.open();
-        categoryList = dbAdapter.getAllCategory();
+        categoryList.clear();
+        categoryList.addAll( dbAdapter.getAllCategory() );
         dbAdapter.close();
+        categoryArrayAdapter.notifyDataSetChanged();
     }
 
     public void onSave(View view) {
-        // TODO: save category
         dbAdapter.open();
         if ( category == null ) {
-            category = new Category( 0, categoryNameEditText.getText().toString());
+            category = new Category( 0, editTextCategory.getText().toString());
         } else {
-            category.setName( categoryNameEditText.getText().toString());
+            category.setName( editTextCategory.getText().toString());
         }
 
         if ( category.getId() > 0 )
@@ -90,8 +91,15 @@ public class CategoryListActivity extends AppCompatActivity {
         dbAdapter.close();
 
         getCategory();
+    }
 
-        arrayAdapter.notifyDataSetChanged();
+    public void onDelete(View view) {
+        if ( category != null) {
+            dbAdapter.open();
+            if ( dbAdapter.deleteCategory(category.getId()) > 0 ) editTextCategory.setText("");
+            dbAdapter.close();
+            getCategory();
+        }
     }
 
     public void onClose(View view) {

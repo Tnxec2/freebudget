@@ -46,6 +46,13 @@
             android:layout_weight="1"
             android:onClick="onSave"
             android:text="Save" />
+        <Button
+            android:id="@+id/btn_categoryDelete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onDelete"
+            android:text="Save" />
     </LinearLayout>
 
     <Button
