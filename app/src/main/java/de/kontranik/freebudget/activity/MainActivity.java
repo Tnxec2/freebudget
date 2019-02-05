@@ -341,14 +341,7 @@ public class MainActivity extends AppCompatActivity {
 
         List<Transaction> dbTransactions = dbAdapter.getTransactions(this.year, this.month, false) ;
 
-        amount_planed = 0;
-        amount_fact = 0;
-        total_planed = 0;
-        total_fact = 0;
-        receipts_fact = 0;
-        receipts_planed = 0;
-        spending_fact = 0;
-        spending_planed = 0;
+        clearSummen();
 
         for (Transaction transaction: dbTransactions) {
             amount_planed = transaction.getAmount_planed();
@@ -384,28 +377,6 @@ public class MainActivity extends AppCompatActivity {
         transactionAdapter.notifyDataSetChanged();
     }
 
-    public void prevYear(View view){
-        prevYear();
-    }
-
-    public void nextYear(View view){
-        nextYear();
-    }
-
-    public void prevYear(){
-        if (this.year == 2000 ) return;
-        this.year = this.year - 1;
-        this.textView_Year.setText(String.format(Locale.getDefault(),"%d", this.year));
-        this.getTransactions();
-    }
-
-    public void nextYear(){
-        if (this.year == 2100 ) return;
-        this.year = this.year + 1;
-        this.textView_Year.setText(String.format(Locale.getDefault(),"%d", this.year));
-        this.getTransactions();
-    }
-
     public void prevMonth(View view){
         prevMonth();
     }
@@ -416,25 +387,30 @@ public class MainActivity extends AppCompatActivity {
 
     public void prevMonth(){
         if (this.month == 1 ) {
+            if ( this.year == 2000 ) return;
             this.month = 12;
-            this.textView_Month.setText(this.months[this.month]);
-            prevYear();
+            this.year--;
         } else {
             this.month = this.month - 1;
-            this.textView_Month.setText(this.months[this.month]);
-            this.getTransactions();
         }
+        setMonthTextView();
+        this.getTransactions();
     }
+
     public void nextMonth(){
         if (this.month == 12 ) {
+            if ( this.year == 3000 ) return;
             this.month = 1;
-            this.textView_Month.setText(this.months[this.month]);
-            nextYear();
+            this.year++;
         } else {
             this.month = this.month + 1;
-            this.textView_Month.setText(this.months[this.month]);
-            this.getTransactions();
         }
+        setMonthTextView();
+        this.getTransactions();
+    }
+
+    private void setMonthTextView() {
+        this.textView_Month.setText(String.format(Locale.getDefault(),"%d / %s", this.year, this.months[this.month]));
     }
 
     public void planRegular(View view) {
@@ -529,6 +505,17 @@ public class MainActivity extends AppCompatActivity {
         } else {
             textView_total_fact.setTextColor(ContextCompat.getColor(this, R.color.colorRed));
         }
+    }
+
+    private void clearSummen() {
+        amount_planed = 0;
+        amount_fact = 0;
+        total_planed = 0;
+        total_fact = 0;
+        receipts_fact = 0;
+        receipts_planed = 0;
+        spending_fact = 0;
+        spending_planed = 0;
     }
 }
 

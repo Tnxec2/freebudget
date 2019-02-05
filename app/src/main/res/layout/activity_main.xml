@@ -36,54 +36,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/prev"
-                android:onClick="prevYear"
-                android:src="@drawable/ic_keyboard_arrow_left_white_24dp"
-                app:srcCompat="@drawable/ic_keyboard_arrow_left_white_24dp" />
-
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <TextView
-                android:id="@+id/textView_Year"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="year"
-                android:textAlignment="center"
-                android:textSize="30sp" />
-
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/next"
-                android:onClick="nextYear"
-                android:src="@drawable/ic_keyboard_arrow_right_white_24dp"
-                app:srcCompat="@drawable/ic_keyboard_arrow_right_white_24dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/prev"
                 android:onClick="prevMonth"
                 android:src="@drawable/ic_keyboard_arrow_left_white_24dp"
                 app:srcCompat="@drawable/ic_keyboard_arrow_left_white_24dp" />
 
             <Space
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1" />
 
             <TextView
@@ -97,7 +56,7 @@
 
             <Space
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1" />
 
             <ImageButton
