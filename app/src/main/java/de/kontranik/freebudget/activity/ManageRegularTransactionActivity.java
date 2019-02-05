@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -43,11 +44,14 @@ public class ManageRegularTransactionActivity extends AppCompatActivity {
     private TextView textView_Month;
     private TextView textView_receipts, textView_spending, textView_total;
     private FloatingActionButton fab_add, fab_add_plus, fab_add_minus;
+
     private int month;
     private String[] months;
-    RegularTransactionAdapter transactionAdapter;
     static String transStat;
     Boolean isMove;
+
+    List<RegularTransaction> transactionList = new ArrayList<>();
+    RegularTransactionAdapter transactionAdapter;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -57,18 +61,18 @@ public class ManageRegularTransactionActivity extends AppCompatActivity {
 
         setTitle(R.string.manage_regular);
 
-        listView_Transactions = (ListView)findViewById(R.id.listView_regular_transactions);
-        textView_Month = (TextView)findViewById(R.id.textView_Month_Regular);
+        listView_Transactions = findViewById(R.id.listView_regular_transactions);
+        textView_Month = findViewById(R.id.textView_Month_Regular);
 
-        textView_receipts = (TextView)findViewById(R.id.textView_receipts_regular);
-        textView_spending = (TextView)findViewById(R.id.textView_spending_regular);
-        textView_total = (TextView)findViewById(R.id.textView_total_regular);
+        textView_receipts = findViewById(R.id.textView_receipts_regular);
+        textView_spending = findViewById(R.id.textView_spending_regular);
+        textView_total = findViewById(R.id.textView_total_regular);
 
-        fab_add = (FloatingActionButton)findViewById(R.id.fab_add_regular);
-        fab_add_plus = (FloatingActionButton)findViewById(R.id.fab_add_plus_regular);
-        fab_add_minus = (FloatingActionButton)findViewById(R.id.fab_add_minus_regular);
+        fab_add = findViewById(R.id.fab_add_regular);
+        fab_add_plus = findViewById(R.id.fab_add_plus_regular);
+        fab_add_minus = findViewById(R.id.fab_add_minus_regular);
 
-        ConstraintLayout mainLayout = (ConstraintLayout) findViewById(R.id.mainlayout_regular);
+        ConstraintLayout mainLayout = findViewById(R.id.mainlayout_regular);
 
         this.months = getResources().getStringArray(R.array.months);
 
@@ -88,6 +92,13 @@ public class ManageRegularTransactionActivity extends AppCompatActivity {
                 }
             }
         });
+
+        // set list adapter
+        transactionAdapter = new RegularTransactionAdapter(this,
+                R.layout.layout_regular_transaction_item,
+                transactionList);
+        // set adapter
+        listView_Transactions.setAdapter(transactionAdapter);
 
         mainLayout.setOnTouchListener(new OnSwipeTouchListener(ManageRegularTransactionActivity.this){
             public void onSwipeLeft(){
@@ -239,19 +250,7 @@ public class ManageRegularTransactionActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        DatabaseAdapter adapter = new DatabaseAdapter(this);
-        adapter.open();
-
-        List<RegularTransaction> transactions = adapter.getRegular(month);
-
-        // set list adapter
-        transactionAdapter = new RegularTransactionAdapter(this,
-                R.layout.layout_transaction_item,
-                transactions);
-        // set adapter
-        listView_Transactions.setAdapter(transactionAdapter);
-
-        adapter.close();
+        getTransactions();
     }
 
     @Override
@@ -303,21 +302,19 @@ public class ManageRegularTransactionActivity extends AppCompatActivity {
 
     public void getTransactions () {
 
-        DatabaseAdapter adapter = new DatabaseAdapter(this);
-        adapter.open();
+        DatabaseAdapter databaseAdapter = new DatabaseAdapter(this);
+        databaseAdapter.open();
 
-        List<RegularTransaction> transactions = adapter.getRegular(this.month);
+        transactionList.clear();
+        transactionAdapter.clear();
 
-        // set list adapter
-        transactionAdapter = new RegularTransactionAdapter(this,
-                R.layout.layout_regular_transaction_item,
-                transactions);
+        transactionList.addAll( databaseAdapter.getRegular(this.month) );
 
         double amount;
         double receipts = 0;
         double spending = 0;
         double total = 0;
-        for (RegularTransaction transaction: transactions) {
+        for (RegularTransaction transaction: transactionList) {
             amount = transaction.getAmount();
             if (amount > 0) {
                 receipts += amount;
@@ -338,9 +335,9 @@ public class ManageRegularTransactionActivity extends AppCompatActivity {
             textView_total.setTextColor(ContextCompat.getColor(this, R.color.colorRed));
         }
 
-        // set adapter
-        listView_Transactions.setAdapter(transactionAdapter);
-        adapter.close();
+        databaseAdapter.close();
+
+        transactionAdapter.notifyDataSetChanged();
     }
 
     public void add(View view){

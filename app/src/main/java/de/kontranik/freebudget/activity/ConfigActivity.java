@@ -12,7 +12,7 @@ import de.kontranik.freebudget.R;
 
 public class ConfigActivity extends AppCompatActivity {
     SharedPreferences settings;
-    RadioButton radioButton_Name, radioButton_Cost, radioButton_YaM,
+    RadioButton radioButton_Name, radioButton_Cost, radioButton_EditDate,
                 radioButton_notsort, radioButton_AbsCost;
     CheckBox checkBox_Sortdesc;
     String order_by;
@@ -30,12 +30,12 @@ public class ConfigActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         // gespeicherte Einstellungen holen
-        radioButton_Name = (RadioButton) findViewById(R.id.radioButton_sort_name);
-        radioButton_Cost = (RadioButton) findViewById(R.id.radioButton_sort_cost);
-        radioButton_AbsCost = (RadioButton) findViewById(R.id.radioButton_sort_abscost);
-        radioButton_YaM = (RadioButton) findViewById(R.id.radioButton_sort_year_month);
-        radioButton_notsort = (RadioButton) findViewById(R.id.radioButton_sort_notsort);
-        checkBox_Sortdesc = (CheckBox) findViewById(R.id.checkBox_sort_desc);
+        radioButton_Name = findViewById(R.id.radioButton_sort_name);
+        radioButton_Cost = findViewById(R.id.radioButton_sort_cost);
+        radioButton_AbsCost = findViewById(R.id.radioButton_sort_abscost);
+        radioButton_EditDate = findViewById(R.id.radioButton_sort_edit_date);
+        radioButton_notsort = findViewById(R.id.radioButton_sort_notsort);
+        checkBox_Sortdesc = findViewById(R.id.checkBox_sort_desc);
 
         order_by = settings.getString(Config.PREF_ORDER_BY, Config.PREF_ORDER_BY_NOT_SORT);
         sort_desc = settings.getBoolean(Config.PREF_SORT_DESC, false);
@@ -49,8 +49,8 @@ public class ConfigActivity extends AppCompatActivity {
             case Config.PREF_ORDER_BY_ABS_AMOUNT:
                 radioButton_AbsCost.setChecked(true);
                 break;
-            case Config.PREF_ORDER_BY_YAM:
-                radioButton_YaM.setChecked(true);
+            case Config.PREF_ORDER_BY_EDIT_DATE:
+                radioButton_EditDate.setChecked(true);
                 break;
             case Config.PREF_ORDER_BY_NOT_SORT:
                 radioButton_notsort.setChecked(true);
@@ -72,8 +72,8 @@ public class ConfigActivity extends AppCompatActivity {
         if (radioButton_AbsCost.isChecked()) {
             order_by = Config.PREF_ORDER_BY_ABS_AMOUNT;
         }
-        if (radioButton_YaM.isChecked()) {
-            order_by = Config.PREF_ORDER_BY_YAM;
+        if (radioButton_EditDate.isChecked()) {
+            order_by = Config.PREF_ORDER_BY_EDIT_DATE;
         }
         if (radioButton_notsort.isChecked()) {
             order_by = Config.PREF_ORDER_BY_NOT_SORT;

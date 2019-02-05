@@ -16,7 +16,27 @@ public class Transaction {
     private double amount_planed;
     private double amount_fact;
     private long date_create;
-    private RegularTransaction regular;
+    private long date_edit;
+
+    public Transaction(long id, long regular_id, String description, String category, long date, double amount_planed, double amount_fact, long date_create, long date_edit) {
+        this.id = id;
+        this.regular_id = regular_id;
+        this.description = description;
+        this.category = category;
+        this.date = date;
+        this.amount_planed = amount_planed;
+        this.amount_fact = amount_fact;
+        this.date_create = date_create;
+        this.date_edit = date_edit;
+
+        if ( date > 0) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(date);
+            this.year  = cal.get(Calendar.YEAR);
+            this.month = cal.get(Calendar.MONTH) + 1;
+            this.day = cal.get(Calendar.DAY_OF_MONTH);
+        }
+    }
 
     public Transaction(long id, long regular_id, String description, String category, long date, double amount_planed, double amount_fact, long date_create) {
         this.id = id;
@@ -35,6 +55,8 @@ public class Transaction {
             this.month = cal.get(Calendar.MONTH) + 1;
             this.day = cal.get(Calendar.DAY_OF_MONTH);
         }
+
+        this.date_edit = new Date().getTime();
     }
 
     public Transaction(long id, long regular_id, String description, String category, long date, double amount_planed, double amount_fact) {
@@ -46,6 +68,7 @@ public class Transaction {
         this.amount_planed = amount_planed;
         this.amount_fact = amount_fact;
         this.date_create = new Date().getTime();
+        this.date_edit = new Date().getTime();
 
         if ( date > 0) {
             Calendar cal = Calendar.getInstance();
@@ -116,14 +139,6 @@ public class Transaction {
         this.date_create = date_create;
     }
 
-    public RegularTransaction getRegular() {
-        return regular;
-    }
-
-    public void setRegular(RegularTransaction regular) {
-        this.regular = regular;
-    }
-
     public int getYear() {
         return year;
     }
@@ -146,5 +161,17 @@ public class Transaction {
 
     public void setDay(int day) {
         this.day = day;
+    }
+
+    public void setDate(long date) {
+        this.date = date;
+    }
+
+    public long getDate_edit() {
+        return date_edit;
+    }
+
+    public void setDate_edit(long date_edit) {
+        this.date_edit = date_edit;
     }
 }

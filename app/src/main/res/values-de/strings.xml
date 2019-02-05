@@ -8,7 +8,7 @@
     <string name="activity_main_receipts">Einnahmen</string>
     <string name="activity_main_spending">Ausgaben</string>
     <string name="activity_main_planed">geplant</string>
-    <string name="activity_main_fact">tatsache</string>
+    <string name="activity_main_fact">gebucht</string>
     <string name="activity_main_total">Summe</string>
     <string name="activity_main_transactions">Bewegungen</string>
 
@@ -29,7 +29,7 @@
     <string name="app_settings_sort">Sortieren nach</string>
     <string name="app_settings_sort_name">Bezeichnung</string>
     <string name="app_settings_sort_cost">Betrag</string>
-    <string name="app_settings_sort_year_month">Jahr und Monat</string>
+    <string name="app_settings_sort_edit_date">Änderungsdatum</string>
     <string name="app_settings_sort_desc">absteigende Reihenfolge</string>
     <string name="app_settings_save">Speichern</string>
     <string name="app_settings_sort_notsort">nicht sortieren</string>
@@ -48,10 +48,10 @@
     <string name="importFromFile">Import von der Datei: %1$s</string>
     <string name="importFail">Import felerhaft. Fehlermeldung: %1$s</string>
     <string name="exportFail">Export felerhaft. Fehlermeldung: %1$s</string>
-    <string name="date">Date</string>
+    <string name="date">Datum</string>
     <string name="put_regular">Reguläre einplanen</string>
     <string name="activity_transaction_edit">Bearbeiten</string>
-    <string name="only_planed">only planed</string>
-    <string name="all">all</string>
+    <string name="only_planed">nur offene</string>
+    <string name="all">alle</string>
     <string name="activity_transaction_amount">Betrag</string>
 </resources>

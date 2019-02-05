@@ -27,6 +27,12 @@ public class RegularTransactionAdapter extends ArrayAdapter<RegularTransaction> 
         this.inflater = LayoutInflater.from(context);
     }
 
+    public void updateTransactionsList(List<RegularTransaction> newlist) {
+        regularTransactions.clear();
+        regularTransactions.addAll(newlist);
+        this.notifyDataSetChanged();
+    }
+
     public View getView(int position, View convertView, ViewGroup parent) {
 
         ViewHolder viewHolder;
@@ -61,9 +67,9 @@ public class RegularTransactionAdapter extends ArrayAdapter<RegularTransaction> 
     private class ViewHolder {
         final TextView amountView, descriptionView, categoryView;
         ViewHolder(View view) {
-            descriptionView = (TextView) view.findViewById(R.id.textView_description_regular);
-            amountView = (TextView) view.findViewById(R.id.textView_amount_regular);
-            categoryView = (TextView) view.findViewById(R.id.textView_category_regular);
+            descriptionView = view.findViewById(R.id.textView_description_regular);
+            amountView = view.findViewById(R.id.textView_amount_regular);
+            categoryView = view.findViewById(R.id.textView_category_regular);
         }
     }
 }

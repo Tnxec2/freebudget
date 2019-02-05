@@ -30,17 +30,16 @@ public class RegularTransactionActivity extends AppCompatActivity {
     static final int PICK_CATEGORY_REQUEST = 123;  // The request code
 
 
-    private EditText descriptionBox;
-    private AutoCompleteTextView categoryBox;
-    private EditText amountBox;
-    private EditText dayBox;
-    private Spinner monthBox;
-    private Button delButton, copyButton, selectCatButton;
+    private EditText editTextDescription;
+    private AutoCompleteTextView acTextViewCategory;
+    private EditText editTextAmount;
+    private EditText editTextDay;
+    private Spinner spinnerMonth;
+    private Button buttonDelete, buttonCopy;
     private RadioButton radioButtonReceipts, radioButtonSpending;
 
     private DatabaseAdapter dbAdapter;
     private long transactionID = 0;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,36 +48,35 @@ public class RegularTransactionActivity extends AppCompatActivity {
 
         setTitle(R.string.new_regular_transaction);
 
-        descriptionBox = (EditText) findViewById(R.id.editText_description_regular);
+        editTextDescription = findViewById(R.id.editText_description_regular);
 
-        descriptionBox.requestFocus();
+        editTextDescription.requestFocus();
         SoftKeyboard.showKeyboard(this  );
 
-        categoryBox = (AutoCompleteTextView) findViewById(R.id.acTextView_category_regular);
+        acTextViewCategory = findViewById(R.id.acTextView_category_regular);
 
-        amountBox = (EditText) findViewById(R.id.editText_amount_regular);
-        dayBox = (EditText) findViewById(R.id.editText_day_regular) ;
-        monthBox = (Spinner) findViewById(R.id.spinner_Month_regular);
-        delButton = (Button) findViewById(R.id.button_delete_regular);
-        copyButton = (Button) findViewById(R.id.button_copy_regular);
-        selectCatButton = findViewById(R.id.btn_selectCat);
+        editTextAmount = findViewById(R.id.editText_amount_regular);
+        editTextDay = findViewById(R.id.editText_day_regular);
+        spinnerMonth = findViewById(R.id.spinner_Month_regular);
+        buttonDelete = findViewById(R.id.button_delete_regular);
+        buttonCopy = findViewById(R.id.button_copy_regular);
 
         dbAdapter = new DatabaseAdapter(this);
 
-        radioButtonReceipts = (RadioButton) findViewById(R.id.radioButton_receipts_regular);
-        radioButtonSpending = (RadioButton) findViewById(R.id.radioButton_spending_regular);
+        radioButtonReceipts = findViewById(R.id.radioButton_receipts_regular);
+        radioButtonSpending = findViewById(R.id.radioButton_spending_regular);
 
         dbAdapter.open();
         List<Category> categoryArrayList = dbAdapter.getAllCategory();
-        ArrayAdapter<Category> adapter = new ArrayAdapter<Category>(
+        ArrayAdapter<Category> adapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_dropdown_item_1line, categoryArrayList);
-        categoryBox.setAdapter(adapter);
-        categoryBox.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        acTextViewCategory.setAdapter(adapter);
+        acTextViewCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
                                     long arg3) {
-                Category selected = (Category) arg0.getAdapter().getItem(arg2);
+                // Category selected = (Category) arg0.getAdapter().getItem(arg2);
                 /*
                 Toast.makeText(RegularTransactionActivity.this,
                         "Clicked " + arg2 + " name: " + selected.getName(),
@@ -93,24 +91,24 @@ public class RegularTransactionActivity extends AppCompatActivity {
             transactionID = extras.getLong("id");
         }
         // if ID = 0, then create new transaction; else update
-        monthBox.setSelection(0);
+        spinnerMonth.setSelection(0);
         if (transactionID > 0) {
             // получаем элемент по id из бд
             dbAdapter.open();
             RegularTransaction transaction = dbAdapter.getRegularById(transactionID);
             if ( transaction != null) {
                 Category category = dbAdapter.getCategory(transaction.getCategory());
-                descriptionBox.setText(transaction.getDescription());
-                categoryBox.setText(category.getName());
+                editTextDescription.setText(transaction.getDescription());
+                acTextViewCategory.setText(category.getName());
                 if (transaction.getAmount() != 0) {
-                    amountBox.setText(String.valueOf(Math.abs(transaction.getAmount())));
+                    editTextAmount.setText(String.valueOf(Math.abs(transaction.getAmount())));
                 }
                 if (transaction.getAmount() > 0) {
                     radioButtonReceipts.setChecked(true);
                 } else if (transaction.getAmount() < 0) {
                     radioButtonSpending.setChecked(true);
                 }
-                monthBox.setSelection(transaction.getMonth());
+                spinnerMonth.setSelection(transaction.getMonth());
             }
             dbAdapter.close();
         } else {
@@ -119,7 +117,7 @@ public class RegularTransactionActivity extends AppCompatActivity {
                 if ( extras.containsKey(TRANS_STAT))
                     transStat = extras.getString(TRANS_STAT);
                 if ( extras.containsKey(MONTH))
-                    monthBox.setSelection(extras.getInt(MONTH));
+                    spinnerMonth.setSelection(extras.getInt(MONTH));
             }
 
             if ( transStat != null ) {
@@ -131,7 +129,7 @@ public class RegularTransactionActivity extends AppCompatActivity {
             }
 
             // hide delete button
-            delButton.setVisibility(View.GONE);
+            buttonDelete.setVisibility(View.GONE);
         }
     }
 
@@ -141,7 +139,7 @@ public class RegularTransactionActivity extends AppCompatActivity {
         if (requestCode == PICK_CATEGORY_REQUEST) {
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
-                categoryBox.setText( data.getStringExtra(RESULT_CATEGORY) );
+                acTextViewCategory.setText( data.getStringExtra(RESULT_CATEGORY) );
             }
         }
     }
@@ -155,11 +153,11 @@ public class RegularTransactionActivity extends AppCompatActivity {
 
     public void save(View view){
 
-        String description = descriptionBox.getText().toString();
-        String categoryName = categoryBox.getText().toString();
+        String description = editTextDescription.getText().toString();
+        String categoryName = acTextViewCategory.getText().toString();
         double amount;
         try {
-            amount = Double.parseDouble(amountBox.getText().toString());
+            amount = Double.parseDouble(editTextAmount.getText().toString());
             if(radioButtonReceipts.isChecked()) {
                 amount = Math.abs(amount);
             } else if(radioButtonSpending.isChecked()) {
@@ -169,8 +167,8 @@ public class RegularTransactionActivity extends AppCompatActivity {
             amount = 0;
         }
 
-        int month = monthBox.getSelectedItemPosition();
-        int day = Integer.parseInt(dayBox.getText().toString());
+        int month = spinnerMonth.getSelectedItemPosition();
+        int day = Integer.parseInt(editTextDay.getText().toString());
 
         dbAdapter.open();
 
@@ -187,8 +185,8 @@ public class RegularTransactionActivity extends AppCompatActivity {
 
     public void copy(View view){
         transactionID = 0;
-        delButton.setVisibility(View.GONE);
-        copyButton.setVisibility(View.GONE);
+        buttonDelete.setVisibility(View.GONE);
+        buttonCopy.setVisibility(View.GONE);
     }
 
     public void delete(View view){

@@ -15,7 +15,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.RadioButton;
-import android.widget.Switch;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -44,11 +43,12 @@ public class TransactionActivity extends AppCompatActivity {
     private AutoCompleteTextView acTextViewCategory;
     private EditText editTextAmountPlanned, editTextAmountFact;
     private EditText editTextDate;
-    private Button btnDelete, btnCopy;
-    ImageButton btn_copy_amount;
+    private Button buttonDelete, buttonCopy;
+    private ImageButton buttonCopyAmount;
+    private RadioButton radioButtonReceipts, radioButtonSpending;
+
     private DatabaseAdapter dbAdapter;
     private long transactionID = 0;
-    private RadioButton radioButtonReceipts, radioButtonSpending;
 
     DatePickerDialog datePickerDialog;
     public int year, month, day;
@@ -69,9 +69,9 @@ public class TransactionActivity extends AppCompatActivity {
         acTextViewCategory = findViewById(R.id.acTextView_category);
         editTextAmountPlanned = findViewById(R.id.editText_amount_planed);
         editTextAmountFact = findViewById(R.id.editText_amount_fact);
-        btnDelete = findViewById(R.id.button_delete);
-        btnCopy = findViewById(R.id.button_copy);
-        btn_copy_amount = findViewById(R.id.btn_copy_amount);
+        buttonDelete = findViewById(R.id.button_delete);
+        buttonCopy = findViewById(R.id.button_copy);
+        buttonCopyAmount = findViewById(R.id.btn_copy_amount);
 
         // initiate the date picker and a button
         editTextDate = findViewById(R.id.editText_date);
@@ -80,7 +80,7 @@ public class TransactionActivity extends AppCompatActivity {
 
         dbAdapter.open();
         List<Category> categoryArrayList = dbAdapter.getAllCategory();
-        ArrayAdapter<Category> adapter = new ArrayAdapter<Category>(
+        ArrayAdapter<Category> adapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_dropdown_item_1line, categoryArrayList);
         acTextViewCategory.setAdapter(adapter);
         acTextViewCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -88,7 +88,7 @@ public class TransactionActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
                                     long arg3) {
-                Category selected = (Category) arg0.getAdapter().getItem(arg2);
+                // Category selected = (Category) arg0.getAdapter().getItem(arg2);
                 /*
                 Toast.makeText(RegularTransactionActivity.this,
                         "Clicked " + arg2 + " name: " + selected.getName(),
@@ -97,8 +97,8 @@ public class TransactionActivity extends AppCompatActivity {
             }
         });
 
-        radioButtonReceipts = (RadioButton) findViewById(R.id.radioButton_receipts);
-        radioButtonSpending = (RadioButton) findViewById(R.id.radioButton_spending);
+        radioButtonReceipts = findViewById(R.id.radioButton_receipts);
+        radioButtonSpending = findViewById(R.id.radioButton_spending);
 
         // perform click event on edit text
         editTextDate.setOnClickListener(new View.OnClickListener() {
@@ -144,7 +144,6 @@ public class TransactionActivity extends AppCompatActivity {
             editTextAmountFact.setText(String.valueOf(Math.abs(transaction.getAmount_fact())));
             editTextAmountPlanned.setText(String.valueOf(Math.abs(transaction.getAmount_planed())));
 
-            SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
             long displayDate;
             if (transaction.getDate() > 0) displayDate = transaction.getDate();
             else displayDate = new Date().getTime();
@@ -184,14 +183,14 @@ public class TransactionActivity extends AppCompatActivity {
             }
 
             // hide delete button
-            btnDelete.setVisibility(View.GONE);
+            buttonDelete.setVisibility(View.GONE);
 
             Log.d("NIK", String.valueOf(planed));
 
         }
         editTextAmountPlanned.setEnabled(planed);
         editTextAmountFact.setEnabled(!planed);
-        btn_copy_amount.setEnabled(!planed);
+        buttonCopyAmount.setEnabled(!planed);
     }
 
     @Override
@@ -294,8 +293,8 @@ public class TransactionActivity extends AppCompatActivity {
 
     public void copy(View view){
         transactionID = 0;
-        btnDelete.setVisibility(View.GONE);
-        btnCopy.setVisibility(View.GONE);
+        buttonDelete.setVisibility(View.GONE);
+        buttonCopy.setVisibility(View.GONE);
     }
 
     public void delete(View view){

@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import de.kontranik.freebudget.service.FileService;
@@ -30,9 +31,9 @@ public class ManagePlanedTransactionsActivity extends AppCompatActivity {
 
     private ListView listView_transactionsList;
 
+    private List<Transaction> transactions = new ArrayList<>();
+
     TransactionAdapter transactionAdapter;
-    static String transStat;
-    Boolean isMove;
 
      @SuppressLint("ClickableViewAccessibility")
      @Override
@@ -41,7 +42,7 @@ public class ManagePlanedTransactionsActivity extends AppCompatActivity {
         setTitle(R.string.title_activity_all_transactions);
         setContentView(R.layout.activity_manage_planed_transactions);
 
-        listView_transactionsList = (ListView)findViewById(R.id.listView_transactionsList);
+        listView_transactionsList = findViewById(R.id.listView_transactionsList);
 
         listView_transactionsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -56,11 +57,16 @@ public class ManagePlanedTransactionsActivity extends AppCompatActivity {
             }
         });
 
+         // set list adapter
+         transactionAdapter = new TransactionAdapter(this,
+                 R.layout.layout_transaction_item,
+                 transactions);
+         // set adapter
+         listView_transactionsList.setAdapter(transactionAdapter);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         getMenuInflater().inflate(R.menu.alltransactions_menu, menu);
         return true;
     }
@@ -98,11 +104,9 @@ public class ManagePlanedTransactionsActivity extends AppCompatActivity {
             case RESULT_OPEN_FILENAME:
                 if (resultCode == RESULT_OK) {
                     String fileName = data.getStringExtra(RESULT_FILENAME);
-
                     Toast.makeText(this,
                             this.getResources().getString(R.string.importFromFile, fileName),
                             Toast.LENGTH_SHORT).show();
-
                     try {
                         FileService.importFileTransaction(fileName, this);
                     } catch (Exception e) {
@@ -117,19 +121,14 @@ public class ManagePlanedTransactionsActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        DatabaseAdapter adapter = new DatabaseAdapter(this);
-        adapter.open();
+        DatabaseAdapter databaseAdapter = new DatabaseAdapter(this);
+        databaseAdapter.open();
 
-        List<Transaction> transactions = adapter.getAllPlanedTransactions(this);
+        transactions.clear();
+        transactions.addAll(databaseAdapter.getAllPlanedTransactions(this));
+        transactionAdapter.notifyDataSetChanged();
 
-        // set list adapter
-        transactionAdapter = new TransactionAdapter(this,
-                R.layout.layout_transaction_item,
-                transactions);
-        // set adapter
-        listView_transactionsList.setAdapter(transactionAdapter);
-
-        adapter.close();
+        databaseAdapter.close();
     }
 
 

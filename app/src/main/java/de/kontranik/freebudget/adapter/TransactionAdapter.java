@@ -32,12 +32,6 @@ public class TransactionAdapter extends ArrayAdapter<Transaction>  {
 
     }
 
-    public void refresh(List<Transaction> transactions)
-    {
-        this.transactions = transactions;
-        notifyDataSetChanged();
-    }
-
     public View getView(int position, View convertView, ViewGroup parent) {
 
         ViewHolder viewHolder;
@@ -88,9 +82,9 @@ public class TransactionAdapter extends ArrayAdapter<Transaction>  {
     private class ViewHolder {
         final TextView amountView, descriptionView, categoryView;
         ViewHolder(View view) {
-            amountView = (TextView) view.findViewById(R.id.textView_amount);
-            descriptionView = (TextView) view.findViewById(R.id.textView_description);
-            categoryView = (TextView) view.findViewById(R.id.textView_category);
+            amountView = view.findViewById(R.id.textView_amount);
+            descriptionView = view.findViewById(R.id.textView_description);
+            categoryView = view.findViewById(R.id.textView_category);
         }
     }
 }

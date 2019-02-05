@@ -19,10 +19,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_ID_REGULAR = "id_regular";
     public static final String COLUMN_DESCRIPTION = "description";
     public static final String COLUMN_AMOUNT = "amount";
-    public static final String COLUMN_YEAR = "year";
+
     public static final String COLUMN_MONTH = "month";
     public static final String COLUMN_DAY = "day";
     public static final String COLUMN_CREATE_DATE = "create_date";
+    public static final String COLUMN_EDIT_DATE = "edit_date";
 
     public static final String COLUMN_DATE = "date";
     public static final String COLUMN_AMOUNT_PLANNED = "amount_planed";
@@ -59,7 +60,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_DATE + " INTEGER, " +
                 COLUMN_AMOUNT_PLANNED + " REAL, " +
                 COLUMN_AMOUNT_FACT + " REAL, " +
-                COLUMN_CREATE_DATE + " INTEGER " +
+                COLUMN_CREATE_DATE + " INTEGER ," +
+                COLUMN_EDIT_DATE + " INTEGER " +
                 ");");
     }
     @Override

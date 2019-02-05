@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.Intent;
 import android.os.Build;
-import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -51,8 +50,6 @@ public class MainActivity extends AppCompatActivity {
     TransactionAdapter transactionAdapter;
 
     Boolean isMove;
-
-    static final int RESULT_CODE = 123;
 
     public static final String TRANS_STAT = "TRANS_STAT";
     public static final String TRANS_STAT_PLUS = "plus";
@@ -344,6 +341,15 @@ public class MainActivity extends AppCompatActivity {
 
         List<Transaction> dbTransactions = dbAdapter.getTransactions(this.year, this.month, false) ;
 
+        amount_planed = 0;
+        amount_fact = 0;
+        total_planed = 0;
+        total_fact = 0;
+        receipts_fact = 0;
+        receipts_planed = 0;
+        spending_fact = 0;
+        spending_planed = 0;
+
         for (Transaction transaction: dbTransactions) {
             amount_planed = transaction.getAmount_planed();
             if (amount_planed > 0) receipts_planed += amount_planed;
@@ -436,17 +442,6 @@ public class MainActivity extends AppCompatActivity {
         getTransactions();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        DatabaseAdapter adapter = new DatabaseAdapter(this);
-        switch (requestCode) {
-            case RESULT_CODE:
-                if (resultCode == RESULT_OK) {
-                }
-                break;
-        }
-    }
-
     public void add(String transStat, String planed){
         setNormalStat();
         Intent intent = new Intent(this, TransactionActivity.class);
@@ -505,6 +500,7 @@ public class MainActivity extends AppCompatActivity {
         databaseAdapter.open();
         databaseAdapter.deleteTransaction(entry.getId());
         databaseAdapter.close();
+        getTransactions();
     }
 
     private void setSummen() {

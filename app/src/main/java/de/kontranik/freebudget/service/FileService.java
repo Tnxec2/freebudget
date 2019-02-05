@@ -7,7 +7,6 @@ import android.util.Log;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -112,11 +111,15 @@ public class FileService {
 
         List<Transaction> transactionList = new ArrayList<>();
 
-        FileReader file = new FileReader(filename);
-        BufferedReader buffer = new BufferedReader(file);
+        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filename), CSV_CODE_PAGE));
+
+        // BOM marker will only appear on the very beginning
+        br.mark(4);
+        if ('\ufeff' != br.read()) br.reset(); // not the BOM marker
+
         String line;
 
-        while ((line = buffer.readLine()) != null) {
+        while ((line = br.readLine()) != null) {
             String[] str = line.split(CSV_DELIMITER);
             if (str.length > 5) {
                 long s_id = 0;
@@ -142,6 +145,7 @@ public class FileService {
         for(Transaction transaction: transactionList) {
             dbAdapter.insert(transaction);
         }
+        br.close();
         dbAdapter.close();
         return true;
     }
