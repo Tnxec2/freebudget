@@ -58,22 +58,12 @@
     <string name="activity_transaction_amount">Amount</string>
 
     <string-array name="navigation_drawer_items_array">
-        <item>overview</item>
-        <item>planned</item>
-        <item>regular</item>
-        <item>tools</item>
-        <item>settings</item>
+        <item>Overview</item>
+        <item>Planned</item>
+        <item>Regular</item>
+        <item>Extras</item>
+        <item>Settings</item>
     </string-array>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="overview">Overview</string>
-    <string name="planned">Planned</string>
-    <string name="regular">Regular</string>
-    <string name="tools">Tools</string>
-    <string name="settings">Settings</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
 
 </resources>
 

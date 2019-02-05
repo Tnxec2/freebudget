@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mTitle = mDrawerTitle = getTitle();
-        mNavigationDrawerItemTitles= getResources().getStringArray(R.array.navigation_drawer_items_array);
+        mNavigationDrawerItemTitles = getResources().getStringArray(R.array.navigation_drawer_items_array);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
@@ -40,11 +40,11 @@ public class MainActivity extends AppCompatActivity {
 
         DrawerItem[] drawerItem = new DrawerItem[5];
 
-        drawerItem[0] = new DrawerItem(R.drawable.ic_assessment_black_24dp, getString(R.string.overview));
-        drawerItem[1] = new DrawerItem(R.drawable.ic_view_list_black_24dp, getString(R.string.planned));
-        drawerItem[2] = new DrawerItem(R.drawable.ic_repeat_black_24dp, getString(R.string.regular));
-        drawerItem[3] = new DrawerItem(R.drawable.ic_menu_manage, getString(R.string.tools));
-        drawerItem[4] = new DrawerItem(R.drawable.ic_settings_black_24dp, getString(R.string.settings));
+        drawerItem[0] = new DrawerItem(R.drawable.ic_assessment_black_24dp, mNavigationDrawerItemTitles[0]);
+        drawerItem[1] = new DrawerItem(R.drawable.ic_view_list_black_24dp, mNavigationDrawerItemTitles[1]);
+        drawerItem[2] = new DrawerItem(R.drawable.ic_repeat_black_24dp, mNavigationDrawerItemTitles[2]);
+        drawerItem[3] = new DrawerItem(R.drawable.ic_menu_manage, mNavigationDrawerItemTitles[3]);
+        drawerItem[4] = new DrawerItem(R.drawable.ic_settings_black_24dp, mNavigationDrawerItemTitles[4]);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setHomeButtonEnabled(true);
