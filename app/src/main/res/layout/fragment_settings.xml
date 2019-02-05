@@ -49,6 +49,13 @@
             android:text="@string/app_settings_sort_abs_cost" />
 
         <RadioButton
+            android:id="@+id/radioButton_sort_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/app_settings_sort_date" />
+
+        <RadioButton
             android:id="@+id/radioButton_sort_edit_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

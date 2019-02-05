@@ -29,6 +29,7 @@
     <string name="app_settings_sort">Sort order by</string>
     <string name="app_settings_sort_name">Name</string>
     <string name="app_settings_sort_cost">Amount</string>
+    <string name="app_settings_sort_date">Date</string>
     <string name="app_settings_sort_edit_date">Edit date</string>
     <string name="app_settings_sort_desc">descending order</string>
     <string name="app_settings_save">save</string>

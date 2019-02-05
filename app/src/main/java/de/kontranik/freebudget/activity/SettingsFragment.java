@@ -14,6 +14,8 @@ import android.widget.RadioButton;
 import de.kontranik.freebudget.R;
 import de.kontranik.freebudget.config.Config;
 
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -25,7 +27,7 @@ import de.kontranik.freebudget.config.Config;
 public class SettingsFragment extends Fragment {
 
     SharedPreferences settings;
-    RadioButton radioButton_Name, radioButton_Cost, radioButton_EditDate,
+    RadioButton radioButton_Name, radioButton_Cost, radioButton_Date, radioButton_EditDate,
             radioButton_notsort, radioButton_AbsCost;
     CheckBox checkBox_Sortdesc;
     String order_by;
@@ -37,7 +39,9 @@ public class SettingsFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+        settings = this.getActivity().getSharedPreferences(Config.PREFS_FILE, MODE_PRIVATE);
     }
 
     @Override
@@ -56,6 +60,7 @@ public class SettingsFragment extends Fragment {
         radioButton_Name = (RadioButton) view.findViewById(R.id.radioButton_sort_name);
         radioButton_Cost = (RadioButton) view.findViewById(R.id.radioButton_sort_cost);
         radioButton_AbsCost = (RadioButton) view.findViewById(R.id.radioButton_sort_abscost);
+        radioButton_Date = (RadioButton) view.findViewById(R.id.radioButton_sort_date);
         radioButton_EditDate = (RadioButton) view.findViewById(R.id.radioButton_sort_edit_date);
         radioButton_notsort = (RadioButton) view.findViewById(R.id.radioButton_sort_notsort);
         checkBox_Sortdesc = (CheckBox) view.findViewById(R.id.checkBox_sort_desc);
@@ -71,6 +76,9 @@ public class SettingsFragment extends Fragment {
                 break;
             case Config.PREF_ORDER_BY_ABS_AMOUNT:
                 radioButton_AbsCost.setChecked(true);
+                break;
+            case Config.PREF_ORDER_BY_DATE:
+                radioButton_Date.setChecked(true);
                 break;
             case Config.PREF_ORDER_BY_EDIT_DATE:
                 radioButton_EditDate.setChecked(true);
@@ -95,6 +103,9 @@ public class SettingsFragment extends Fragment {
         }
         if (radioButton_AbsCost.isChecked()) {
             order_by = Config.PREF_ORDER_BY_ABS_AMOUNT;
+        }
+        if (radioButton_Date.isChecked()) {
+            order_by = Config.PREF_ORDER_BY_DATE;
         }
         if (radioButton_EditDate.isChecked()) {
             order_by = Config.PREF_ORDER_BY_EDIT_DATE;
