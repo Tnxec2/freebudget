@@ -1,5 +1,6 @@
 package de.kontranik.freebudget.activity;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -38,13 +39,14 @@ public class MainActivity extends AppCompatActivity {
 
         setupToolbar();
 
-        DrawerItem[] drawerItem = new DrawerItem[5];
+        DrawerItem[] drawerItem = new DrawerItem[6];
 
         drawerItem[0] = new DrawerItem(R.drawable.ic_assessment_black_24dp, mNavigationDrawerItemTitles[0]);
         drawerItem[1] = new DrawerItem(R.drawable.ic_view_list_black_24dp, mNavigationDrawerItemTitles[1]);
         drawerItem[2] = new DrawerItem(R.drawable.ic_repeat_black_24dp, mNavigationDrawerItemTitles[2]);
-        drawerItem[3] = new DrawerItem(R.drawable.ic_menu_manage, mNavigationDrawerItemTitles[3]);
-        drawerItem[4] = new DrawerItem(R.drawable.ic_settings_black_24dp, mNavigationDrawerItemTitles[4]);
+        drawerItem[3] = new DrawerItem(R.drawable.ic_folder_black_24dp, mNavigationDrawerItemTitles[3]);
+        drawerItem[4] = new DrawerItem(R.drawable.ic_menu_manage, mNavigationDrawerItemTitles[4]);
+        drawerItem[5] = new DrawerItem(R.drawable.ic_settings_black_24dp, mNavigationDrawerItemTitles[5]);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -83,9 +85,13 @@ public class MainActivity extends AppCompatActivity {
                 fragment = new RegularFragment();
                 break;
             case 3:
-                fragment = new ToolsFragment();
+                Intent open_import = new Intent(this, CategoryListActivity.class);
+                this.startActivityForResult(open_import, 0);
                 break;
             case 4:
+                fragment = new ToolsFragment();
+                break;
+            case 5:
                 fragment = new SettingsFragment();
                 break;
 
@@ -100,11 +106,8 @@ public class MainActivity extends AppCompatActivity {
             mDrawerList.setItemChecked(position, true);
             mDrawerList.setSelection(position);
             setTitle(mNavigationDrawerItemTitles[position]);
-            mDrawerLayout.closeDrawer(mDrawerList);
-
-        } else {
-            Log.e("MainActivity", "Error in creating fragment");
         }
+        mDrawerLayout.closeDrawer(mDrawerList);
     }
 
     @Override

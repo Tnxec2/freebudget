@@ -56,11 +56,14 @@
     <string name="only_planed">only planned</string>
     <string name="all">all</string>
     <string name="activity_transaction_amount">Amount</string>
+    <string name="delete">Delete</string>
+    <string name="save">Save</string>
 
     <string-array name="navigation_drawer_items_array">
         <item>Overview</item>
         <item>Planned</item>
         <item>Regular</item>
+        <item>Category</item>
         <item>Extras</item>
         <item>Settings</item>
     </string-array>

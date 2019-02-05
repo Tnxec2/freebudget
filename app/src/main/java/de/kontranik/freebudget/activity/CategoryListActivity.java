@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.kontranik.freebudget.R;
@@ -39,6 +40,8 @@ public class CategoryListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category_list);
 
+        categoryList = new ArrayList<>();
+
         listViewCategory = (ListView) findViewById(R.id.listView_categoryList);
         editTextCategory = (EditText) findViewById(R.id.editText_categoryName);
         btn_Save = (Button) findViewById(R.id.btn_categorySave);
@@ -46,7 +49,6 @@ public class CategoryListActivity extends AppCompatActivity {
 
         dbAdapter = new DatabaseAdapter(this);
 
-        getCategory();
         categoryArrayAdapter = new ArrayAdapter(this,
                 android.R.layout.simple_list_item_1, categoryList);
         // устанавливаем для списка адаптер
@@ -65,6 +67,13 @@ public class CategoryListActivity extends AppCompatActivity {
                 dbAdapter.close();
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        getCategory();
     }
 
     public void getCategory() {
@@ -90,15 +99,23 @@ public class CategoryListActivity extends AppCompatActivity {
 
         dbAdapter.close();
 
+        category = null;
+        editTextCategory.setText("");
+
         getCategory();
     }
 
     public void onDelete(View view) {
         if ( category != null) {
             dbAdapter.open();
-            if ( dbAdapter.deleteCategory(category.getId()) > 0 ) editTextCategory.setText("");
+            if ( dbAdapter.deleteCategory(category.getId()) > 0 ) {
+                editTextCategory.setText("");
+                category = null;
+            }
             dbAdapter.close();
             getCategory();
+        } else {
+            editTextCategory.setText("");
         }
     }
 

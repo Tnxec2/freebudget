@@ -56,11 +56,14 @@
     <string name="activity_transaction_amount">Betrag</string>
     <string name="importOK">Import OK. Datei: %1$s</string>
     <string name="exportOK">Export OK. Datei: %1$s</string>
+    <string name="delete">Löschen</string>
+    <string name="save">Speichern</string>
 
     <string-array name="navigation_drawer_items_array">
         <item>Übersicht</item>
         <item>Geplante</item>
         <item>Reguläre</item>
+        <item>Kategorie</item>
         <item>Extras</item>
         <item>Einstellungen</item>
     </string-array>
