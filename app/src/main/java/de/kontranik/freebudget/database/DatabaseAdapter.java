@@ -42,18 +42,7 @@ public class DatabaseAdapter {
     }
 
     private Cursor getAllTransactions(Context context){
-        settings = context.getSharedPreferences(Config.PREFS_FILE, Context.MODE_PRIVATE);
-        order_by = settings.getString(Config.PREF_ORDER_BY, Config.PREF_ORDER_BY_NOT_SORT);
-        sort_desc = settings.getBoolean(Config.PREF_SORT_DESC, false);
-
-        String sortOrder = null;
-        if (!order_by.equals(Config.PREF_ORDER_BY_NOT_SORT)) {
-            sortOrder = order_by;
-
-            if (sort_desc) {
-                sortOrder = sortOrder + " DESC ";
-            }
-        }
+        String sortOrder = getSortFromSettings(context);
 
         String[] columns = new String[] {   DatabaseHelper.COLUMN_ID,
                                             DatabaseHelper.COLUMN_ID_REGULAR,
@@ -96,18 +85,7 @@ public class DatabaseAdapter {
     public List<Transaction> getAllPlannedTransactions(Context context){
         List<Transaction> transactions = new ArrayList<>();
 
-        settings = context.getSharedPreferences(Config.PREFS_FILE, Context.MODE_PRIVATE);
-        order_by = settings.getString(Config.PREF_ORDER_BY, Config.PREF_ORDER_BY_NOT_SORT);
-        sort_desc = settings.getBoolean(Config.PREF_SORT_DESC, false);
-
-        String sortOrder = null;
-        if (!order_by.equals(Config.PREF_ORDER_BY_NOT_SORT)) {
-            sortOrder = order_by;
-
-            if (sort_desc) {
-                sortOrder = sortOrder + " DESC ";
-            }
-        }
+        String sortOrder = getSortFromSettings(context);
 
         String[] columns = new String[] {   DatabaseHelper.COLUMN_ID,
                 DatabaseHelper.COLUMN_ID_REGULAR,
@@ -143,7 +121,7 @@ public class DatabaseAdapter {
         return  transactions;
     }
 
-     public List<Transaction> getTransactions(int e_year, int e_month, boolean showOnlyPlanned){
+     public List<Transaction> getTransactions(Context context, int e_year, int e_month, boolean showOnlyPlanned){
 
         ArrayList<Transaction> transactions = new ArrayList<>();
 
@@ -163,7 +141,7 @@ public class DatabaseAdapter {
 
         String[] whereArgs = new String[]{ timeStringStart, timeStringEnd };
 
-        String sortOrder = DatabaseHelper.COLUMN_DATE;
+        String sortOrder = getSortFromSettings(context);
 
         String[] columns = new String[] {
                 DatabaseHelper.COLUMN_ID,
@@ -542,4 +520,19 @@ public class DatabaseAdapter {
         return database.update(DatabaseHelper.TABLE_CATEGORY, cv, whereClause, null);
     }
 
+    String getSortFromSettings(Context context) {
+        settings = context.getSharedPreferences(Config.PREFS_FILE, Context.MODE_PRIVATE);
+        order_by = settings.getString(Config.PREF_ORDER_BY, Config.PREF_ORDER_BY_NOT_SORT);
+        sort_desc = settings.getBoolean(Config.PREF_SORT_DESC, false);
+
+        String sortOrder = null;
+        if (!order_by.equals(Config.PREF_ORDER_BY_NOT_SORT)) {
+            sortOrder = order_by;
+
+            if (sort_desc) {
+                sortOrder = sortOrder + " DESC ";
+            }
+        }
+        return sortOrder;
+    }
 }
