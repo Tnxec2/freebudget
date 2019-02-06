@@ -79,12 +79,12 @@ public class DatabaseAdapter {
                 long idRegular = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_ID_REGULAR));
                 String category = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_CATEGORY_NAME));
                 String description = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_DESCRIPTION));
-                double amount_planed = cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.COLUMN_AMOUNT_PLANNED));
+                double amount_planned = cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.COLUMN_AMOUNT_PLANNED));
                 double amount_fact = cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.COLUMN_AMOUNT_FACT));
                 long date = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_DATE));
                 long date_create = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_CREATE_DATE));
                 long date_edit = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_EDIT_DATE));
-                transactions.add(new Transaction(id, idRegular, description, category, date, amount_planed, amount_fact, date_create, date_edit));
+                transactions.add(new Transaction(id, idRegular, description, category, date, amount_planned, amount_fact, date_create, date_edit));
             }
             while (cursor.moveToNext());
         }
@@ -93,7 +93,7 @@ public class DatabaseAdapter {
         return  transactions;
     }
 
-    public List<Transaction> getAllPlanedTransactions(Context context){
+    public List<Transaction> getAllPlannedTransactions(Context context){
         List<Transaction> transactions = new ArrayList<>();
 
         settings = context.getSharedPreferences(Config.PREFS_FILE, Context.MODE_PRIVATE);
@@ -129,12 +129,12 @@ public class DatabaseAdapter {
                 long idRegular = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_ID_REGULAR));
                 String category = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_CATEGORY_NAME));
                 String description = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_DESCRIPTION));
-                double amount_planed = cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.COLUMN_AMOUNT_PLANNED));
+                double amount_planned = cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.COLUMN_AMOUNT_PLANNED));
                 double amount_fact = cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.COLUMN_AMOUNT_FACT));
                 long date = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_DATE));
                 long date_create = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_CREATE_DATE));
                 long date_edit = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_EDIT_DATE));
-                transactions.add(new Transaction(id, idRegular, description, category, date, amount_planed, amount_fact, date_create, date_edit));
+                transactions.add(new Transaction(id, idRegular, description, category, date, amount_planned, amount_fact, date_create, date_edit));
             }
             while (cursor.moveToNext());
         }
@@ -143,7 +143,7 @@ public class DatabaseAdapter {
         return  transactions;
     }
 
-     public List<Transaction> getTransactions(int e_year, int e_month, boolean showOnlyPlaned){
+     public List<Transaction> getTransactions(int e_year, int e_month, boolean showOnlyPlanned){
 
         ArrayList<Transaction> transactions = new ArrayList<>();
 
@@ -159,7 +159,7 @@ public class DatabaseAdapter {
                         + " AND "
                         + DatabaseHelper.COLUMN_DATE + " < ? ";
 
-        if ( showOnlyPlaned ) whereClause += " AND " + DatabaseHelper.COLUMN_AMOUNT_FACT + " = 0 ";
+        if ( showOnlyPlanned ) whereClause += " AND " + DatabaseHelper.COLUMN_AMOUNT_FACT + " = 0 ";
 
         String[] whereArgs = new String[]{ timeStringStart, timeStringEnd };
 
@@ -186,11 +186,11 @@ public class DatabaseAdapter {
                 String description = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_DESCRIPTION));
                 String category = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_CATEGORY_NAME));
                 long date = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_DATE));
-                double amount_planed = cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.COLUMN_AMOUNT_PLANNED));
+                double amount_planned = cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.COLUMN_AMOUNT_PLANNED));
                 double amount_fact = cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.COLUMN_AMOUNT_FACT));
                 long create_date = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_CREATE_DATE));
                 long date_edit = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_EDIT_DATE));
-                transactions.add( new Transaction(id, idRegular, description, category, date, amount_planed, amount_fact, create_date, date_edit) );
+                transactions.add( new Transaction(id, idRegular, description, category, date, amount_planned, amount_fact, create_date, date_edit) );
             }
             while (cursor.moveToNext());
         }
@@ -290,11 +290,11 @@ public class DatabaseAdapter {
             String description = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_DESCRIPTION));
             String category = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_CATEGORY_NAME));
             long date = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_DATE));
-            double amount_planed = cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.COLUMN_AMOUNT_PLANNED));
+            double amount_planned = cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.COLUMN_AMOUNT_PLANNED));
             double amount_fact = cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.COLUMN_AMOUNT_FACT));
             long create_date = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_CREATE_DATE));
             long date_edit = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_EDIT_DATE));
-            entry = new Transaction(id, idRegular, description, category, date, amount_planed, amount_fact, create_date, date_edit);
+            entry = new Transaction(id, idRegular, description, category, date, amount_planned, amount_fact, create_date, date_edit);
         }
         cursor.close();
 
@@ -360,7 +360,7 @@ public class DatabaseAdapter {
         cv.put(DatabaseHelper.COLUMN_DESCRIPTION, transaction.getDescription());
         cv.put(DatabaseHelper.COLUMN_CATEGORY_NAME, transaction.getCategory());
         cv.put(DatabaseHelper.COLUMN_DATE, transaction.getDate());
-        cv.put(DatabaseHelper.COLUMN_AMOUNT_PLANNED, transaction.getAmount_planed());
+        cv.put(DatabaseHelper.COLUMN_AMOUNT_PLANNED, transaction.getAmount_planned());
         cv.put(DatabaseHelper.COLUMN_AMOUNT_FACT, transaction.getAmount_fact());
         cv.put(DatabaseHelper.COLUMN_CREATE_DATE, new Date().getTime());
         cv.put(DatabaseHelper.COLUMN_EDIT_DATE, new Date().getTime());
@@ -407,7 +407,7 @@ public class DatabaseAdapter {
         cv.put(DatabaseHelper.COLUMN_DESCRIPTION, transaction.getDescription());
         cv.put(DatabaseHelper.COLUMN_CATEGORY_NAME, transaction.getCategory());
         cv.put(DatabaseHelper.COLUMN_DATE, transaction.getDate());
-        cv.put(DatabaseHelper.COLUMN_AMOUNT_PLANNED, transaction.getAmount_planed());
+        cv.put(DatabaseHelper.COLUMN_AMOUNT_PLANNED, transaction.getAmount_planned());
         cv.put(DatabaseHelper.COLUMN_AMOUNT_FACT, transaction.getAmount_fact());
         cv.put(DatabaseHelper.COLUMN_CREATE_DATE, transaction.getDate_create());
         cv.put(DatabaseHelper.COLUMN_EDIT_DATE, new Date().getTime());

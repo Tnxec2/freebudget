@@ -13,18 +13,18 @@ public class Transaction {
     private String description;
     private String category;
     private long date;
-    private double amount_planed;
+    private double amount_planned;
     private double amount_fact;
     private long date_create;
     private long date_edit;
 
-    public Transaction(long id, long regular_id, String description, String category, long date, double amount_planed, double amount_fact, long date_create, long date_edit) {
+    public Transaction(long id, long regular_id, String description, String category, long date, double amount_planned, double amount_fact, long date_create, long date_edit) {
         this.id = id;
         this.regular_id = regular_id;
         this.description = description;
         this.category = category;
         this.date = date;
-        this.amount_planed = amount_planed;
+        this.amount_planned = amount_planned;
         this.amount_fact = amount_fact;
         this.date_create = date_create;
         this.date_edit = date_edit;
@@ -38,13 +38,13 @@ public class Transaction {
         }
     }
 
-    public Transaction(long id, long regular_id, String description, String category, long date, double amount_planed, double amount_fact, long date_create) {
+    public Transaction(long id, long regular_id, String description, String category, long date, double amount_planned, double amount_fact, long date_create) {
         this.id = id;
         this.regular_id = regular_id;
         this.description = description;
         this.category = category;
         this.date = date;
-        this.amount_planed = amount_planed;
+        this.amount_planned = amount_planned;
         this.amount_fact = amount_fact;
         this.date_create = date_create;
 
@@ -59,13 +59,13 @@ public class Transaction {
         this.date_edit = new Date().getTime();
     }
 
-    public Transaction(long id, long regular_id, String description, String category, long date, double amount_planed, double amount_fact) {
+    public Transaction(long id, long regular_id, String description, String category, long date, double amount_planned, double amount_fact) {
         this.id = id;
         this.regular_id = regular_id;
         this.description = description;
         this.category = category;
         this.date = date;
-        this.amount_planed = amount_planed;
+        this.amount_planned = amount_planned;
         this.amount_fact = amount_fact;
         this.date_create = new Date().getTime();
         this.date_edit = new Date().getTime();
@@ -115,12 +115,12 @@ public class Transaction {
         return date;
     }
 
-    public double getAmount_planed() {
-        return amount_planed;
+    public double getAmount_planned() {
+        return amount_planned;
     }
 
-    public void setAmount_planed(double amount_planed) {
-        this.amount_planed = amount_planed;
+    public void setAmount_planned(double amount_planned) {
+        this.amount_planned = amount_planned;
     }
 
     public double getAmount_fact() {

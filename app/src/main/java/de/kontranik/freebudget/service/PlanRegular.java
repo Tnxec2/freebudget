@@ -12,7 +12,7 @@ import de.kontranik.freebudget.model.Transaction;
 
 public class PlanRegular {
 
-    public static void setRegularToPlaned(Context context, int year, int month) {
+    public static void setRegularToPlanned(Context context, int year, int month) {
 
         DatabaseAdapter dbAdapter = new DatabaseAdapter(context);
         dbAdapter.open();

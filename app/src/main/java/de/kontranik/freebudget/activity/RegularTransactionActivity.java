@@ -101,6 +101,7 @@ public class RegularTransactionActivity extends AppCompatActivity {
                 Category category = dbAdapter.getCategory(transaction.getCategory());
                 editTextDescription.setText(transaction.getDescription());
                 acTextViewCategory.setText(category.getName());
+                editTextDay.setText(transaction.getDay());
                 if (transaction.getAmount() != 0) {
                     editTextAmount.setText(String.valueOf(Math.abs(transaction.getAmount())));
                 }

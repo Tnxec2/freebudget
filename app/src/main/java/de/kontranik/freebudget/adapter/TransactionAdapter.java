@@ -46,7 +46,7 @@ public class TransactionAdapter extends ArrayAdapter<Transaction>  {
         Transaction transaction = transactions.get(position);
 
         String amount = String.format(Locale.getDefault(), "%1$,.2f", transaction.getAmount_fact());
-        if ( transaction.getAmount_planed() != 0 ) amount += " (" + String.format(Locale.getDefault(), "%1$,.2f",transaction.getAmount_planed()) + ")";
+        if ( transaction.getAmount_planned() != 0 ) amount += " (" + String.format(Locale.getDefault(), "%1$,.2f",transaction.getAmount_planned()) + ")";
 
         viewHolder.amountView.setText(amount);
 
@@ -56,10 +56,10 @@ public class TransactionAdapter extends ArrayAdapter<Transaction>  {
          } else if ( transaction.getAmount_fact() < 0) {
             viewHolder.amountView.setTextColor(
                     ContextCompat.getColor(parent.getContext(), R.color.colorRed));
-        } else if ( transaction.getAmount_planed() > 0) {
+        } else if ( transaction.getAmount_planned() > 0) {
             viewHolder.amountView.setTextColor(
                     ContextCompat.getColor(parent.getContext(), R.color.colorGreen));
-        } else if ( transaction.getAmount_planed() < 0) {
+        } else if ( transaction.getAmount_planned() < 0) {
             viewHolder.amountView.setTextColor(
                     ContextCompat.getColor(parent.getContext(), R.color.colorRed));
         }

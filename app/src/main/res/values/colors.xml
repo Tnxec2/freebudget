@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorAccent">#f9b90a</color>
+    <color name="ic_launcher_background">#6C8B9B</color>
+    <color name="colorBackgroundLight">#6C8B9B</color>
+    <color name="colorBackground">#344955</color>
+    <color name="colorBackgroundDark">#232F34</color>
+    <color name="colorAccent">#F9AA33</color>
     <color name="colorGreen">#4caf50</color>
     <color name="colorRed">#f44336</color>
     <color name="colorGreenGray">#748F75</color>
     <color name="colorRedGray">#886D6B</color>
-    <color name="colorBackground">#F4F4F4</color>
     <color name="colorBackgroundCard">#FFFFFF</color>
 </resources>

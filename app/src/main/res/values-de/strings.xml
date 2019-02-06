@@ -7,13 +7,13 @@
     <string name="activity_main_header">Monatsübersicht</string>
     <string name="activity_main_receipts">Einnahmen</string>
     <string name="activity_main_spending">Ausgaben</string>
-    <string name="activity_main_planed">geplant</string>
+    <string name="activity_main_planned">geplant</string>
     <string name="activity_main_fact">gebucht</string>
     <string name="activity_main_total">Summe</string>
     <string name="activity_main_transactions">Bewegungen</string>
 
     <string name="activity_transaction_name">Bezeichnung</string>
-    <string name="activity_transaction_amount_planed">Betrag geplannt</string>
+    <string name="activity_transaction_amount_planned">Betrag geplannt</string>
     <string name="activity_transaction_amount_fact">Betrag faktisch</string>
     <string name="activity_transaction_freq">Wiederholung</string>
     <string name="activity_transaction_save">Speichern</string>
@@ -52,13 +52,26 @@
     <string name="date">Datum</string>
     <string name="put_regular">Reguläre einplanen</string>
     <string name="activity_transaction_edit">Bearbeiten</string>
-    <string name="only_planed">nur offene</string>
+    <string name="only_planned">nur offene</string>
     <string name="all">alle</string>
     <string name="activity_transaction_amount">Betrag</string>
     <string name="importOK">Import OK. Datei: %1$s</string>
     <string name="exportOK">Export OK. Datei: %1$s</string>
     <string name="delete">Löschen</string>
     <string name="save">Speichern</string>
+    <string name="categoryname">Kategoriename</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="select">Auswählen</string>
+    <string name="copy_amount">Betrag kopieren</string>
+    <string name="month">Monat</string>
+    <string name="import_export">Import / Export</string>
+    <string name="import_regular">Import reguläre</string>
+    <string name="export_regular">Export reguläre</string>
+    <string name="import_normal">Import normale</string>
+    <string name="export_normal">Export normale</string>
+    <string name="item_name">Item Name</string>
+    <string name="activity_transaction_edit_planned">Geplante bearbeiten</string>
 
     <string-array name="navigation_drawer_items_array">
         <item>Übersicht</item>

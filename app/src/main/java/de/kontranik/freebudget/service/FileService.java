@@ -127,7 +127,7 @@ public class FileService {
                 String s_description = str[1];
                 String s_category = str[2];
                 long s_date = new SimpleDateFormat(DATE_SHORT, Locale.US).parse(str[3]).getTime();
-                double s_amount_planed = Double.valueOf(str[4].replace(',', '.'));
+                double s_amount_planned = Double.valueOf(str[4].replace(',', '.'));
                 double s_amount_fact = Double.valueOf(str[5].replace(',', '.'));
                 long s_create_date;
                 if (str.length > 6 && str[6].trim().length() > 0) {
@@ -135,7 +135,7 @@ public class FileService {
                 } else {
                     s_create_date = new Date().getTime();
                 }
-                transactionList.add( new Transaction(s_id, s_regular_id, s_description, s_category, s_date, s_amount_planed, s_amount_fact, s_create_date));
+                transactionList.add( new Transaction(s_id, s_regular_id, s_description, s_category, s_date, s_amount_planned, s_amount_fact, s_create_date));
             } else {
                 throw new Exception(context.getResources().getString(R.string.wrongLineFormat, line));
             }
@@ -171,7 +171,7 @@ public class FileService {
                 transaction.getDescription() + CSV_DELIMITER +
                 transaction.getCategory() + CSV_DELIMITER +
                 df2.format(transaction.getDate()) + CSV_DELIMITER +
-                String.valueOf(transaction.getAmount_planed()) + CSV_DELIMITER +
+                String.valueOf(transaction.getAmount_planned()) + CSV_DELIMITER +
                 String.valueOf(transaction.getAmount_fact()) + CSV_DELIMITER +
                 df1.format(transaction.getDate_create()) + CSV_NEW_LINE
             );

@@ -26,7 +26,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_EDIT_DATE = "edit_date";
 
     public static final String COLUMN_DATE = "date";
-    public static final String COLUMN_AMOUNT_PLANNED = "amount_planed";
+    public static final String COLUMN_AMOUNT_PLANNED = "amount_planned";
     public static final String COLUMN_AMOUNT_FACT = "amount_fact";
 
     public DatabaseHelper(Context context) {

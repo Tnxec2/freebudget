@@ -27,10 +27,11 @@ import de.kontranik.freebudget.database.DatabaseAdapter;
 import de.kontranik.freebudget.model.Category;
 import de.kontranik.freebudget.model.Transaction;
 
+import static de.kontranik.freebudget.activity.OverviewFragment.TRANS_ID;
 import static de.kontranik.freebudget.activity.OverviewFragment.TRANS_STAT_MINUS;
 import static de.kontranik.freebudget.activity.OverviewFragment.TRANS_STAT_PLUS;
 import static de.kontranik.freebudget.activity.OverviewFragment.TRANS_TYP;
-import static de.kontranik.freebudget.activity.OverviewFragment.TRANS_TYP_PLANED;
+import static de.kontranik.freebudget.activity.OverviewFragment.TRANS_TYP_PLANNED;
 import static de.kontranik.freebudget.activity.OverviewFragment.TRANS_STAT;
 import static de.kontranik.freebudget.activity.CategoryListActivity.RESULT_CATEGORY;
 
@@ -51,7 +52,7 @@ public class TransactionActivity extends AppCompatActivity {
 
     DatePickerDialog datePickerDialog;
     public int year, month, day;
-    public boolean planed = false;
+    public boolean planned = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +67,7 @@ public class TransactionActivity extends AppCompatActivity {
         SoftKeyboard.showKeyboard(this);
 
         acTextViewCategory = (AutoCompleteTextView) findViewById(R.id.acTextView_category);
-        editTextAmountPlanned = (EditText) findViewById(R.id.editText_amount_planed);
+        editTextAmountPlanned = (EditText) findViewById(R.id.editText_amount_planned);
         editTextAmountFact = (EditText) findViewById(R.id.editText_amount_fact);
         buttonDelete = (Button) findViewById(R.id.button_delete);
         buttonCopy = (Button) findViewById(R.id.button_copy);
@@ -130,7 +131,8 @@ public class TransactionActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            transactionID = extras.getLong("id");
+            if ( extras.containsKey(TRANS_ID) ) transactionID = extras.getLong(TRANS_ID);
+            if ( extras.containsKey(TRANS_TYP) ) planned = extras.getString(TRANS_TYP).equals(TRANS_TYP_PLANNED);
         }
         //
         if (transactionID > 0) {
@@ -143,7 +145,7 @@ public class TransactionActivity extends AppCompatActivity {
             acTextViewCategory.setText(category.getName());
 
             editTextAmountFact.setText(String.valueOf(Math.abs(transaction.getAmount_fact())));
-            editTextAmountPlanned.setText(String.valueOf(Math.abs(transaction.getAmount_planed())));
+            editTextAmountPlanned.setText(String.valueOf(Math.abs(transaction.getAmount_planned())));
 
             long displayDate;
             if (transaction.getDate() > 0) displayDate = transaction.getDate();
@@ -162,9 +164,9 @@ public class TransactionActivity extends AppCompatActivity {
                 radioButtonReceipts.setChecked(true);
             } else if (transaction.getAmount_fact() < 0 ) {
                 radioButtonSpending.setChecked(true);
-            } else if (transaction.getAmount_planed() > 0) {
+            } else if (transaction.getAmount_planned() > 0) {
                 radioButtonReceipts.setChecked(true);
-            } else if (transaction.getAmount_planed() < 0 ) {
+            } else if (transaction.getAmount_planned() < 0 ) {
                 radioButtonSpending.setChecked(true);
             }
 
@@ -174,7 +176,6 @@ public class TransactionActivity extends AppCompatActivity {
 
             if (extras != null) {
                 if ( extras.containsKey(TRANS_STAT) ) transStat = extras.getString(TRANS_STAT);
-                if ( extras.containsKey(TRANS_TYP) ) planed = extras.getString(TRANS_TYP).equals(TRANS_TYP_PLANED);
             }
 
             if (transStat != null && transStat.equals(TRANS_STAT_PLUS)) {
@@ -186,12 +187,12 @@ public class TransactionActivity extends AppCompatActivity {
             // hide delete button
             buttonDelete.setVisibility(View.GONE);
 
-            Log.d("NIK", String.valueOf(planed));
+            Log.d("NIK", String.valueOf(planned));
 
         }
-        editTextAmountPlanned.setEnabled(planed);
-        editTextAmountFact.setEnabled(!planed);
-        buttonCopyAmount.setEnabled(!planed);
+        editTextAmountPlanned.setEnabled(planned);
+        editTextAmountFact.setEnabled(!planned);
+        buttonCopyAmount.setEnabled(!planned);
     }
 
     @Override
@@ -270,15 +271,15 @@ public class TransactionActivity extends AppCompatActivity {
         Transaction entry = new Transaction(
                 transactionID, (long) 0, description, categoryName, cal.getTimeInMillis(), amountPlanned, amountFact);
 
-        if ( planed ) {
-            entry.setAmount_planed( amountPlanned );
+        if (planned) {
+            entry.setAmount_planned( amountPlanned );
         } else {
             entry.setAmount_fact( amountFact );
             if ( transactionID > 0) {
                 Transaction dbentry = dbAdapter.getTransaction(transactionID);
                 if (dbentry != null) {
                     entry.setRegular_id(dbentry.getRegular_id());
-                    entry.setAmount_planed(dbentry.getAmount_planed());
+                    entry.setAmount_planned(dbentry.getAmount_planned());
                 }
             }
         }

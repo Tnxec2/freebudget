@@ -42,6 +42,8 @@ public class CategoryListActivity extends AppCompatActivity {
 
         categoryList = new ArrayList<>();
 
+        setTitle(R.string.activity_category);
+
         listViewCategory = (ListView) findViewById(R.id.listView_categoryList);
         editTextCategory = (EditText) findViewById(R.id.editText_categoryName);
         btn_Save = (Button) findViewById(R.id.btn_categorySave);

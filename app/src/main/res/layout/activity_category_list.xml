@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.CategoryListActivity">
+    tools:context=".activity.CategoryListActivity"
+    android:excludeFromRecents="true" >
 
 
     <ListView
@@ -16,7 +17,8 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
+        android:background="@color/colorBackgroundCard"
+        android:padding="@dimen/paddint_small"
         app:layout_constraintBottom_toTopOf="@id/linearLayout_categorySave"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,7 +28,14 @@
         android:id="@+id/linearLayout_categorySave"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@color/colorBackgroundCard"
         android:orientation="horizontal"
+        android:paddingLeft="@dimen/paddint_small"
+        android:paddingRight="@dimen/paddint_small"
         app:layout_constraintBottom_toTopOf="@id/btn_categoryClose"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,8 +45,10 @@
             android:id="@+id/editText_categoryName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="categoryname"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:hint="@string/categoryname"
+            android:inputType="text"
+            tools:ignore="Autofill" />
 
         <Button
             android:id="@+id/btn_categorySave"
@@ -46,6 +57,7 @@
             android:layout_weight="1"
             android:onClick="onSave"
             android:text="@string/save" />
+
         <Button
             android:id="@+id/btn_categoryDelete"
             android:layout_width="0dp"
@@ -59,9 +71,16 @@
         android:id="@+id/btn_categoryClose"
         android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
         android:layout_weight="1"
         android:onClick="onClose"
-        android:text="OK"
+        android:paddingLeft="@dimen/paddint_small"
+        android:paddingRight="@dimen/paddint_small"
+        android:text="@string/ok"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

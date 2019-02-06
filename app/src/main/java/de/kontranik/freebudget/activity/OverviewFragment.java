@@ -6,14 +6,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.ContextMenu;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -21,11 +19,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -60,11 +56,11 @@ public class OverviewFragment extends Fragment {
 
     private ListView listView_Transactions;
     private TextView textView_Month;
-    private TextView textView_receipts_planed, textView_spending_planed, textView_total_planed;
+    private TextView textView_receipts_planned, textView_spending_planned, textView_total_planned;
     private TextView textView_receipts_fact, textView_spending_fact, textView_total_fact;
     private Button btn_planRegular;
     private ImageButton btn_prevMonth, btn_nextMonth;
-    private FloatingActionButton fab_add, fab_add_plus, fab_add_minus, fab_add_plus_planed, fab_add_minus_planed;
+    private FloatingActionButton fab_add, fab_add_plus, fab_add_minus, fab_add_plus_planned, fab_add_minus_planned;
 
     private int year, month;
 
@@ -79,18 +75,19 @@ public class OverviewFragment extends Fragment {
     public static final String TRANS_STAT_PLUS = "plus";
     public static final String TRANS_STAT_MINUS = "minus";
     public static final String TRANS_TYP = "TRANS_TYP";
-    public static final String TRANS_TYP_PLANED = "planed";
+    public static final String TRANS_TYP_PLANNED = "planned";
     public static final String TRANS_TYP_FACT= "fact";
+    public static final String TRANS_ID = "id";
 
-    double amount_planed, amount_fact;
-    double receipts_planed = 0;
+    double amount_planned, amount_fact;
+    double receipts_planned = 0;
     double receipts_fact = 0;
-    double spending_planed = 0;
+    double spending_planned = 0;
     double spending_fact = 0;
-    double total_planed = 0;
+    double total_planned = 0;
     double total_fact = 0;
 
-    boolean showOnlyPlaned = false;
+    boolean showOnlyPlanned = false;
 
 
 
@@ -139,11 +136,11 @@ public class OverviewFragment extends Fragment {
         listView_Transactions = (ListView) view.findViewById(R.id.listView_transactions);
         textView_Month = (TextView) view.findViewById(R.id.textView_Month);
 
-        textView_receipts_planed = (TextView) view.findViewById(R.id.textView_receipts_planed);
+        textView_receipts_planned = (TextView) view.findViewById(R.id.textView_receipts_planned);
         textView_receipts_fact = (TextView) view.findViewById(R.id.textView_receipts_fact);
-        textView_spending_planed = (TextView) view.findViewById(R.id.textView_spending_planed);
+        textView_spending_planned = (TextView) view.findViewById(R.id.textView_spending_planned);
         textView_spending_fact = (TextView) view.findViewById(R.id.textView_spending_fact);
-        textView_total_planed = (TextView) view.findViewById(R.id.textView_total_planed);
+        textView_total_planned = (TextView) view.findViewById(R.id.textView_total_planned);
         textView_total_fact = (TextView) view.findViewById(R.id.textView_total_fact);
 
         btn_planRegular = (Button) view.findViewById(R.id.btn_planRegular);
@@ -154,8 +151,8 @@ public class OverviewFragment extends Fragment {
         fab_add = (FloatingActionButton) view.findViewById(R.id.fab_add);
         fab_add_plus = (FloatingActionButton) view.findViewById(R.id.fab_add_plus);
         fab_add_minus = (FloatingActionButton) view.findViewById(R.id.fab_add_minus);
-        fab_add_plus_planed = (FloatingActionButton) view.findViewById(R.id.fab_add_plus_planed);
-        fab_add_minus_planed = (FloatingActionButton) view.findViewById(R.id.fab_add_minus_planed);
+        fab_add_plus_planned = (FloatingActionButton) view.findViewById(R.id.fab_add_plus_planned);
+        fab_add_minus_planned = (FloatingActionButton) view.findViewById(R.id.fab_add_minus_planned);
 
         this.months = getResources().getStringArray(R.array.months);
 
@@ -200,7 +197,7 @@ public class OverviewFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Transaction entry = transactionAdapter.getItem(position);
-                editTransaction(entry);
+                editTransaction(entry, TRANS_TYP_FACT);
             }
         });
         listView_Transactions.setOnDragListener(new View.OnDragListener() {
@@ -250,8 +247,8 @@ public class OverviewFragment extends Fragment {
                     }
                     fab_add_plus.setVisibility(View.VISIBLE);
                     fab_add_minus.setVisibility(View.VISIBLE);
-                    fab_add_plus_planed.setVisibility(View.VISIBLE);
-                    fab_add_minus_planed.setVisibility(View.VISIBLE);
+                    fab_add_plus_planned.setVisibility(View.VISIBLE);
+                    fab_add_minus_planned.setVisibility(View.VISIBLE);
                     fab_add.setVisibility(View.INVISIBLE);
                     isMove = true;
                 } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
@@ -261,8 +258,8 @@ public class OverviewFragment extends Fragment {
                 } else if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                     fab_add_plus.setVisibility(View.VISIBLE);
                     fab_add_minus.setVisibility(View.VISIBLE);
-                    fab_add_plus_planed.setVisibility(View.VISIBLE);
-                    fab_add_minus_planed.setVisibility(View.VISIBLE);
+                    fab_add_plus_planned.setVisibility(View.VISIBLE);
+                    fab_add_minus_planned.setVisibility(View.VISIBLE);
                     fab_add.setVisibility(View.VISIBLE);
                 }
                 return true;
@@ -316,7 +313,7 @@ public class OverviewFragment extends Fragment {
             }
         });
 
-        fab_add_plus_planed.setOnDragListener(new View.OnDragListener() {
+        fab_add_plus_planned.setOnDragListener(new View.OnDragListener() {
             @Override
             public boolean onDrag(View v, DragEvent event) {
                 int action = event.getAction();
@@ -328,7 +325,7 @@ public class OverviewFragment extends Fragment {
                     case DragEvent.ACTION_DRAG_EXITED:
                         break;
                     case DragEvent.ACTION_DROP:
-                        add(TRANS_STAT_PLUS, TRANS_TYP_PLANED);
+                        add(TRANS_STAT_PLUS, TRANS_TYP_PLANNED);
                         break;
                     case DragEvent.ACTION_DRAG_ENDED:
                         break;
@@ -339,7 +336,7 @@ public class OverviewFragment extends Fragment {
             }
         });
 
-        fab_add_minus_planed.setOnDragListener(new View.OnDragListener() {
+        fab_add_minus_planned.setOnDragListener(new View.OnDragListener() {
             @Override
             public boolean onDrag(View v, DragEvent event) {
                 int action = event.getAction();
@@ -352,7 +349,7 @@ public class OverviewFragment extends Fragment {
                     case DragEvent.ACTION_DRAG_EXITED:
                         break;
                     case DragEvent.ACTION_DROP:
-                        add(TRANS_STAT_MINUS, TRANS_TYP_PLANED);
+                        add(TRANS_STAT_MINUS, TRANS_TYP_PLANNED);
                         break;
                     case DragEvent.ACTION_DRAG_ENDED:
                         break;
@@ -387,9 +384,10 @@ public class OverviewFragment extends Fragment {
 
         Transaction transaction = transactionList.get(listPosition);
         if(item.getItemId()==R.id.popup_edit){
-            editTransaction(transaction);
-        }
-        else if(item.getItemId()==R.id.popup_delete){
+            editTransaction(transaction, TRANS_TYP_FACT);
+        } else if (item.getItemId()==R.id.popup_edit_planned) {
+            editTransaction(transaction, TRANS_TYP_PLANNED);
+        } else if(item.getItemId()==R.id.popup_delete){
             deleteTransaction(transaction);
         }else{
             return false;
@@ -436,17 +434,17 @@ public class OverviewFragment extends Fragment {
          */
 
         transactionList.clear();
-        //transactionList.addAll( dbAdapter.getTransactions(this.year, this.month, this.showOnlyPlaned) );
+        //transactionList.addAll( dbAdapter.getTransactions(this.year, this.month, this.showOnlyPlanned) );
 
         List<Transaction> dbTransactions = dbAdapter.getTransactions(this.year, this.month, false) ;
 
         clearSummen();
 
         for (Transaction transaction: dbTransactions) {
-            amount_planed = transaction.getAmount_planed();
-            if (amount_planed > 0) receipts_planed += amount_planed;
-            else spending_planed += Math.abs(amount_planed);
-            total_planed = total_planed + amount_planed;
+            amount_planned = transaction.getAmount_planned();
+            if (amount_planned > 0) receipts_planned += amount_planned;
+            else spending_planned += Math.abs(amount_planned);
+            total_planned = total_planned + amount_planned;
 
             amount_fact = transaction.getAmount_fact();
             if (amount_fact > 0) receipts_fact += amount_fact;
@@ -456,7 +454,7 @@ public class OverviewFragment extends Fragment {
             /*
              * bereits gebuchte Transactionen überlesen
              */
-            if ( !showOnlyPlaned || transaction.getAmount_fact() == 0 ) {
+            if ( !showOnlyPlanned || transaction.getAmount_fact() == 0 ) {
                 transactionList.add(transaction);
             }
         }
@@ -513,15 +511,15 @@ public class OverviewFragment extends Fragment {
     }
 
     public void planRegular(View view) {
-        PlanRegular.setRegularToPlaned(getContext(), year, month);
+        PlanRegular.setRegularToPlanned(getContext(), year, month);
         getTransactions();
     }
 
-    public void add(String transStat, String planed){
+    public void add(String transStat, String planned){
         setNormalStat();
         Intent intent = new Intent(getContext(), TransactionActivity.class);
         intent.putExtra(TRANS_STAT, transStat);
-        intent.putExtra(TRANS_TYP, planed);
+        intent.putExtra(TRANS_TYP, planned);
         startActivity(intent);
     }
 
@@ -530,30 +528,30 @@ public class OverviewFragment extends Fragment {
         fab_add.setVisibility(View.VISIBLE);
         fab_add_plus.setVisibility(View.INVISIBLE);
         fab_add_minus.setVisibility(View.INVISIBLE);
-        fab_add_plus_planed.setVisibility(View.INVISIBLE);
-        fab_add_minus_planed.setVisibility(View.INVISIBLE);
+        fab_add_plus_planned.setVisibility(View.INVISIBLE);
+        fab_add_minus_planned.setVisibility(View.INVISIBLE);
     }
 
     private void setSummen() {
-        textView_spending_planed.setText(String.format(Locale.getDefault(),"%1$,.2f", spending_planed));
-        textView_spending_planed.setTextColor(ContextCompat.getColor(getContext(), R.color.colorRed));
+        textView_spending_planned.setText(String.format(Locale.getDefault(),"%1$,.2f", spending_planned));
+        textView_spending_planned.setTextColor(ContextCompat.getColor(getContext(), R.color.colorRed));
 
         textView_spending_fact.setText(String.format(Locale.getDefault(),"%1$,.2f", spending_fact));
         textView_spending_fact.setTextColor(ContextCompat.getColor(getContext(), R.color.colorRed));
 
-        textView_receipts_planed.setText(String.format(Locale.getDefault(),"%1$,.2f", receipts_planed));
-        textView_receipts_planed.setTextColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
+        textView_receipts_planned.setText(String.format(Locale.getDefault(),"%1$,.2f", receipts_planned));
+        textView_receipts_planned.setTextColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
 
         textView_receipts_fact.setText(String.format(Locale.getDefault(),"%1$,.2f", receipts_fact));
         textView_receipts_fact.setTextColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
 
         textView_total_fact.setText(String.format(Locale.getDefault(),"%1$,.2f", total_fact));
-        textView_total_planed.setText(String.format(Locale.getDefault(),"%1$,.2f", total_planed));
+        textView_total_planned.setText(String.format(Locale.getDefault(),"%1$,.2f", total_planned));
 
-        if (total_planed > 0) {
-            textView_total_planed.setTextColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
+        if (total_planned > 0) {
+            textView_total_planned.setTextColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
         } else {
-            textView_total_planed.setTextColor(ContextCompat.getColor(getContext(), R.color.colorRed));
+            textView_total_planned.setTextColor(ContextCompat.getColor(getContext(), R.color.colorRed));
         }
         if (total_fact > 0) {
             textView_total_fact.setTextColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
@@ -563,21 +561,22 @@ public class OverviewFragment extends Fragment {
     }
 
     private void clearSummen() {
-        amount_planed = 0;
+        amount_planned = 0;
         amount_fact = 0;
-        total_planed = 0;
+        total_planned = 0;
         total_fact = 0;
         receipts_fact = 0;
-        receipts_planed = 0;
+        receipts_planned = 0;
         spending_fact = 0;
-        spending_planed = 0;
+        spending_planned = 0;
     }
 
-    private void editTransaction(Transaction entry) {
+    private void editTransaction(Transaction entry, String planned) {
         if(entry!=null) {
             Intent intent = new Intent(getContext(), TransactionActivity.class);
-            intent.putExtra("id", entry.getId());
+            intent.putExtra(TRANS_ID, entry.getId());
             intent.putExtra("click", 25);
+            intent.putExtra(TRANS_TYP, planned);
             startActivity(intent);
         }
     }

@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.TransactionActivity">
+    tools:context=".activity.TransactionActivity"
+    android:excludeFromRecents="true"
+    >
 
     <EditText
         android:id="@+id/editText_description"
@@ -20,7 +22,9 @@
         app:layout_constraintBottom_toTopOf="@+id/linearLayout0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:inputType="text"
+        tools:ignore="Autofill" />
 
     <LinearLayout
         android:id="@+id/linearLayout0"
@@ -48,7 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="selectCat"
-            android:text="select" />
+            android:text="@string/select" />
     </LinearLayout>
 
     <TextView
@@ -60,18 +64,18 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:text="@string/activity_transaction_amount_fact"
-        app:layout_constraintEnd_toStartOf="@id/textView_amount_planed"
+        app:layout_constraintEnd_toStartOf="@id/textView_amount_planned"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout0" />
 
     <TextView
-        android:id="@+id/textView_amount_planed"
+        android:id="@+id/textView_amount_planned"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:hint="@string/activity_transaction_amount_planed"
-        android:text="@string/activity_transaction_amount_planed"
+        android:hint="@string/activity_transaction_amount_planned"
+        android:text="@string/activity_transaction_amount_planned"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/textView_amount_fact"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout0" />
@@ -82,11 +86,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:hint="0"
         android:inputType="numberDecimal"
         app:layout_constraintEnd_toStartOf="@id/btn_copy_amount"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView_amount_fact" />
+        app:layout_constraintTop_toBottomOf="@id/textView_amount_fact"
+        tools:ignore="Autofill" />
 
     <ImageButton
         android:id="@+id/btn_copy_amount"
@@ -94,24 +98,24 @@
         android:layout_height="wrap_content"
         android:onClick="copyAmount"
         android:src="@drawable/ic_copy_back"
-        app:layout_constraintEnd_toStartOf="@+id/editText_amount_planed"
+        app:layout_constraintEnd_toStartOf="@+id/editText_amount_planned"
         app:layout_constraintStart_toEndOf="@+id/editText_amount_fact"
-        app:layout_constraintTop_toBottomOf="@+id/textView_amount_fact" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_amount_fact"
+        android:contentDescription="@string/copy_amount" />
 
     <EditText
-        android:id="@+id/editText_amount_planed"
+        android:id="@+id/editText_amount_planned"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:hint="0"
         android:textAlignment="viewEnd"
         android:inputType="numberDecimal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/btn_copy_amount"
-        app:layout_constraintTop_toBottomOf="@+id/textView_amount_planed"
-
-        android:layout_gravity="end" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_amount_planned"
+        android:layout_gravity="end"
+        tools:ignore="Autofill" />
 
 
     <LinearLayout
@@ -125,7 +129,7 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editText_amount_planed">
+        app:layout_constraintTop_toBottomOf="@id/editText_amount_planned">
 
         <RadioGroup
             android:id="@+id/radioTrans"

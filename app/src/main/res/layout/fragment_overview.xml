@@ -50,7 +50,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="month"
+                android:text="@string/month"
                 android:textAlignment="center"
                 android:textSize="30sp" />
 
@@ -91,10 +91,10 @@
                     android:layout_weight="1" />
 
                 <TextView
-                    android:id="@+id/textView_title_planed"
+                    android:id="@+id/textView_title_planned"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/activity_main_planed"
+                    android:text="@string/activity_main_planned"
                     android:textAlignment="center"
                     android:textSize="18sp" />
 
@@ -123,7 +123,7 @@
                     android:layout_weight="1" />
 
                 <TextView
-                    android:id="@+id/textView_receipts_planed"
+                    android:id="@+id/textView_receipts_planned"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/activity_main_receipts"
@@ -155,7 +155,7 @@
                     android:layout_weight="1" />
 
                 <TextView
-                    android:id="@+id/textView_spending_planed"
+                    android:id="@+id/textView_spending_planned"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/activity_main_spending"
@@ -187,7 +187,7 @@
                     android:layout_weight="1" />
 
                 <TextView
-                    android:id="@+id/textView_total_planed"
+                    android:id="@+id/textView_total_planned"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/activity_main_total"
@@ -266,7 +266,7 @@
         app:srcCompat="@drawable/ic_add_white_24dp" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_add_plus_planed"
+        android:id="@+id/fab_add_plus_planned"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -298,7 +298,7 @@
         app:srcCompat="@drawable/ic_remove_white_24dp" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_add_minus_planed"
+        android:id="@+id/fab_add_minus_planned"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"

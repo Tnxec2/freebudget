@@ -6,6 +6,9 @@
         android:id="@+id/popup_edit"
         android:title="@string/activity_transaction_edit" />
     <item
+        android:id="@+id/popup_edit_planned"
+        android:title="@string/activity_transaction_edit_planned" />
+    <item
         android:id="@+id/popup_delete"
         android:title="@string/activity_transaction_delete" />
 </menu>

@@ -4,63 +4,83 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.RegularTransactionActivity">
+    tools:context=".activity.RegularTransactionActivity"
+    android:excludeFromRecents="true"
+    >
 
-    <EditText
-        android:id="@+id/editText_description_regular"
+    <LinearLayout
+        android:id="@+id/linearLayout0"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/activity_transaction_name"
-        app:layout_constraintBottom_toTopOf="@id/acTextView_category_regular"
+        android:background="@color/colorBackgroundCard"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/paddint_small"
+        android:paddingTop="@dimen/paddint_small"
+        android:paddingRight="@dimen/paddint_small"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <AutoCompleteTextView
-        android:id="@+id/acTextView_category_regular"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:hint="@string/activity_category"
-        app:layout_constraintBottom_toTopOf="@id/editText_amount_regular"
-        app:layout_constraintEnd_toStartOf="@id/btn_selectCat_regular"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editText_description_regular" />
+        <EditText
+            android:id="@+id/editText_description_regular"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:hint="@string/activity_transaction_name"
+            android:inputType="text" />
 
-    <Button
-        android:id="@+id/btn_selectCat_regular"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="selectCat"
-        android:text="select"
-        app:layout_constraintBottom_toTopOf="@id/editText_amount_regular"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/acTextView_category_regular"
-        app:layout_constraintTop_toBottomOf="@id/editText_description_regular" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-    <EditText
-        android:id="@+id/editText_amount_regular"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/activity_transaction_amount"
-        android:inputType="numberDecimal"
-        app:layout_constraintBottom_toTopOf="@id/linearLayout_regular"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/acTextView_category_regular" />
+            <AutoCompleteTextView
+                android:id="@+id/acTextView_category_regular"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_weight="1"
+                android:hint="@string/activity_category" />
+
+            <Button
+                android:id="@+id/btn_selectCat_regular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:onClick="selectCat"
+                android:text="@string/select" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/editText_amount_regular"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:hint="@string/activity_transaction_amount"
+            android:inputType="numberDecimal" />
+    </LinearLayout>
 
 
     <LinearLayout
         android:id="@+id/linearLayout_regular"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:background="@color/colorBackgroundCard"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@id/linearLayout2_regular"
+        android:paddingLeft="@dimen/paddint_small"
+        android:paddingTop="@dimen/paddint_small"
+        android:paddingRight="@dimen/paddint_small"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_amount_regular">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout0">
 
         <RadioGroup
             android:id="@+id/radioTrans_regular"
@@ -96,7 +116,8 @@
             android:ems="10"
             android:hint="@string/day"
             android:inputType="number"
-            android:text="1" />
+            android:text="1"
+            tools:ignore="Autofill" />
 
         <Spinner
             android:id="@+id/spinner_Month_regular"
@@ -111,8 +132,11 @@
         android:id="@+id/linearLayout2_regular"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/colorBackgroundCard"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@id/linearLayout3_regular"
+        android:paddingLeft="@dimen/paddint_small"
+        android:paddingTop="@dimen/paddint_small"
+        android:paddingRight="@dimen/paddint_small"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout_regular">
@@ -137,9 +161,12 @@
     <LinearLayout
         android:id="@+id/linearLayout3_regular"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorBackgroundCard"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:paddingLeft="@dimen/paddint_small"
+        android:paddingRight="@dimen/paddint_small"
+        android:paddingBottom="@dimen/paddint_small"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2_regular">
@@ -160,7 +187,6 @@
             android:onClick="copy"
             android:text="@string/activity_transaction_copy" />
     </LinearLayout>
-
 
 
 </android.support.constraint.ConstraintLayout>
