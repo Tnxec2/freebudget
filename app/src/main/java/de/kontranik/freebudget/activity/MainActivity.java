@@ -9,8 +9,10 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.support.v7.widget.Toolbar;
+import android.widget.Switch;
 
 import de.kontranik.freebudget.R;
 import de.kontranik.freebudget.adapter.DrawerItemCustomAdapter;
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     Toolbar toolbar;
+    Switch switchShowOnlyPlanned;
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     android.support.v7.app.ActionBarDrawerToggle mDrawerToggle;
@@ -44,6 +47,24 @@ public class MainActivity extends AppCompatActivity {
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
         setupToolbar();
+
+        switchShowOnlyPlanned = (Switch) findViewById(R.id.switchShowPlannedOnly);
+        setTextSwitch(false);
+
+        switchShowOnlyPlanned.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // do something, the isChecked will be
+                // true if the switch is in the On position
+
+                setTextSwitch(isChecked);
+
+                // an Fragment übergeben
+                Fragment contentFragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
+                if ((contentFragment != null) && (findViewById(R.id.mainlayout_overview) != null)) {
+                    ((OverviewFragment)contentFragment).changeShowOnlyPlanned(isChecked);
+                }
+            }
+        });
 
         DrawerItem[] drawerItem = new DrawerItem[6];
 
@@ -107,6 +128,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (fragment != null) {
+            if (position == 0) {
+                switchShowOnlyPlanned.setVisibility(View.VISIBLE);
+                switchShowOnlyPlanned.setEnabled(true);
+            } else {
+                switchShowOnlyPlanned.setVisibility(View.INVISIBLE);
+                switchShowOnlyPlanned.setEnabled(false);
+            }
+
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
             this.position = position;
@@ -151,6 +180,11 @@ public class MainActivity extends AppCompatActivity {
         mDrawerToggle = new android.support.v7.app.ActionBarDrawerToggle(this,mDrawerLayout,toolbar,R.string.app_name, R.string.app_name);
         //This is necessary to change the icon of the Drawer Toggle upon state change.
         mDrawerToggle.syncState();
+    }
+
+    void setTextSwitch(boolean isChecked) {
+        if ( isChecked ) switchShowOnlyPlanned.setText(R.string.only_planned);
+        else switchShowOnlyPlanned.setText(R.string.all);
     }
 }
 

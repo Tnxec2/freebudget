@@ -592,4 +592,9 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         databaseAdapter.close();
         getTransactions();
     }
+
+    public void changeShowOnlyPlanned(boolean b) {
+        this.showOnlyPlanned = b;
+        getTransactions();
+    }
 }
