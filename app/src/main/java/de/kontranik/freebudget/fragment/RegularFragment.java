@@ -33,7 +33,7 @@ import de.kontranik.freebudget.model.RegularTransaction;
 import de.kontranik.freebudget.service.OnSwipeTouchListener;
 
 import static de.kontranik.freebudget.activity.RegularTransactionActivity.MONTH;
-import static de.kontranik.freebudget.activity.RegularTransactionActivity.TRANS_STAT;
+import static de.kontranik.freebudget.service.Constant.TRANS_STAT;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -377,7 +377,7 @@ public class RegularFragment extends Fragment {
     public void add(){
         setNormalStat();
         Intent intent = new Intent(getContext(), RegularTransactionActivity.class);
-        intent.putExtra(TRANS_STAT, transStat);
+        intent.putExtra( TRANS_STAT, transStat );
         intent.putExtra( MONTH, this.month);
         startActivity(intent);
     }

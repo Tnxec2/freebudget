@@ -21,10 +21,10 @@ import de.kontranik.freebudget.model.Category;
 import de.kontranik.freebudget.model.RegularTransaction;
 
 import static de.kontranik.freebudget.activity.CategoryListActivity.RESULT_CATEGORY;
+import static de.kontranik.freebudget.service.Constant.TRANS_STAT;
 
 public class RegularTransactionActivity extends AppCompatActivity {
 
-    public static final String TRANS_STAT = "TRANS_STAT";
     public static final String MONTH = "MONTH";
 
     static final int PICK_CATEGORY_REQUEST = 123;  // The request code

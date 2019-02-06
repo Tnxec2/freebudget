@@ -27,13 +27,13 @@ import de.kontranik.freebudget.database.DatabaseAdapter;
 import de.kontranik.freebudget.model.Category;
 import de.kontranik.freebudget.model.Transaction;
 
-import static de.kontranik.freebudget.fragment.OverviewFragment.TRANS_ID;
-import static de.kontranik.freebudget.fragment.OverviewFragment.TRANS_STAT_MINUS;
-import static de.kontranik.freebudget.fragment.OverviewFragment.TRANS_STAT_PLUS;
-import static de.kontranik.freebudget.fragment.OverviewFragment.TRANS_TYP;
-import static de.kontranik.freebudget.fragment.OverviewFragment.TRANS_TYP_PLANNED;
-import static de.kontranik.freebudget.fragment.OverviewFragment.TRANS_STAT;
 import static de.kontranik.freebudget.activity.CategoryListActivity.RESULT_CATEGORY;
+import static de.kontranik.freebudget.service.Constant.TRANS_ID;
+import static de.kontranik.freebudget.service.Constant.TRANS_STAT;
+import static de.kontranik.freebudget.service.Constant.TRANS_STAT_MINUS;
+import static de.kontranik.freebudget.service.Constant.TRANS_STAT_PLUS;
+import static de.kontranik.freebudget.service.Constant.TRANS_TYP;
+import static de.kontranik.freebudget.service.Constant.TRANS_TYP_PLANNED;
 
 public class TransactionActivity extends AppCompatActivity {
 
@@ -190,6 +190,7 @@ public class TransactionActivity extends AppCompatActivity {
             Log.d("NIK", String.valueOf(planned));
 
         }
+
         editTextAmountPlanned.setEnabled(planned);
         editTextAmountFact.setEnabled(!planned);
         buttonCopyAmount.setEnabled(!planned);

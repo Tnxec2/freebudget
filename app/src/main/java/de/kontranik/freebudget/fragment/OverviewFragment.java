@@ -37,6 +37,14 @@ import de.kontranik.freebudget.model.Transaction;
 import de.kontranik.freebudget.service.OnSwipeTouchListener;
 import de.kontranik.freebudget.service.PlanRegular;
 
+import static de.kontranik.freebudget.service.Constant.TRANS_ID;
+import static de.kontranik.freebudget.service.Constant.TRANS_STAT;
+import static de.kontranik.freebudget.service.Constant.TRANS_STAT_MINUS;
+import static de.kontranik.freebudget.service.Constant.TRANS_STAT_PLUS;
+import static de.kontranik.freebudget.service.Constant.TRANS_TYP;
+import static de.kontranik.freebudget.service.Constant.TRANS_TYP_FACT;
+import static de.kontranik.freebudget.service.Constant.TRANS_TYP_PLANNED;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -71,14 +79,6 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
     TransactionAdapter transactionAdapter;
 
     Boolean isMove;
-
-    public static final String TRANS_STAT = "TRANS_STAT";
-    public static final String TRANS_STAT_PLUS = "plus";
-    public static final String TRANS_STAT_MINUS = "minus";
-    public static final String TRANS_TYP = "TRANS_TYP";
-    public static final String TRANS_TYP_PLANNED = "planned";
-    public static final String TRANS_TYP_FACT= "fact";
-    public static final String TRANS_ID = "id";
 
     double amount_planned, amount_fact;
     double receipts_planned = 0;
