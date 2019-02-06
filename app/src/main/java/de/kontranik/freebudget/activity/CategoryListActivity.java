@@ -25,7 +25,7 @@ public class CategoryListActivity extends AppCompatActivity {
 
     private ListView listViewCategory;
     private EditText editTextCategory;
-    private Button btn_Save, btn_Close;
+    private Button btn_Save, btn_Close, btn_Delete;
 
     private Category category;
 
@@ -48,6 +48,26 @@ public class CategoryListActivity extends AppCompatActivity {
         editTextCategory = (EditText) findViewById(R.id.editText_categoryName);
         btn_Save = (Button) findViewById(R.id.btn_categorySave);
         btn_Close = (Button) findViewById(R.id.btn_categoryClose);
+        btn_Delete = (Button) findViewById(R.id.btn_categoryDelete);
+
+        btn_Save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onSave(v);
+            }
+        });
+        btn_Close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClose(v);
+            }
+        });
+        btn_Delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onDelete(v);
+            }
+        });
 
         dbAdapter = new DatabaseAdapter(this);
 
