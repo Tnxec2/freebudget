@@ -40,7 +40,7 @@
     <string name="new_regular_transaction">Neue reguläre Bewegung</string>
     <string name="day">Tag</string>
     <string name="activity_category">Kategorie</string>
-    <string name="subTitleTransaction">Fälligkeit am %1$s. Kategorie %2$s</string>
+    <string name="subTitleTransaction">Fällig am %1$s. Kategorie %2$s</string>
     <string name="wrongMonthInTheLine">Falschen Monat in der Zeile: %1$s</string>
     <string name="wrongDayInTheLine">Falschen Tag in der Zeile: %1$s</string>
     <string name="wrongLineFormat">Falsches Zeilenformat: %1$s</string>
