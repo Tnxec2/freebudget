@@ -1,4 +1,4 @@
-package de.kontranik.freebudget.activity;
+package de.kontranik.freebudget.fragment;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +18,7 @@ import android.widget.Toast;
 import java.io.IOException;
 
 import de.kontranik.freebudget.R;
+import de.kontranik.freebudget.activity.OpenFileActivity;
 import de.kontranik.freebudget.service.FileService;
 
 import static android.app.Activity.RESULT_OK;

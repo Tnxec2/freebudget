@@ -1,4 +1,4 @@
-package de.kontranik.freebudget.activity;
+package de.kontranik.freebudget.fragment;
 
 import android.content.ClipData;
 import android.content.Context;
@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Locale;
 
 import de.kontranik.freebudget.R;
+import de.kontranik.freebudget.activity.TransactionActivity;
 import de.kontranik.freebudget.adapter.TransactionAdapter;
 import de.kontranik.freebudget.database.DatabaseAdapter;
 import de.kontranik.freebudget.model.Transaction;

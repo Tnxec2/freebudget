@@ -14,6 +14,11 @@ import android.support.v7.widget.Toolbar;
 
 import de.kontranik.freebudget.R;
 import de.kontranik.freebudget.adapter.DrawerItemCustomAdapter;
+import de.kontranik.freebudget.fragment.OverviewFragment;
+import de.kontranik.freebudget.fragment.PlannedFragment;
+import de.kontranik.freebudget.fragment.RegularFragment;
+import de.kontranik.freebudget.fragment.SettingsFragment;
+import de.kontranik.freebudget.fragment.ToolsFragment;
 import de.kontranik.freebudget.model.DrawerItem;
 
 public class MainActivity extends AppCompatActivity {
@@ -84,8 +89,8 @@ public class MainActivity extends AppCompatActivity {
                 fragment = new RegularFragment();
                 break;
             case 3:
-                Intent open_import = new Intent(this, CategoryListActivity.class);
-                this.startActivityForResult(open_import, 0);
+                Intent open_category = new Intent(this, CategoryListActivity.class);
+                this.startActivityForResult(open_category, 0);
                 break;
             case 4:
                 fragment = new ToolsFragment();
