@@ -7,4 +7,14 @@
     android:minHeight="?attr/actionBarSize"
     android:background="@color/colorBackground"
     local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-    local:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+    local:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
+
+    <Switch
+        android:id="@+id/switchShowPlannedOnly"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:layout_marginRight="16dp"
+        android:layout_marginEnd="16dp" />
+
+</android.support.v7.widget.Toolbar>
