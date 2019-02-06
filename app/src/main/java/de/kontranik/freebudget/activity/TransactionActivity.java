@@ -135,6 +135,8 @@ public class TransactionActivity extends AppCompatActivity {
             if ( extras.containsKey(TRANS_TYP) ) planned = extras.getString(TRANS_TYP).equals(TRANS_TYP_PLANNED);
         }
         //
+        long displayDate;
+
         if (transactionID > 0) {
             // get entry from db
             dbAdapter.open();
@@ -147,18 +149,8 @@ public class TransactionActivity extends AppCompatActivity {
             editTextAmountFact.setText(String.valueOf(Math.abs(transaction.getAmount_fact())));
             editTextAmountPlanned.setText(String.valueOf(Math.abs(transaction.getAmount_planned())));
 
-            long displayDate;
             if (transaction.getDate() > 0) displayDate = transaction.getDate();
             else displayDate = new Date().getTime();
-
-            if ( displayDate > 0) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(new Date(displayDate));
-                this.year = calendar.get(Calendar.YEAR);
-                this.month = calendar.get(Calendar.MONTH) + 1;
-                this.day = calendar.get(Calendar.DAY_OF_MONTH);
-            }
-            setDateBox(year, month, day);
 
             if (transaction.getAmount_fact() > 0) {
                 radioButtonReceipts.setChecked(true);
@@ -184,12 +176,23 @@ public class TransactionActivity extends AppCompatActivity {
                 radioButtonSpending.setChecked(true);
             }
 
+            displayDate = new Date().getTime();
+
             // hide delete button
             buttonDelete.setVisibility(View.GONE);
 
             Log.d("NIK", String.valueOf(planned));
 
         }
+
+        if ( displayDate > 0) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(new Date(displayDate));
+            this.year = calendar.get(Calendar.YEAR);
+            this.month = calendar.get(Calendar.MONTH) + 1;
+            this.day = calendar.get(Calendar.DAY_OF_MONTH);
+        }
+        setDateBox(year, month, day);
 
         editTextAmountPlanned.setEnabled(planned);
         editTextAmountFact.setEnabled(!planned);

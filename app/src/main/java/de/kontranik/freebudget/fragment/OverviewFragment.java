@@ -1,5 +1,6 @@
 package de.kontranik.freebudget.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
@@ -129,6 +130,7 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         return inflater.inflate(R.layout.fragment_overview, parent, false);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -437,7 +439,8 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         transactionList.clear();
         //transactionList.addAll( dbAdapter.getTransactions(this.year, this.month, this.showOnlyPlanned) );
 
-        List<Transaction> dbTransactions = dbAdapter.getTransactions(this.year, this.month, false) ;
+        // als erstes komplett alle bewegungen für den Monat lesen
+        List<Transaction> dbTransactions = dbAdapter.getTransactions(getContext(), this.year, this.month, false) ;
 
         clearSummen();
 

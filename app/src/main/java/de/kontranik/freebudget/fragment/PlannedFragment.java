@@ -289,7 +289,7 @@ public class PlannedFragment extends Fragment {
         databaseAdapter.open();
 
         transactions.clear();
-        transactions.addAll(databaseAdapter.getTransactions(this.year, this.month, true));
+        transactions.addAll(databaseAdapter.getTransactions(getContext(), this.year, this.month, true));
         transactionAdapter.notifyDataSetChanged();
 
         databaseAdapter.close();
