@@ -21,7 +21,9 @@ import de.kontranik.freebudget.model.Category;
 import de.kontranik.freebudget.model.RegularTransaction;
 
 import static de.kontranik.freebudget.activity.CategoryListActivity.RESULT_CATEGORY;
+import static de.kontranik.freebudget.service.Constant.TRANS_ID;
 import static de.kontranik.freebudget.service.Constant.TRANS_STAT;
+import static de.kontranik.freebudget.service.Constant.TRANS_STAT_PLUS;
 
 public class RegularTransactionActivity extends AppCompatActivity {
 
@@ -89,7 +91,7 @@ public class RegularTransactionActivity extends AppCompatActivity {
         // get ID from Buffer
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            transactionID = extras.getLong("id");
+            transactionID = extras.getLong(TRANS_ID);
         }
         // if ID = 0, then create new transaction; else update
         spinnerMonth.setSelection(0);
@@ -98,10 +100,10 @@ public class RegularTransactionActivity extends AppCompatActivity {
             dbAdapter.open();
             RegularTransaction transaction = dbAdapter.getRegularById(transactionID);
             if ( transaction != null) {
-                Category category = dbAdapter.getCategory(transaction.getCategory());
                 editTextDescription.setText(transaction.getDescription());
-                acTextViewCategory.setText(category.getName());
-                editTextDay.setText(transaction.getDay());
+                acTextViewCategory.setText(transaction.getCategory());
+                editTextDay.setText(String.valueOf(transaction.getDay()));
+
                 if (transaction.getAmount() != 0) {
                     editTextAmount.setText(String.valueOf(Math.abs(transaction.getAmount())));
                 }
@@ -114,7 +116,7 @@ public class RegularTransactionActivity extends AppCompatActivity {
             }
             dbAdapter.close();
         } else {
-            String transStat = "";
+            String transStat = null;
             if (extras != null) {
                 if ( extras.containsKey(TRANS_STAT))
                     transStat = extras.getString(TRANS_STAT);
@@ -123,7 +125,7 @@ public class RegularTransactionActivity extends AppCompatActivity {
             }
 
             if ( transStat != null ) {
-                if (transStat.equals("plus")) {
+                if (transStat.equals(TRANS_STAT_PLUS)) {
                     radioButtonReceipts.setChecked(true);
                 } else {
                     radioButtonSpending.setChecked(true);
