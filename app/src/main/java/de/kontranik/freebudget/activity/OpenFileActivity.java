@@ -1,6 +1,7 @@
 package de.kontranik.freebudget.activity;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -30,8 +31,6 @@ import de.kontranik.freebudget.R;
 public class OpenFileActivity extends Activity
         implements OnClickListener, OnItemClickListener {
 
-    private static final int PERMISSION_REQUEST_CODE = 1;
-
     public static final String RESULT_FILENAME = "filename";
     public static final String RESULT_SHORT_FILENAME = "short_filename";
 
@@ -56,15 +55,8 @@ public class OpenFileActivity extends Activity
         super.onCreate(savedInstanceState);
 
         setTitle(R.string.menu_import_csv);
-        setContentView(R.layout.activity_open_file);
 
-        if (Build.VERSION.SDK_INT >= 23)
-        {
-            if (!checkPermission())
-            {
-                requestPermission(); // Code for permission
-            }
-        }
+        setContentView(R.layout.activity_open_file);
 
         try {
             /* Initializing Widgets */
@@ -101,11 +93,11 @@ public class OpenFileActivity extends Activity
         File directory = new File(path);
         File[] allEntries = directory.listFiles();
 
-        for (File allEntry : allEntries) {
-            if (allEntry.isDirectory()) {
-                folders.add(allEntry.getName());
-            } else if (allEntry.isFile()) {
-                files.add(allEntry.getName());
+        for (File entry : allEntries) {
+            if (entry.isDirectory()) {
+                folders.add( entry.getName() );
+            } else if ( entry.isFile() && entry.getName().toLowerCase().endsWith("csv") ) {
+                files.add( entry.getName() );
             }
         }
 
@@ -191,37 +183,6 @@ public class OpenFileActivity extends Activity
             textView_openFileName.setText(selectedFileName);
             setTitle(this.getResources().getString(R.string.title_activity_open_file)
                     + "[" + entryName + "]");
-        }
-    }
-
-    private boolean checkPermission() {
-        int result = ContextCompat.checkSelfPermission(OpenFileActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        if (result == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    private void requestPermission() {
-
-        if (ActivityCompat.shouldShowRequestPermissionRationale(OpenFileActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            Toast.makeText(OpenFileActivity.this, "Write External Storage permission allows us to do store images. Please allow this permission in App Settings.", Toast.LENGTH_LONG).show();
-        } else {
-            ActivityCompat.requestPermissions(OpenFileActivity.this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case PERMISSION_REQUEST_CODE:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.e("value", "Permission Granted, Now you can use local drive .");
-                } else {
-                    Log.e("value", "Permission Denied, You cannot use local drive .");
-                }
-                break;
         }
     }
 }

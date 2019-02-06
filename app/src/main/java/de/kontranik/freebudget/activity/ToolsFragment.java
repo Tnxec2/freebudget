@@ -2,8 +2,13 @@ package de.kontranik.freebudget.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +35,8 @@ public class ToolsFragment extends Fragment {
 
     static final int RESULT_OPEN_FILENAME_REGULAR = 230;
     static final int RESULT_OPEN_FILENAME_NORMAL = 240;
+
+    private static final int PERMISSION_REQUEST_CODE = 165;
 
     private Button btn_ImportRegular, btn_ExportRegular, btn_ImportNormal, btn_ExportNormal;
 
@@ -70,6 +77,14 @@ public class ToolsFragment extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+
+        if (Build.VERSION.SDK_INT >= 23)
+        {
+            if (!checkPermission())
+            {
+                requestPermission(); // Code for permission
+            }
         }
     }
 
@@ -173,7 +188,7 @@ public class ToolsFragment extends Fragment {
                     try {
                         FileService.importFileRegular(fileName, getContext());
                         Toast.makeText(getContext(),
-                                this.getResources().getString(R.string.importOK),
+                                this.getResources().getString(R.string.importOK, fileName),
                                 Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -200,6 +215,37 @@ public class ToolsFragment extends Fragment {
                         Toast.makeText(getContext(), this.getResources().getString(R.string.importFail, e.getMessage()),
                                 Toast.LENGTH_LONG).show();
                     }
+                }
+                break;
+        }
+    }
+
+    private boolean checkPermission() {
+        int result = ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (result == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void requestPermission() {
+
+        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            Toast.makeText(getContext(), "Write External Storage permission allows us to do store images. Please allow this permission in App Settings.", Toast.LENGTH_LONG).show();
+        } else {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_REQUEST_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.e("value", "Permission Granted, Now you can use local drive .");
+                } else {
+                    Log.e("value", "Permission Denied, You cannot use local drive .");
                 }
                 break;
         }
