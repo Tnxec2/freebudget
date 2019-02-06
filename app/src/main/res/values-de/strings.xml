@@ -21,8 +21,6 @@
     <string name="activity_transaction_copy">Kopieren</string>
     <string name="activity_transaction_delete">Löschen</string>
     <string name="activity_transaction_not_define">nicht festgelegt</string>
-    <string name="activity_transaction_month_not_define">Monat eingeben</string>
-    <string name="activity_transaction_month_a_year_not_define">Monat und Jahr eingeben</string>
     <string name="prev">zurück</string>
     <string name="next">vor</string>
     <string name="app_settings">Einstellungen</string>
@@ -59,7 +57,7 @@
     <string name="exportOK">Export OK. Datei: %1$s</string>
     <string name="delete">Löschen</string>
     <string name="save">Speichern</string>
-    <string name="categoryname">Kategoriename</string>
+    <string name="category_name">Kategoriename</string>
     <string name="ok">OK</string>
     <string name="cancel">Abbrechen</string>
     <string name="select">Auswählen</string>

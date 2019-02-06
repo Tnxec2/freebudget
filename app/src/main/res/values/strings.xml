@@ -21,8 +21,6 @@
     <string name="activity_transaction_copy">Copy</string>
     <string name="activity_transaction_delete">Delete</string>
     <string name="activity_transaction_not_define">not define</string>
-    <string name="activity_transaction_month_not_define">define a month</string>
-    <string name="activity_transaction_month_a_year_not_define">define a year and a month</string>
     <string name="prev">previous</string>
     <string name="next">next</string>
     <string name="app_settings">Settings</string>
@@ -59,7 +57,7 @@
     <string name="activity_transaction_amount">Amount</string>
     <string name="delete">Delete</string>
     <string name="save">Save</string>
-    <string name="categoryname">categoryname</string>
+    <string name="category_name">category name</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="select">Select</string>
