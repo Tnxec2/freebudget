@@ -45,7 +45,7 @@ import de.kontranik.freebudget.service.PlanRegular;
  * Use the {@link OverviewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class OverviewFragment extends Fragment {
+public class OverviewFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -163,26 +163,9 @@ public class OverviewFragment extends Fragment {
 
         setMonthTextView();
 
-        btn_planRegular.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                planRegular(v);
-            }
-        });
-
-        btn_prevMonth.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                prevMonth(v);
-            }
-        });
-
-        btn_nextMonth.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                nextMonth(v);
-            }
-        });
+        btn_planRegular.setOnClickListener(this);
+        btn_prevMonth.setOnClickListener(this);
+        btn_nextMonth.setOnClickListener(this);
 
         LinearLayout mainLayout = (LinearLayout) view.findViewById(R.id.linearLayout1);
         mainLayout.setOnTouchListener(new OnSwipeTouchListener(getContext()){
@@ -406,6 +389,23 @@ public class OverviewFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btn_planRegular:
+                planRegular(view);
+                break;
+            case R.id.btn_prevMonth:
+                prevMonth(view);
+                break;
+            case R.id.btn_nextMonth:
+                nextMonth(view);
+                break;
+            default:
+                break;
+        }
     }
 
     /**
