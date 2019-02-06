@@ -1,10 +1,16 @@
 package de.kontranik.freebudget.fragment;
 
+import android.annotation.SuppressLint;
+import android.content.ClipData;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -24,6 +30,14 @@ import de.kontranik.freebudget.database.DatabaseAdapter;
 import de.kontranik.freebudget.model.Transaction;
 import de.kontranik.freebudget.service.OnSwipeTouchListener;
 
+import static de.kontranik.freebudget.service.Constant.TRANS_ID;
+import static de.kontranik.freebudget.service.Constant.TRANS_STAT;
+import static de.kontranik.freebudget.service.Constant.TRANS_STAT_MINUS;
+import static de.kontranik.freebudget.service.Constant.TRANS_STAT_PLUS;
+import static de.kontranik.freebudget.service.Constant.TRANS_TYP;
+import static de.kontranik.freebudget.service.Constant.TRANS_TYP_FACT;
+import static de.kontranik.freebudget.service.Constant.TRANS_TYP_PLANNED;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -34,11 +48,10 @@ import de.kontranik.freebudget.service.OnSwipeTouchListener;
  */
 public class PlannedFragment extends Fragment {
 
-    public static final String TRANS_STAT = "TRANS_STAT";
-
     private TextView textView_Month;
     private ListView listView_transactionsList;
     private ImageButton btn_prevMonth, btn_nextMonth;
+    private FloatingActionButton fab_add, fab_add_plus, fab_add_minus;
 
     private List<Transaction> transactions = new ArrayList<>();
 
@@ -48,6 +61,7 @@ public class PlannedFragment extends Fragment {
 
     private String[] months;
 
+    boolean isMove;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -96,6 +110,7 @@ public class PlannedFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_planned, container, false);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         // Setup any handles to view objects here
@@ -104,6 +119,10 @@ public class PlannedFragment extends Fragment {
 
         btn_prevMonth = (ImageButton) view.findViewById(R.id.btn_prevMonth);
         btn_nextMonth = (ImageButton) view.findViewById(R.id.btn_nextMonth);
+
+        fab_add = (FloatingActionButton) view.findViewById(R.id.fab_add);
+        fab_add_plus = (FloatingActionButton) view.findViewById(R.id.fab_add_plus);
+        fab_add_minus = (FloatingActionButton) view.findViewById(R.id.fab_add_minus);
 
         btn_prevMonth.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,10 +144,9 @@ public class PlannedFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Transaction entry = transactionAdapter.getItem(position);
-                if(entry!=null) {
+                if(entry != null) {
                     Intent intent = new Intent(getContext(), TransactionActivity.class);
-                    intent.putExtra("id", entry.getId());
-                    intent.putExtra("click", 25);
+                    intent.putExtra(TRANS_ID, entry.getId());
                     startActivity(intent);
                 }
             }
@@ -156,6 +174,106 @@ public class PlannedFragment extends Fragment {
             }
         });
 
+        listView_transactionsList.setOnDragListener(new View.OnDragListener() {
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+                int action = event.getAction();
+                switch (action) {
+                    case DragEvent.ACTION_DRAG_STARTED:
+                        break;
+                    case DragEvent.ACTION_DRAG_ENTERED:
+                        break;
+                    case DragEvent.ACTION_DRAG_EXITED:
+                        break;
+                    case DragEvent.ACTION_DROP:
+                        setNormalStat();
+                        break;
+                    case DragEvent.ACTION_DRAG_ENDED:
+                        setNormalStat();
+                        break;
+                    default:
+                        break;
+                }
+                return true;
+            }
+        });
+
+        fab_add.setOnTouchListener(new View.OnTouchListener () {
+            public boolean onTouch (View view, MotionEvent motionEvent){
+                isMove = false;
+                if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
+                    ClipData data = ClipData.newPlainText("", "");
+                    fab_add.setImageResource(R.drawable.ic_euro_symbol_white_24dp);
+                    View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        view.startDragAndDrop(data, shadowBuilder, view, 0);
+                    } else {
+                        //noinspection deprecation
+                        view.startDrag(data, shadowBuilder, view, 0);
+                    }
+                    fab_add_plus.setVisibility(View.VISIBLE);
+                    fab_add_minus.setVisibility(View.VISIBLE);
+                    fab_add.setVisibility(View.INVISIBLE);
+                    isMove = true;
+                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    if(!isMove) {
+                        add(TRANS_STAT_MINUS, TRANS_TYP_PLANNED);
+                    }
+                } else if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    fab_add_plus.setVisibility(View.VISIBLE);
+                    fab_add_minus.setVisibility(View.VISIBLE);
+                    fab_add.setVisibility(View.VISIBLE);
+                }
+                return true;
+            }
+        });
+
+        fab_add_plus.setOnDragListener(new View.OnDragListener() {
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+                int action = event.getAction();
+                switch (action) {
+                    case DragEvent.ACTION_DRAG_STARTED:
+                        break;
+                    case DragEvent.ACTION_DRAG_ENTERED:
+                        break;
+                    case DragEvent.ACTION_DRAG_EXITED:
+                        break;
+                    case DragEvent.ACTION_DROP:
+                        add(TRANS_STAT_PLUS, TRANS_TYP_PLANNED);
+                        break;
+                    case DragEvent.ACTION_DRAG_ENDED:
+                        break;
+                    default:
+                        break;
+                }
+                return true;
+            }
+        });
+
+        fab_add_minus.setOnDragListener(new View.OnDragListener() {
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+                int action = event.getAction();
+                switch (action) {
+                    case DragEvent.ACTION_DRAG_STARTED:
+                        // do nothing
+                        break;
+                    case DragEvent.ACTION_DRAG_ENTERED:
+                        break;
+                    case DragEvent.ACTION_DRAG_EXITED:
+                        break;
+                    case DragEvent.ACTION_DROP:
+                        add(TRANS_STAT_MINUS, TRANS_TYP_PLANNED);
+                        break;
+                    case DragEvent.ACTION_DRAG_ENDED:
+                        break;
+                    default:
+                        break;
+                }
+                return true;
+            }
+        });
 
         setMonthTextView();
     }
@@ -211,5 +329,20 @@ public class PlannedFragment extends Fragment {
 
     private void setMonthTextView() {
         this.textView_Month.setText(String.format(Locale.getDefault(),"%d / %s", this.year, this.months[this.month]));
+    }
+
+    public void add(String transStat, String planned){
+        setNormalStat();
+        Intent intent = new Intent(getContext(), TransactionActivity.class);
+        intent.putExtra(TRANS_STAT, transStat);
+        intent.putExtra(TRANS_TYP, planned);
+        startActivity(intent);
+    }
+
+    private void setNormalStat(){
+        fab_add.setImageResource(R.drawable.ic_add_white_24dp);
+        fab_add.setVisibility(View.VISIBLE);
+        fab_add_plus.setVisibility(View.INVISIBLE);
+        fab_add_minus.setVisibility(View.INVISIBLE);
     }
 }
