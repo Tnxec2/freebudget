@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.RadioButton;
 
@@ -30,6 +31,8 @@ public class SettingsFragment extends Fragment {
     RadioButton radioButton_Name, radioButton_Cost, radioButton_Date, radioButton_EditDate,
             radioButton_notsort, radioButton_AbsCost;
     CheckBox checkBox_Sortdesc;
+    Button buttonSave;
+
     String order_by;
     Boolean sort_desc = false;
 
@@ -64,6 +67,15 @@ public class SettingsFragment extends Fragment {
         radioButton_EditDate = (RadioButton) view.findViewById(R.id.radioButton_sort_edit_date);
         radioButton_notsort = (RadioButton) view.findViewById(R.id.radioButton_sort_notsort);
         checkBox_Sortdesc = (CheckBox) view.findViewById(R.id.checkBox_sort_desc);
+
+        buttonSave = (Button) view.findViewById(R.id.button);
+
+        buttonSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveConfig(v);
+            }
+        });
 
         order_by = settings.getString(Config.PREF_ORDER_BY, Config.PREF_ORDER_BY_NOT_SORT);
         sort_desc = settings.getBoolean(Config.PREF_SORT_DESC, false);
