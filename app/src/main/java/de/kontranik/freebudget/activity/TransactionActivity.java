@@ -143,8 +143,7 @@ public class TransactionActivity extends AppCompatActivity {
             Transaction transaction = dbAdapter.getTransaction(transactionID);
             editTextDescription.setText(transaction.getDescription());
 
-            Category category = dbAdapter.getCategory(transaction.getCategory());
-            acTextViewCategory.setText(category.getName());
+            acTextViewCategory.setText(transaction.getCategory());
 
             editTextAmountFact.setText(String.valueOf(Math.abs(transaction.getAmount_fact())));
             editTextAmountPlanned.setText(String.valueOf(Math.abs(transaction.getAmount_planned())));
