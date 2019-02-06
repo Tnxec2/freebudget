@@ -31,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
     private CharSequence mTitle;
     android.support.v7.app.ActionBarDrawerToggle mDrawerToggle;
 
+    int position;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         setupDrawerToggle();
 
+        position = 0;
         selectItem(0);
     }
 
@@ -106,11 +109,13 @@ public class MainActivity extends AppCompatActivity {
         if (fragment != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-
-            mDrawerList.setItemChecked(position, true);
-            mDrawerList.setSelection(position);
-            setTitle(mNavigationDrawerItemTitles[position]);
+            this.position = position;
         }
+
+        mDrawerList.setItemChecked(this.position, true);
+        mDrawerList.setSelection(this.position);
+        setTitle(mNavigationDrawerItemTitles[this.position]);
+
         mDrawerLayout.closeDrawer(mDrawerList);
     }
 
