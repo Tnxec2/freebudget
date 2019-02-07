@@ -70,6 +70,8 @@
     <string name="export_normal">Export normal</string>
     <string name="item_name">Item Name</string>
     <string name="activity_transaction_edit_planned">Edit planned</string>
+    <string name="mark_last_edited">Mark last edited</string>
+    <string name="overview_list">Overview List</string>
 
     <string-array name="navigation_drawer_items_array">
         <item>Overview</item>

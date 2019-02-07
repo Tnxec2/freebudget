@@ -79,5 +79,7 @@
         <item>Extras</item>
         <item>Einstellungen</item>
     </string-array>
+    <string name="mark_last_edited">Zuletzt geänderten Eintrag hervorheben</string>
+    <string name="overview_list">Übersichtsliste</string>
 
 </resources>

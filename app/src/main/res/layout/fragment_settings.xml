@@ -25,7 +25,7 @@
         android:id="@+id/radioButton_sort_notsort"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:checked="true"
         android:text="@string/app_settings_sort_notsort"
         app:layout_constraintEnd_toEndOf="parent"
@@ -87,7 +87,31 @@
         android:text="@string/app_settings_sort_desc"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radioButton_sort_edit_date" />
+        app:layout_constraintTop_toBottomOf="@id/radioButton_sort_edit_date" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/overview_list"
+        android:textSize="30sp"
+        app:layout_constraintTop_toBottomOf="@id/checkBox_sort_desc"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+ />
+
+    <CheckBox
+        android:id="@+id/checkBox_markLastEdited"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/mark_last_edited"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textView4" />
 
     <Button
         android:id="@+id/button"
@@ -97,5 +121,5 @@
         android:text="@string/app_settings_save"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox_sort_desc" />
+        app:layout_constraintTop_toBottomOf="@+id/checkBox_markLastEdited" />" />
 </android.support.constraint.ConstraintLayout>

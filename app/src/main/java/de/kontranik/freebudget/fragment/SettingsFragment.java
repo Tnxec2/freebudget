@@ -28,11 +28,7 @@ public class SettingsFragment extends Fragment {
     SharedPreferences settings;
     RadioButton radioButton_Name, radioButton_Cost, radioButton_Date, radioButton_EditDate,
             radioButton_notsort, radioButton_AbsCost;
-    CheckBox checkBox_Sortdesc;
-    Button buttonSave;
-
-    String order_by;
-    Boolean sort_desc = false;
+    CheckBox checkBox_Sortdesc, checkBox_MarkLastEdited;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -42,13 +38,13 @@ public class SettingsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        settings = this.getActivity().getSharedPreferences(Config.PREFS_FILE, MODE_PRIVATE);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        settings = this.getActivity().getSharedPreferences(Config.PREFS_FILE, MODE_PRIVATE);
         return inflater.inflate(R.layout.fragment_settings, container, false);
     }
 
@@ -65,8 +61,9 @@ public class SettingsFragment extends Fragment {
         radioButton_EditDate = (RadioButton) view.findViewById(R.id.radioButton_sort_edit_date);
         radioButton_notsort = (RadioButton) view.findViewById(R.id.radioButton_sort_notsort);
         checkBox_Sortdesc = (CheckBox) view.findViewById(R.id.checkBox_sort_desc);
+        checkBox_MarkLastEdited = (CheckBox) view.findViewById(R.id.checkBox_markLastEdited);
 
-        buttonSave = (Button) view.findViewById(R.id.button);
+        Button buttonSave = (Button) view.findViewById(R.id.button);
 
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,9 +72,7 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-        order_by = settings.getString(Config.PREF_ORDER_BY, Config.PREF_ORDER_BY_NOT_SORT);
-        sort_desc = settings.getBoolean(Config.PREF_SORT_DESC, false);
-        switch (order_by) {
+        switch (settings.getString(Config.PREF_ORDER_BY, Config.PREF_ORDER_BY_NOT_SORT)) {
             case Config.PREF_ORDER_BY_DESCRIPTION:
                 radioButton_Name.setChecked(true);
                 break;
@@ -99,11 +94,12 @@ public class SettingsFragment extends Fragment {
             default:
                 radioButton_Name.setChecked(true);
         }
-        checkBox_Sortdesc.setChecked(sort_desc);
-
+        checkBox_Sortdesc.setChecked(settings.getBoolean(Config.PREF_SORT_DESC, false));
+        checkBox_MarkLastEdited.setChecked(settings.getBoolean(Config.PREF_MARK_LAST_EDITED, true));
     }
 
     public void saveConfig(View view) {
+        String order_by = Config.PREF_ORDER_BY_NOT_SORT;
         // Einstellungen speichern
         if (radioButton_Name.isChecked()) {
             order_by = Config.PREF_ORDER_BY_DESCRIPTION;
@@ -123,12 +119,12 @@ public class SettingsFragment extends Fragment {
         if (radioButton_notsort.isChecked()) {
             order_by = Config.PREF_ORDER_BY_NOT_SORT;
         }
-        sort_desc = checkBox_Sortdesc.isChecked();
 
         // сохраняем его в настройках
         SharedPreferences.Editor prefEditor = settings.edit();
         prefEditor.putString(Config.PREF_ORDER_BY, order_by);
-        prefEditor.putBoolean(Config.PREF_SORT_DESC, sort_desc);
+        prefEditor.putBoolean(Config.PREF_SORT_DESC, checkBox_Sortdesc.isChecked());
+        prefEditor.putBoolean(Config.PREF_MARK_LAST_EDITED, checkBox_MarkLastEdited.isChecked());
         prefEditor.apply();
     }
 
