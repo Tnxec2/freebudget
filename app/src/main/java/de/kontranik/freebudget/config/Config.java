@@ -18,4 +18,5 @@ public class Config {
     public static final String PREF_ORDER_BY_ABS_AMOUNT = "ABS(" + DatabaseHelper.COLUMN_AMOUNT + ")";
     public static final String PREF_ORDER_BY_EDIT_DATE = DatabaseHelper.COLUMN_EDIT_DATE;
     public static final String PREF_ORDER_BY_DATE = DatabaseHelper.COLUMN_DATE;
+    public static final String PREF_MARK_LAST_EDITED = "mark_last_edited";
 }
