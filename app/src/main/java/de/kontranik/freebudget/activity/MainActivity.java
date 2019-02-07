@@ -13,6 +13,7 @@ import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.support.v7.widget.Toolbar;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import de.kontranik.freebudget.R;
 import de.kontranik.freebudget.adapter.DrawerItemCustomAdapter;
@@ -139,6 +140,9 @@ public class MainActivity extends AppCompatActivity {
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
             this.position = position;
+
+            TextView title = (TextView) findViewById(R.id.title);
+            title.setText(mNavigationDrawerItemTitles[position]);
         }
 
         mDrawerList.setItemChecked(this.position, true);
