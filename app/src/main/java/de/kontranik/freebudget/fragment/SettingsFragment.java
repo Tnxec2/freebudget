@@ -54,9 +54,9 @@ public class SettingsFragment extends Fragment {
         // EditText etFoo = (EditText) view.findViewById(R.id.etFoo);
 
         getActivity().setTitle("Settings");
-        radioButton_Description = (RadioButton) view.findViewById(R.id.radioButton_sort_name);
-        radioButton_Amount = (RadioButton) view.findViewById(R.id.radioButton_sort_cost);
-        radioButton_AbsAmount = (RadioButton) view.findViewById(R.id.radioButton_sort_abscost);
+        radioButton_Description = (RadioButton) view.findViewById(R.id.radioButton_sort_description);
+        radioButton_Amount = (RadioButton) view.findViewById(R.id.radioButton_sort_amount);
+        radioButton_AbsAmount = (RadioButton) view.findViewById(R.id.radioButton_sort_absamount);
         radioButton_Date = (RadioButton) view.findViewById(R.id.radioButton_sort_date);
         radioButton_EditDate = (RadioButton) view.findViewById(R.id.radioButton_sort_edit_date);
         radioButton_notsort = (RadioButton) view.findViewById(R.id.radioButton_sort_notsort);
