@@ -29,7 +29,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:hint="@string/activity_transaction_name"
+            android:hint="@string/activity_transaction_description"
             android:inputType="text" />
 
         <LinearLayout
