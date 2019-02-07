@@ -23,10 +23,14 @@ package="de.kontranik.freebudget">
         </intent-filter>
 
     </activity>
-    <activity android:name=".activity.CategoryListActivity" />
-    <activity android:name=".activity.RegularTransactionActivity" />
-    <activity android:name=".activity.TransactionActivity" />
-    <activity android:name=".activity.OpenFileActivity" />
+    <activity android:name=".activity.CategoryListActivity"
+        android:theme="@style/CustomActionBarTheme"/>
+    <activity android:name=".activity.RegularTransactionActivity"
+        android:theme="@style/CustomActionBarTheme"/>
+    <activity android:name=".activity.TransactionActivity"
+        android:theme="@style/CustomActionBarTheme"/>
+    <activity android:name=".activity.OpenFileActivity"
+        android:theme="@style/CustomActionBarTheme"/>
 </application>
 
 </manifest>
