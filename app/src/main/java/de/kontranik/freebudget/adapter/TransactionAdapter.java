@@ -1,11 +1,13 @@
 package de.kontranik.freebudget.adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.text.DateFormat;
@@ -14,6 +16,8 @@ import java.util.List;
 import java.util.Locale;
 
 import de.kontranik.freebudget.R;
+import de.kontranik.freebudget.config.Config;
+import de.kontranik.freebudget.fragment.OverviewFragment;
 import de.kontranik.freebudget.model.Transaction;
 
 import static de.kontranik.freebudget.config.Config.DATE_SHORT;
@@ -23,6 +27,7 @@ public class TransactionAdapter extends ArrayAdapter<Transaction>  {
     private LayoutInflater inflater;
     private int layout;
     private List<Transaction> transactions;
+    private boolean markLastEdited;
 
     public TransactionAdapter(Context context, int resource, List<Transaction> transactions) {
         super(context, resource, transactions);
@@ -30,6 +35,8 @@ public class TransactionAdapter extends ArrayAdapter<Transaction>  {
         this.layout = resource;
         this.inflater = LayoutInflater.from(context);
 
+        SharedPreferences settings = context.getSharedPreferences(Config.PREFS_FILE, Context.MODE_PRIVATE);
+        markLastEdited  = settings.getBoolean(Config.PREF_MARK_LAST_EDITED, false);
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -76,12 +83,26 @@ public class TransactionAdapter extends ArrayAdapter<Transaction>  {
                 parent.getResources().getString(
                         R.string.subTitleTransaction, dateString, transaction.getCategory()) );
 
+        // last edited hervorheben
+        if ( markLastEdited && transaction.getId() == OverviewFragment.lastEditedId ) {
+            viewHolder.descriptionView.setTextColor( ContextCompat.getColor(parent.getContext(), R.color.colorBackgroundListItem) );
+            viewHolder.amountView.setTextColor( ContextCompat.getColor(parent.getContext(), R.color.colorBackgroundListItem) );
+            viewHolder.categoryView.setTextColor( ContextCompat.getColor(parent.getContext(), R.color.colorBackgroundListItem) );
+            viewHolder.linearLayout_Item.setBackgroundColor( ContextCompat.getColor(parent.getContext(), R.color.colorBackgroundAccent) );
+        } else {
+            viewHolder.descriptionView.setTextColor( ContextCompat.getColor(parent.getContext(), R.color.colorTextListItem) );
+            viewHolder.categoryView.setTextColor( ContextCompat.getColor(parent.getContext(), R.color.colorTextListItem) );
+            viewHolder.linearLayout_Item.setBackgroundColor( ContextCompat.getColor(parent.getContext(), R.color.colorBackgroundListItem ));
+        }
+
         return convertView;
     }
 
     private class ViewHolder {
+        final LinearLayout linearLayout_Item;
         final TextView amountView, descriptionView, categoryView;
         ViewHolder(View view) {
+            linearLayout_Item = view.findViewById(R.id.linearLayout_Item);
             amountView = view.findViewById(R.id.textView_amount);
             descriptionView = view.findViewById(R.id.textView_description);
             categoryView = view.findViewById(R.id.textView_category);
