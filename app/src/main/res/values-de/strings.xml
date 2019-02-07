@@ -12,7 +12,7 @@
     <string name="activity_main_total">Summe</string>
     <string name="activity_main_transactions">Bewegungen</string>
 
-    <string name="activity_transaction_name">Bezeichnung</string>
+    <string name="activity_transaction_description">Bezeichnung</string>
     <string name="activity_transaction_amount_planned">Betrag geplannt</string>
     <string name="activity_transaction_amount_fact">Betrag faktisch</string>
     <string name="activity_transaction_freq">Wiederholung</string>
@@ -25,7 +25,7 @@
     <string name="next">vor</string>
     <string name="app_settings">Einstellungen</string>
     <string name="app_settings_sort">Sortieren nach</string>
-    <string name="app_settings_sort_name">Bezeichnung</string>
+    <string name="app_settings_sort_description">Bezeichnung</string>
     <string name="app_settings_sort_cost">Betrag</string>
     <string name="app_settings_sort_date">Datum</string>
     <string name="app_settings_sort_edit_date">Änderungsdatum</string>
