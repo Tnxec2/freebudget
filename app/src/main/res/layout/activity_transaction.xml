@@ -14,7 +14,6 @@
         android:layout_height="wrap_content"
         android:hint="@string/activity_transaction_name"
         android:inputType="text"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
