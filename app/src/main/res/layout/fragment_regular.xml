@@ -2,9 +2,10 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainlayout_regular"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/mainlayout_regular">
+    android:padding="@dimen/paddint_small">
 
     <LinearLayout
         android:id="@+id/ll_summary"
@@ -12,7 +13,6 @@
         android:layout_height="wrap_content"
         android:background="@color/colorBackgroundCard"
         android:orientation="vertical"
-        android:padding="8dp"
         app:layout_constraintBottom_toTopOf="@+id/ll_overview"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -137,12 +137,9 @@
         android:id="@+id/ll_overview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         android:background="@color/colorBackgroundCard"
         android:orientation="vertical"
-        android:paddingLeft="8dp"
-        android:paddingTop="8dp"
-        android:paddingRight="8dp"
-        android:paddingBottom="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -170,12 +167,12 @@
         android:layout_margin="16dp"
         android:layout_marginBottom="16dp"
         android:clickable="true"
+        android:focusable="true"
         app:backgroundTint="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="@+id/ll_overview"
         app:layout_constraintRight_toRightOf="parent"
         app:rippleColor="#FFF"
-        app:srcCompat="@drawable/ic_add_white_24dp"
-        android:focusable="true" />
+        app:srcCompat="@drawable/ic_add_white_24dp" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_add_plus_regular"
@@ -185,13 +182,13 @@
         android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
         android:clickable="true"
+        android:focusable="true"
         android:visibility="invisible"
         app:backgroundTint="@color/colorGreen"
         app:layout_constraintBottom_toBottomOf="@+id/ll_overview"
         app:layout_constraintEnd_toStartOf="@+id/fab_add_regular"
         app:rippleColor="#FFF"
-        app:srcCompat="@drawable/ic_add_white_24dp"
-        android:focusable="true" />
+        app:srcCompat="@drawable/ic_add_white_24dp" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_add_minus_regular"
@@ -201,12 +198,12 @@
         android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
         android:clickable="true"
+        android:focusable="true"
         android:visibility="invisible"
         app:backgroundTint="@color/colorRed"
         app:layout_constraintBottom_toTopOf="@+id/fab_add_regular"
         app:layout_constraintEnd_toEndOf="parent"
         app:rippleColor="#FFF"
-        app:srcCompat="@drawable/ic_remove_white_24dp"
-        android:focusable="true" />
+        app:srcCompat="@drawable/ic_remove_white_24dp" />
 
 </android.support.constraint.ConstraintLayout>

@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.RegularTransactionActivity"
     android:excludeFromRecents="true"
-    >
+    android:padding="@dimen/paddint_small"
+    tools:context=".activity.RegularTransactionActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout0"

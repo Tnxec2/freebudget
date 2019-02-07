@@ -1,79 +1,101 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    >
+    android:padding="@dimen/paddint_big">
 
 
     <TextView
         android:id="@+id/textView3"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
         android:text="@string/app_settings_sort"
-        android:textSize="30sp" />
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <RadioGroup
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
-        <RadioButton
-            android:id="@+id/radioButton_sort_notsort"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:checked="true"
-            android:text="@string/app_settings_sort_notsort" />
+    <RadioButton
+        android:id="@+id/radioButton_sort_notsort"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:checked="true"
+        android:text="@string/app_settings_sort_notsort"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
-        <RadioButton
-            android:id="@+id/radioButton_sort_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:checked="true"
-            android:text="@string/app_settings_sort_name" />
+    <RadioButton
+        android:id="@+id/radioButton_sort_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:text="@string/app_settings_sort_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioButton_sort_notsort" />
 
-        <RadioButton
-            android:id="@+id/radioButton_sort_cost"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/app_settings_sort_cost" />
+    <RadioButton
+        android:id="@+id/radioButton_sort_cost"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/app_settings_sort_cost"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioButton_sort_name" />
 
-        <RadioButton
-            android:id="@+id/radioButton_sort_abscost"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/app_settings_sort_abs_cost" />
+    <RadioButton
+        android:id="@+id/radioButton_sort_abscost"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/app_settings_sort_abs_cost"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioButton_sort_cost" />
 
-        <RadioButton
-            android:id="@+id/radioButton_sort_date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/app_settings_sort_date" />
+    <RadioButton
+        android:id="@+id/radioButton_sort_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/app_settings_sort_date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioButton_sort_abscost" />
 
-        <RadioButton
-            android:id="@+id/radioButton_sort_edit_date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/app_settings_sort_edit_date" />
-
-    </RadioGroup>
+    <RadioButton
+        android:id="@+id/radioButton_sort_edit_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/app_settings_sort_edit_date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioButton_sort_date" />
 
 
     <CheckBox
         android:id="@+id/checkBox_sort_desc"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/app_settings_sort_desc" />
+        android:layout_marginTop="8dp"
+        android:text="@string/app_settings_sort_desc"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioButton_sort_edit_date" />
 
     <Button
         android:id="@+id/button"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/app_settings_save" />
-</LinearLayout>
+        android:layout_marginTop="32dp"
+        android:text="@string/app_settings_save"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkBox_sort_desc" />
+</android.support.constraint.ConstraintLayout>
