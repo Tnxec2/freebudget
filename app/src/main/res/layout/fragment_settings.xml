@@ -26,7 +26,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:checked="true"
+        android:checked="false"
         android:text="@string/app_settings_sort_notsort"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,8 +36,8 @@
         android:id="@+id/radioButton_sort_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:checked="true"
-        android:text="@string/app_settings_sort_name"
+        android:checked="false"
+        android:text="@string/app_settings_sort_description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/radioButton_sort_notsort" />
@@ -47,6 +47,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/app_settings_sort_cost"
+        android:checked="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/radioButton_sort_name" />
@@ -56,6 +57,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/app_settings_sort_abs_cost"
+        android:checked="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/radioButton_sort_cost" />
@@ -65,6 +67,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/app_settings_sort_date"
+        android:checked="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/radioButton_sort_abscost" />
@@ -74,6 +77,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/app_settings_sort_edit_date"
+        android:checked="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/radioButton_sort_date" />
@@ -84,6 +88,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:checked="false"
         android:text="@string/app_settings_sort_desc"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -109,6 +114,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="@string/mark_last_edited"
+        android:checked="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textView4" />
@@ -121,5 +127,5 @@
         android:text="@string/app_settings_save"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox_markLastEdited" />" />
+        app:layout_constraintTop_toBottomOf="@id/checkBox_markLastEdited" />
 </android.support.constraint.ConstraintLayout>
