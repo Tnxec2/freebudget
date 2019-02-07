@@ -26,13 +26,13 @@
     <string name="app_settings">Einstellungen</string>
     <string name="app_settings_sort">Sortieren nach</string>
     <string name="app_settings_sort_description">Bezeichnung</string>
-    <string name="app_settings_sort_cost">Betrag</string>
+    <string name="app_settings_sort_amount">Betrag</string>
     <string name="app_settings_sort_date">Datum</string>
     <string name="app_settings_sort_edit_date">Änderungsdatum</string>
     <string name="app_settings_sort_desc">absteigende Reihenfolge</string>
     <string name="app_settings_save">Speichern</string>
     <string name="app_settings_sort_notsort">nicht sortieren</string>
-    <string name="app_settings_sort_abs_cost">absolute Betrag</string>
+    <string name="app_settings_sort_abs_amount">absolute Betrag</string>
     <string name="menu_import_csv">CSV importieren</string>
     <string name="menu_export_csv">CSV exportieren</string>
     <string name="title_activity_open_file">Datei öffnen</string>
