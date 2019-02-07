@@ -91,7 +91,7 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
 
     boolean showOnlyPlanned = false;
 
-
+    public static long lastEditedId = 0;
 
     public OverviewFragment() {
         // Required empty public constructor
@@ -444,6 +444,9 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
 
         clearSummen();
 
+        lastEditedId = 0;
+        long lastEditDate = 0;
+
         for (Transaction transaction: dbTransactions) {
             amount_planned = transaction.getAmount_planned();
             if (amount_planned > 0) receipts_planned += amount_planned;
@@ -460,6 +463,11 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
              */
             if ( !showOnlyPlanned || transaction.getAmount_fact() == 0 ) {
                 transactionList.add(transaction);
+
+                if ( transaction.getAmount_fact() != 0 && transaction.getDate_edit() > lastEditDate ) {
+                    lastEditDate = transaction.getDate_edit();
+                    lastEditedId = transaction.getId();
+                }
             }
         }
 
