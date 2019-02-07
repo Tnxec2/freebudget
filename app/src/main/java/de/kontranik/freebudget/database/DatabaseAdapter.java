@@ -480,10 +480,14 @@ public class DatabaseAdapter {
     }
 
     public long insert(Category category) {
-        if ( getCategory(category.getName()) == null) {
-            ContentValues cv = new ContentValues();
-            cv.put(DatabaseHelper.COLUMN_CATEGORY_NAME, category.getName());
-            return database.insert(DatabaseHelper.TABLE_CATEGORY, null, cv);
+        if ( category.getName().trim().length() > 0 ) {
+            if (getCategory(category.getName()) == null) {
+                ContentValues cv = new ContentValues();
+                cv.put(DatabaseHelper.COLUMN_CATEGORY_NAME, category.getName());
+                return database.insert(DatabaseHelper.TABLE_CATEGORY, null, cv);
+            } else {
+                return 0;
+            }
         } else {
             return 0;
         }
@@ -513,11 +517,15 @@ public class DatabaseAdapter {
     }
 
     public long update(Category category){
-        String whereClause = DatabaseHelper.COLUMN_ID + " = " +
-                String.valueOf(category.getId());
-        ContentValues cv = new ContentValues();
-        cv.put(DatabaseHelper.COLUMN_CATEGORY_NAME, category.getName());
-        return database.update(DatabaseHelper.TABLE_CATEGORY, cv, whereClause, null);
+        if ( category.getName().trim().length() > 0 ) {
+            String whereClause = DatabaseHelper.COLUMN_ID + " = " +
+                    String.valueOf(category.getId());
+            ContentValues cv = new ContentValues();
+            cv.put(DatabaseHelper.COLUMN_CATEGORY_NAME, category.getName());
+            return database.update(DatabaseHelper.TABLE_CATEGORY, cv, whereClause, null);
+        } else {
+            return  0;
+        }
     }
 
     String getSortFromSettings(Context context) {
