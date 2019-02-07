@@ -19,7 +19,7 @@ import de.kontranik.freebudget.model.RegularTransaction;
 import de.kontranik.freebudget.model.Transaction;
 
 public class DatabaseAdapter {
-    private SharedPreferences settings;
+
     private String order_by;
     private Boolean sort_desc = false;
 
@@ -529,7 +529,7 @@ public class DatabaseAdapter {
     }
 
     String getSortFromSettings(Context context) {
-        settings = context.getSharedPreferences(Config.PREFS_FILE, Context.MODE_PRIVATE);
+        SharedPreferences settings = context.getSharedPreferences(Config.PREFS_FILE, Context.MODE_PRIVATE);
         order_by = settings.getString(Config.PREF_ORDER_BY, Config.PREF_ORDER_BY_NOT_SORT);
         sort_desc = settings.getBoolean(Config.PREF_SORT_DESC, false);
 
