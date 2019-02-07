@@ -95,7 +95,7 @@ public class SettingsFragment extends Fragment {
                 radioButton_Name.setChecked(true);
         }
         checkBox_Sortdesc.setChecked(settings.getBoolean(Config.PREF_SORT_DESC, false));
-        checkBox_MarkLastEdited.setChecked(settings.getBoolean(Config.PREF_MARK_LAST_EDITED, true));
+        checkBox_MarkLastEdited.setChecked(settings.getBoolean(Config.PREF_MARK_LAST_EDITED, false));
     }
 
     public void saveConfig(View view) {
