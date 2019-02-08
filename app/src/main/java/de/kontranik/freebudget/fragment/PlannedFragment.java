@@ -5,6 +5,7 @@ import android.content.ClipData;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -35,18 +36,11 @@ import static de.kontranik.freebudget.service.Constant.TRANS_STAT;
 import static de.kontranik.freebudget.service.Constant.TRANS_STAT_MINUS;
 import static de.kontranik.freebudget.service.Constant.TRANS_STAT_PLUS;
 import static de.kontranik.freebudget.service.Constant.TRANS_TYP;
-import static de.kontranik.freebudget.service.Constant.TRANS_TYP_FACT;
 import static de.kontranik.freebudget.service.Constant.TRANS_TYP_PLANNED;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link PlannedFragment} interface
- * to handle interaction events.
- * Use the {@link PlannedFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class PlannedFragment extends Fragment {
+
+    private static final String PREFS_KEY_LISTPOSITION = "LISTPOS";
 
     private TextView textView_Month;
     private ListView listView_transactionsList;
@@ -63,44 +57,8 @@ public class PlannedFragment extends Fragment {
 
     boolean isMove;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     public PlannedFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment PlannedFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static PlannedFragment newInstance(String param1, String param2) {
-        PlannedFragment fragment = new PlannedFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -127,14 +85,14 @@ public class PlannedFragment extends Fragment {
         btn_prevMonth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                prevMonth(v);
+                prevMonth();
             }
         });
 
         btn_nextMonth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                nextMonth(v);
+                nextMonth();
             }
         });
 
@@ -284,6 +242,25 @@ public class PlannedFragment extends Fragment {
         getTransactions();
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if(outState!=null) {
+            outState.putInt(PREFS_KEY_LISTPOSITION, listView_transactionsList.getFirstVisiblePosition());
+        }
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+
+        if(savedInstanceState!=null) {
+            int listpos = savedInstanceState.getInt(PREFS_KEY_LISTPOSITION);
+            listView_transactionsList.setSelection(listpos);
+        }
+    }
+
     private void getTransactions() {
         DatabaseAdapter databaseAdapter = new DatabaseAdapter(getContext());
         databaseAdapter.open();
@@ -293,14 +270,6 @@ public class PlannedFragment extends Fragment {
         transactionAdapter.notifyDataSetChanged();
 
         databaseAdapter.close();
-    }
-
-    public void prevMonth(View view){
-        prevMonth();
-    }
-
-    public void nextMonth(View view){
-        nextMonth();
     }
 
     public void prevMonth(){
