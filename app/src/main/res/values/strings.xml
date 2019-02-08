@@ -12,7 +12,7 @@
     <string name="activity_main_total">Budget</string>
     <string name="activity_main_transactions">Transactions</string>
 
-    <string name="activity_transaction_description">Name</string>
+    <string name="activity_transaction_description">Description</string>
     <string name="activity_transaction_amount_planned">Amount planned</string>
     <string name="activity_transaction_amount_fact">Amount fact</string>
     <string name="activity_transaction_freq">repeat</string>
@@ -81,6 +81,9 @@
         <item>Extras</item>
         <item>Settings</item>
     </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
 
