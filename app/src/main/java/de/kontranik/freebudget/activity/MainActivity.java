@@ -26,6 +26,8 @@ import de.kontranik.freebudget.model.DrawerItem;
 
 public class MainActivity extends AppCompatActivity {
 
+    final static String FRAGMENT_POSITION_KEY = "FRAGMENT_POSITION_KEY";
+
     private String[] mNavigationDrawerItemTitles;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -101,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void selectItem(int position) {
 
-        Fragment fragment = null;
+       Fragment fragment = null;
 
         switch (position) {
             case 0:
@@ -172,6 +174,25 @@ public class MainActivity extends AppCompatActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         mDrawerToggle.syncState();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putInt(FRAGMENT_POSITION_KEY, position);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            if ( savedInstanceState.containsKey(FRAGMENT_POSITION_KEY) ) {
+                position = savedInstanceState.getInt(FRAGMENT_POSITION_KEY);
+                selectItem(position);
+            }
+        }
     }
 
     void setupToolbar(){
