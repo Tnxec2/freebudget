@@ -1,11 +1,12 @@
 package de.kontranik.freebudget.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.ClipData;
-import android.content.Context;
 import android.content.Intent;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -35,17 +36,9 @@ import de.kontranik.freebudget.service.OnSwipeTouchListener;
 import static de.kontranik.freebudget.activity.RegularTransactionActivity.MONTH;
 import static de.kontranik.freebudget.service.Constant.TRANS_STAT;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link RegularFragment} interface
- * to handle interaction events.
- * Use the {@link RegularFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class RegularFragment extends Fragment {
 
-    static final int RESULT_OPEN_FILENAME = 234;
+    private static final String PREFS_KEY_LISTPOSITION = "LISTPOS";
 
     private ListView listView_Transactions;
     private TextView textView_Month;
@@ -61,44 +54,8 @@ public class RegularFragment extends Fragment {
     List<RegularTransaction> transactionList = new ArrayList<>();
     RegularTransactionAdapter transactionAdapter;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     public RegularFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment RegularFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static RegularFragment newInstance(String param1, String param2) {
-        RegularFragment fragment = new RegularFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -110,11 +67,10 @@ public class RegularFragment extends Fragment {
 
     // This event is triggered soon after onCreateView().
     // Any view setup should occur here.  E.g., view lookups and attaching view listeners.
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         // Setup any handles to view objects here
-
-        getActivity().setTitle(R.string.manage_regular);
 
         listView_Transactions = (ListView) view.findViewById(R.id.listView_regular_transactions);
         textView_Month = (TextView) view.findViewById(R.id.textView_Month_Regular);
@@ -133,14 +89,14 @@ public class RegularFragment extends Fragment {
         btn_prevMonth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                prevMonth(v);
+                prevMonth();
             }
         });
 
         btn_nextMonth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                nextMonth(v);
+                nextMonth();
             }
         });
 
@@ -179,8 +135,6 @@ public class RegularFragment extends Fragment {
                 transactionList);
         // set adapter
         listView_Transactions.setAdapter(transactionAdapter);
-
-
 
         fab_add.setOnTouchListener(new View.OnTouchListener () {
             public boolean onTouch (View view, MotionEvent motionEvent){
@@ -295,24 +249,22 @@ public class RegularFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
 
+        if(outState!=null) {
+            outState.putInt(PREFS_KEY_LISTPOSITION, listView_Transactions.getFirstVisiblePosition());
+        }
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
 
-    }
-
-
-    public void prevMonth(View view){
-        prevMonth();
-    }
-
-    public void nextMonth(View view){
-        nextMonth();
+        if(savedInstanceState!=null) {
+            int listpos = savedInstanceState.getInt(PREFS_KEY_LISTPOSITION);
+            listView_Transactions.setSelection(listpos);
+        }
     }
 
     public void prevMonth(){
@@ -367,11 +319,6 @@ public class RegularFragment extends Fragment {
         databaseAdapter.close();
 
         transactionAdapter.notifyDataSetChanged();
-    }
-
-    public void add(View view){
-        Intent intent = new Intent(getContext(), RegularTransactionActivity.class);
-        startActivity(intent);
     }
 
     public void add(){
