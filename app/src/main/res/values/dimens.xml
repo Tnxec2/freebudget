@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="paddint_big">32dp</dimen>
     <dimen name="paddint_small">8dp</dimen>
+    <dimen name="paddint_medium">16dp</dimen>
+    <dimen name="paddint_big">32dp</dimen>
 </resources>
