@@ -75,14 +75,13 @@ public class FileService {
         return true;
     }
 
-    public static boolean exportFileRegular(String fileName, Context context) throws IOException {
+    public static String exportFileRegular(String fileName, Context context) throws IOException {
         DatabaseAdapter dbAdapter = new DatabaseAdapter(context);
         dbAdapter.open();
 
         List<RegularTransaction> regularTransactions = dbAdapter.getAllRegular();
 
         DateFormat df1 = new SimpleDateFormat(DATE_LONG, Locale.US);
-        DateFormat df2 = new SimpleDateFormat(DATE_SHORT, Locale.US);
 
         String FILENAME = fileName + "_" + df1.format(new Date()) + ".csv";
         File directory = Environment.getExternalStorageDirectory();
@@ -104,7 +103,7 @@ public class FileService {
 
         out.close();
         dbAdapter.close();
-        return true;
+        return file_export.getAbsolutePath();
     }
 
     public static boolean importFileTransaction(String filename, Context context) throws Exception {
@@ -150,7 +149,7 @@ public class FileService {
         return true;
     }
 
-    public static boolean exportFileTransaction(String fileName, Context context) throws IOException {
+    public static String exportFileTransaction(String fileName, Context context) throws IOException {
         DatabaseAdapter dbAdapter = new DatabaseAdapter(context);
         dbAdapter.open();
 
@@ -179,6 +178,6 @@ public class FileService {
 
         out.close();
         dbAdapter.close();
-        return true;
+        return file_export.getAbsolutePath();
     }
 }

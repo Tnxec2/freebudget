@@ -109,7 +109,9 @@ public class ToolsFragment extends Fragment {
 
     private void exportRegular(View view) {
         try {
-            FileService.exportFileRegular("export_freebudget_regular_transaction", getContext());
+            String filename = "export_freebudget_regular_transaction";
+            String result = FileService.exportFileRegular(filename, getContext());
+            Toast.makeText(getContext(), this.getResources().getString(R.string.exportOK, result), Toast.LENGTH_LONG).show();
         } catch (IOException e) {
             //e.printStackTrace();
             Toast.makeText(getContext(), this.getResources().getString(R.string.exportFail, e.getLocalizedMessage()),
@@ -124,7 +126,9 @@ public class ToolsFragment extends Fragment {
 
     private void exportNormal(View view) {
         try {
-            FileService.exportFileTransaction("export_freebudget_transaction", getContext());
+            String filename = "export_freebudget_transaction";
+            String result = FileService.exportFileTransaction(filename, getContext());
+            Toast.makeText(getContext(), this.getResources().getString(R.string.exportOK, result), Toast.LENGTH_LONG).show();
         } catch (IOException e) {
             //e.printStackTrace();
             Toast.makeText(getContext(), this.getResources().getString(R.string.exportFail, e.getLocalizedMessage()),
