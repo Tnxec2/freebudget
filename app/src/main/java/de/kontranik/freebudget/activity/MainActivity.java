@@ -33,8 +33,6 @@ public class MainActivity extends AppCompatActivity {
     private ListView mDrawerList;
     Toolbar toolbar;
     Switch switchShowOnlyPlanned;
-    private CharSequence mDrawerTitle;
-    private CharSequence mTitle;
     android.support.v7.app.ActionBarDrawerToggle mDrawerToggle;
 
     int position;
@@ -44,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mTitle = mDrawerTitle = getTitle();
         mNavigationDrawerItemTitles = getResources().getStringArray(R.array.navigation_drawer_items_array);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
@@ -58,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // do something, the isChecked will be
                 // true if the switch is in the On position
-
                 setTextSwitch(isChecked);
 
                 // an Fragment übergeben
@@ -88,8 +84,14 @@ public class MainActivity extends AppCompatActivity {
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         setupDrawerToggle();
 
-        position = 0;
-        selectItem(0);
+        // If turn the screen orientation then the savedInstanceState is not null.
+        // In this condition, do not need to add new fragment again.
+        if( savedInstanceState == null ) {
+            position = 0;
+            selectItem(0);
+        } else {
+            //Use exist fragment.
+        }
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
@@ -103,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void selectItem(int position) {
 
-       Fragment fragment = null;
+        Fragment fragment = null;
 
         switch (position) {
             case 0:
@@ -142,14 +144,11 @@ public class MainActivity extends AppCompatActivity {
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
             this.position = position;
-
-            TextView title = (TextView) findViewById(R.id.title);
-            title.setText(mNavigationDrawerItemTitles[position]);
         }
 
-        mDrawerList.setItemChecked(this.position, true);
-        mDrawerList.setSelection(this.position);
-        setTitle(mNavigationDrawerItemTitles[this.position]);
+        mDrawerList.setItemChecked( this.position, true );
+        mDrawerList.setSelection( this.position );
+        setTitle( mNavigationDrawerItemTitles[this.position] );
 
         mDrawerLayout.closeDrawer(mDrawerList);
     }
@@ -166,8 +165,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void setTitle(CharSequence title) {
-        mTitle = title;
-        getSupportActionBar().setTitle(mTitle);
+        TextView textViewTitle = (TextView) findViewById(R.id.title);
+        textViewTitle.setText(title);
     }
 
     @Override
@@ -180,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putInt(FRAGMENT_POSITION_KEY, position);
+        outState.putInt(FRAGMENT_POSITION_KEY, this.position);
     }
 
     @Override
@@ -190,24 +189,24 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState != null) {
             if ( savedInstanceState.containsKey(FRAGMENT_POSITION_KEY) ) {
                 position = savedInstanceState.getInt(FRAGMENT_POSITION_KEY);
-                selectItem(position);
+                setTitle( mNavigationDrawerItemTitles[this.position] );
             }
         }
     }
 
-    void setupToolbar(){
+    private void setupToolbar(){
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
-    void setupDrawerToggle(){
+    private void setupDrawerToggle(){
         mDrawerToggle = new android.support.v7.app.ActionBarDrawerToggle(this,mDrawerLayout,toolbar,R.string.app_name, R.string.app_name);
         //This is necessary to change the icon of the Drawer Toggle upon state change.
         mDrawerToggle.syncState();
     }
 
-    void setTextSwitch(boolean isChecked) {
+    private void setTextSwitch(boolean isChecked) {
         if ( isChecked ) switchShowOnlyPlanned.setText(R.string.only_planned);
         else switchShowOnlyPlanned.setText(R.string.all);
     }
