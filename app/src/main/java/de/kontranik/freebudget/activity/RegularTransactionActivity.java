@@ -199,7 +199,6 @@ public class RegularTransactionActivity extends AppCompatActivity {
         dbAdapter.close();
         SoftKeyboard.hideKeyboard(this);
         this.finish();
-        //goHome();
     }
 
     public void selectCat(View view) {
