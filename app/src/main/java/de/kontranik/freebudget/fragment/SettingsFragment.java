@@ -15,14 +15,6 @@ import de.kontranik.freebudget.config.Config;
 
 import static android.content.Context.MODE_PRIVATE;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link SettingsFragment} interface
- * to handle interaction events.
- * Use the {@link SettingsFragment} factory method to
- * create an instance of this fragment.
- */
 public class SettingsFragment extends Fragment {
 
     SharedPreferences settings;
@@ -32,12 +24,6 @@ public class SettingsFragment extends Fragment {
 
     public SettingsFragment() {
         // Required empty public constructor
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-
-        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -51,9 +37,7 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         // Setup any handles to view objects here
-        // EditText etFoo = (EditText) view.findViewById(R.id.etFoo);
 
-        getActivity().setTitle("Settings");
         radioButton_Description = (RadioButton) view.findViewById(R.id.radioButton_sort_description);
         radioButton_Amount = (RadioButton) view.findViewById(R.id.radioButton_sort_amount);
         radioButton_AbsAmount = (RadioButton) view.findViewById(R.id.radioButton_sort_absamount);
@@ -128,5 +112,4 @@ public class SettingsFragment extends Fragment {
         prefEditor.putBoolean(Config.PREF_MARK_LAST_EDITED, checkBox_MarkLastEdited.isChecked());
         prefEditor.apply();
     }
-
 }
