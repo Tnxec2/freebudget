@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:excludeFromRecents="true"
+    android:padding="@dimen/paddint_small"
+    tools:context=".activity.RegularTransactionActivity">
+
+    <LinearLayout
+        android:id="@+id/linearLayout7"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toStartOf="@+id/linearLayout5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/linearLayout0"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorBackgroundCard"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toStartOf="@+id/linearLayout2_regular"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <EditText
+                android:id="@+id/editText_description_regular"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/activity_transaction_description"
+                android:inputType="text" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <AutoCompleteTextView
+                    android:id="@+id/acTextView_category_regular"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/activity_category" />
+
+                <Button
+                    android:id="@+id/btn_selectCat_regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="selectCat"
+                    android:text="@string/select" />
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/editText_amount_regular"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/activity_transaction_amount"
+                android:inputType="numberDecimal" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout_regular"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorBackgroundCard"
+            android:orientation="horizontal">
+
+            <RadioGroup
+                android:id="@+id/radioTrans_regular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkedButton="@+id/radioButton_receipts">
+
+                <RadioButton
+                    android:id="@+id/radioButton_receipts_regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="@string/activity_main_receipts" />
+
+                <RadioButton
+                    android:id="@+id/radioButton_spending_regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/activity_main_spending" />
+
+            </RadioGroup>
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/editText_day_regular"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="@string/day"
+                android:inputType="number"
+                android:text="1"
+                tools:ignore="Autofill" />
+
+            <Spinner
+                android:id="@+id/spinner_Month_regular"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:entries="@array/months"
+                android:spinnerMode="dropdown" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout5"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/linearLayout2_regular"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button_saveAndClose_regular"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="saveAndClose"
+                android:text="@string/activity_transaction_saveAclose" />
+
+            <Button
+                android:id="@+id/button_delete_regular"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="delete"
+                android:text="@string/activity_transaction_delete" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout3_regular"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorBackgroundCard"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button_save_regular"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="save"
+                android:text="@string/activity_transaction_save" />
+
+            <Button
+                android:id="@+id/button_copy_regular"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="copy"
+                android:text="@string/activity_transaction_copy" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+</android.support.constraint.ConstraintLayout>

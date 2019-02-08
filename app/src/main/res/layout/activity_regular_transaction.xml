@@ -14,9 +14,6 @@
         android:layout_height="wrap_content"
         android:background="@color/colorBackgroundCard"
         android:orientation="vertical"
-        android:paddingLeft="@dimen/paddint_small"
-        android:paddingTop="@dimen/paddint_small"
-        android:paddingRight="@dimen/paddint_small"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -25,10 +22,6 @@
             android:id="@+id/editText_description_regular"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
             android:hint="@string/activity_transaction_description"
             android:inputType="text" />
 
@@ -41,8 +34,6 @@
                 android:id="@+id/acTextView_category_regular"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
                 android:layout_weight="1"
                 android:hint="@string/activity_category" />
 
@@ -50,8 +41,6 @@
                 android:id="@+id/btn_selectCat_regular"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
                 android:onClick="selectCat"
                 android:text="@string/select" />
         </LinearLayout>
@@ -60,10 +49,6 @@
             android:id="@+id/editText_amount_regular"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
             android:hint="@string/activity_transaction_amount"
             android:inputType="numberDecimal" />
     </LinearLayout>
