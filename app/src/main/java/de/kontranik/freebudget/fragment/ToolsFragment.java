@@ -24,14 +24,6 @@ import de.kontranik.freebudget.service.FileService;
 import static android.app.Activity.RESULT_OK;
 import static de.kontranik.freebudget.activity.OpenFileActivity.RESULT_FILENAME;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ToolsFragment} interface
- * to handle interaction events.
- * Use the {@link ToolsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ToolsFragment extends Fragment {
 
     static final int RESULT_OPEN_FILENAME_REGULAR = 230;
@@ -41,44 +33,13 @@ public class ToolsFragment extends Fragment {
 
     private Button btn_ImportRegular, btn_ExportRegular, btn_ImportNormal, btn_ExportNormal;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     public ToolsFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ToolsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ToolsFragment newInstance(String param1, String param2) {
-        ToolsFragment fragment = new ToolsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
 
         if (Build.VERSION.SDK_INT >= 23)
         {
@@ -99,9 +60,6 @@ public class ToolsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         // Setup any handles to view objects here
-        // EditText etFoo = (EditText) view.findViewById(R.id.etFoo);
-
-        getActivity().setTitle("Tools");
 
         btn_ImportRegular = (Button) view.findViewById(R.id.btn_import_regular);
         btn_ExportRegular = (Button) view.findViewById(R.id.btn_export_regular);
@@ -223,15 +181,10 @@ public class ToolsFragment extends Fragment {
 
     private boolean checkPermission() {
         int result = ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        if (result == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        } else {
-            return false;
-        }
+        return result == PackageManager.PERMISSION_GRANTED;
     }
 
     private void requestPermission() {
-
         if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             Toast.makeText(getContext(), "Write External Storage permission allows us to do store images. Please allow this permission in App Settings.", Toast.LENGTH_LONG).show();
         } else {
@@ -244,9 +197,9 @@ public class ToolsFragment extends Fragment {
         switch (requestCode) {
             case PERMISSION_REQUEST_CODE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.e("value", "Permission Granted, Now you can use local drive .");
+                    Log.i(getResources().getString(R.string.app_name), "Permission Granted, Now you can use local drive .");
                 } else {
-                    Log.e("value", "Permission Denied, You cannot use local drive .");
+                    Log.e(getResources().getString(R.string.app_name), "Permission Denied, You cannot use local drive .");
                 }
                 break;
         }
