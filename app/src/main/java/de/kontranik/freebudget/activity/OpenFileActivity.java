@@ -74,11 +74,9 @@ public class OpenFileActivity extends Activity
                     "Error in OpenFileActivity.onCreate: " + ex.getMessage(),
                     Toast.LENGTH_SHORT).show();
         }
-
-
     }
 
-    void setCurrentPath(String path) {
+    private void setCurrentPath(String path) {
         ArrayList<String> folders = new ArrayList<>();
 
         ArrayList<String> files = new ArrayList<>();
@@ -127,8 +125,7 @@ public class OpenFileActivity extends Activity
     }
 
     @Override
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
         if (!currentPath.equals(Environment.getExternalStorageDirectory().getAbsolutePath() + "/")) {
             setCurrentPath(new File(currentPath).getParent() + "/");
         } else {
