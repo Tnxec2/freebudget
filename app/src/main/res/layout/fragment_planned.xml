@@ -22,24 +22,14 @@
             android:contentDescription="@string/prev"
             app:srcCompat="@drawable/ic_keyboard_arrow_left_white_24dp" />
 
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
         <TextView
             android:id="@+id/textView_Month"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/month"
             android:textAlignment="center"
             android:textSize="30sp" />
-
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
 
         <ImageButton
             android:id="@+id/btn_nextMonth"
