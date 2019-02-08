@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -55,6 +56,9 @@ import static de.kontranik.freebudget.service.Constant.TRANS_TYP_PLANNED;
  * create an instance of this fragment.
  */
 public class OverviewFragment extends Fragment implements View.OnClickListener {
+
+    private static final String PREFS_KEY_LISTPOSITION = "LISTPOS";
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -407,6 +411,26 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
                 break;
             default:
                 break;
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if(outState!=null) {
+            outState.putInt(PREFS_KEY_LISTPOSITION, listView_Transactions.getFirstVisiblePosition());
+        }
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+
+        if(savedInstanceState!=null) {
+            int listpos = savedInstanceState.getInt(PREFS_KEY_LISTPOSITION);
+
+            listView_Transactions.setSelection(listpos);
         }
     }
 
