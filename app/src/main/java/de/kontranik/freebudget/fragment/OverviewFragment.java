@@ -52,7 +52,7 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
     private ListView listView_Transactions;
     private TextView textView_Month;
     private TextView textView_receipts_planned, textView_spending_planned, textView_total_planned;
-    private TextView textView_receipts_fact, textView_spending_fact, textView_total_fact;
+    private TextView textView_receipts_fact_planned, textView_receipts_fact_unplanned, textView_spending_fact_planned, textView_spending_fact_unplanned, textView_total_fact;
     private Button btn_planRegular;
     private ImageButton btn_prevMonth, btn_nextMonth;
     private FloatingActionButton fab_add, fab_add_plus, fab_add_minus, fab_add_plus_planned, fab_add_minus_planned;
@@ -68,9 +68,11 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
 
     double amount_planned, amount_fact;
     double receipts_planned = 0;
-    double receipts_fact = 0;
+    double receipts_fact_planned = 0;
+    double receipts_fact_unplanned = 0;
     double spending_planned = 0;
-    double spending_fact = 0;
+    double spending_fact_planned = 0;
+    double spending_fact_unplanned = 0;
     double total_planned = 0;
     double total_fact = 0;
 
@@ -85,6 +87,7 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         // Defines the xml file for the fragment
+        clearSummen();
         return inflater.inflate(R.layout.fragment_overview, parent, false);
     }
 
@@ -96,9 +99,11 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         textView_Month = (TextView) view.findViewById(R.id.textView_Month);
 
         textView_receipts_planned = (TextView) view.findViewById(R.id.textView_receipts_planned);
-        textView_receipts_fact = (TextView) view.findViewById(R.id.textView_receipts_fact);
+        textView_receipts_fact_planned = (TextView) view.findViewById(R.id.textView_receipts_fact_planned);
+        textView_receipts_fact_unplanned = (TextView) view.findViewById(R.id.textView_receipts_fact_unplanned);
         textView_spending_planned = (TextView) view.findViewById(R.id.textView_spending_planned);
-        textView_spending_fact = (TextView) view.findViewById(R.id.textView_spending_fact);
+        textView_spending_fact_planned = (TextView) view.findViewById(R.id.textView_spending_fact_planned);
+        textView_spending_fact_unplanned = (TextView) view.findViewById(R.id.textView_spending_fact_unplanned);
         textView_total_planned = (TextView) view.findViewById(R.id.textView_total_planned);
         textView_total_fact = (TextView) view.findViewById(R.id.textView_total_fact);
 
@@ -402,8 +407,13 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
             total_planned = total_planned + amount_planned;
 
             amount_fact = transaction.getAmount_fact();
-            if (amount_fact > 0) receipts_fact += amount_fact;
-            else spending_fact += Math.abs(amount_fact);
+            if ( amount_fact > 0 ) {
+                if ( amount_planned > 0 ) receipts_fact_planned += amount_fact;
+                else receipts_fact_unplanned += amount_fact;
+            } else if ( amount_fact < 0 ) {
+                if ( amount_planned < 0 ) spending_fact_planned += Math.abs(amount_fact);
+                else spending_fact_unplanned += Math.abs(amount_fact);
+            }
             total_fact += amount_fact;
 
             /*
@@ -488,14 +498,20 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         textView_spending_planned.setText(String.format(Locale.getDefault(),"%1$,.2f", spending_planned));
         textView_spending_planned.setTextColor(ContextCompat.getColor(getContext(), R.color.colorRed));
 
-        textView_spending_fact.setText(String.format(Locale.getDefault(),"%1$,.2f", spending_fact));
-        textView_spending_fact.setTextColor(ContextCompat.getColor(getContext(), R.color.colorRed));
+        textView_spending_fact_planned.setText(String.format(Locale.getDefault(),"%1$,.2f", spending_fact_planned));
+        textView_spending_fact_planned.setTextColor(ContextCompat.getColor(getContext(), R.color.colorRed));
+
+        textView_spending_fact_unplanned.setText(String.format(Locale.getDefault(),"%1$,.2f", spending_fact_unplanned));
+        textView_spending_fact_unplanned.setTextColor(ContextCompat.getColor(getContext(), R.color.colorRed));
 
         textView_receipts_planned.setText(String.format(Locale.getDefault(),"%1$,.2f", receipts_planned));
         textView_receipts_planned.setTextColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
 
-        textView_receipts_fact.setText(String.format(Locale.getDefault(),"%1$,.2f", receipts_fact));
-        textView_receipts_fact.setTextColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
+        textView_receipts_fact_planned.setText(String.format(Locale.getDefault(),"%1$,.2f", receipts_fact_planned));
+        textView_receipts_fact_planned.setTextColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
+
+        textView_receipts_fact_unplanned.setText(String.format(Locale.getDefault(),"%1$,.2f", receipts_fact_unplanned));
+        textView_receipts_fact_unplanned.setTextColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
 
         textView_total_fact.setText(String.format(Locale.getDefault(),"%1$,.2f", total_fact));
         textView_total_planned.setText(String.format(Locale.getDefault(),"%1$,.2f", total_planned));
@@ -517,9 +533,11 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         amount_fact = 0;
         total_planned = 0;
         total_fact = 0;
-        receipts_fact = 0;
+        receipts_fact_planned = 0;
+        receipts_fact_unplanned = 0;
         receipts_planned = 0;
-        spending_fact = 0;
+        spending_fact_planned = 0;
+        spending_fact_unplanned = 0;
         spending_planned = 0;
     }
 
