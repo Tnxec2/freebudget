@@ -64,6 +64,9 @@ public class TransactionAdapter extends ArrayAdapter<Transaction>  {
          } else if ( transaction.getAmount_fact() < 0) {
             viewHolder.textView_amount_fact.setTextColor(
                     ContextCompat.getColor(parent.getContext(), R.color.colorRed));
+        } else {
+            viewHolder.textView_amount_fact.setTextColor(
+                    ContextCompat.getColor(parent.getContext(), R.color.colorBlack));
         }
 
         if ( transaction.getAmount_planned() > 0) {
@@ -72,6 +75,9 @@ public class TransactionAdapter extends ArrayAdapter<Transaction>  {
         } else if ( transaction.getAmount_planned() < 0) {
             viewHolder.textView_amount_planned.setTextColor(
                     ContextCompat.getColor(parent.getContext(), R.color.colorRed));
+        } else {
+            viewHolder.textView_amount_planned.setTextColor(
+                    ContextCompat.getColor(parent.getContext(), R.color.colorBlack));
         }
 
         viewHolder.descriptionView.setText(transaction.getDescription());
@@ -89,15 +95,11 @@ public class TransactionAdapter extends ArrayAdapter<Transaction>  {
         // last edited hervorheben
         if ( markLastEdited && transaction.getId() == OverviewFragment.lastEditedId ) {
             viewHolder.descriptionView.setTextColor( ContextCompat.getColor(parent.getContext(), R.color.colorBackgroundListItem) );
-            viewHolder.textView_amount_planned.setTextColor( ContextCompat.getColor(parent.getContext(), R.color.colorBackgroundListItem) );
-            viewHolder.textView_amount_fact.setTextColor( ContextCompat.getColor(parent.getContext(), R.color.colorBackgroundListItem) );
             viewHolder.categoryView.setTextColor( ContextCompat.getColor(parent.getContext(), R.color.colorBackgroundListItem) );
             viewHolder.linearLayout_Item.setBackgroundColor( ContextCompat.getColor(parent.getContext(), R.color.colorBackgroundAccent) );
         } else {
             viewHolder.descriptionView.setTextColor( ContextCompat.getColor(parent.getContext(), R.color.colorTextListItem) );
             viewHolder.categoryView.setTextColor( ContextCompat.getColor(parent.getContext(), R.color.colorTextListItem) );
-            viewHolder.textView_amount_planned.setTextColor( ContextCompat.getColor(parent.getContext(), R.color.colorTextListItem) );
-            viewHolder.textView_amount_fact.setTextColor( ContextCompat.getColor(parent.getContext(), R.color.colorTextListItem) );
             viewHolder.linearLayout_Item.setBackgroundColor( ContextCompat.getColor(parent.getContext(), R.color.colorBackgroundListItem ));
         }
 
