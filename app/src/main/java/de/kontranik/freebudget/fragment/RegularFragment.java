@@ -136,6 +136,24 @@ public class RegularFragment extends Fragment {
         // set adapter
         listView_Transactions.setAdapter(transactionAdapter);
 
+        listView_Transactions.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        fab_add.hide();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        fab_add.show();
+                        break;
+                    case MotionEvent.ACTION_CANCEL:
+                        fab_add.show();
+                        break;
+                }
+                return false;
+            }
+        });
+
         fab_add.setOnTouchListener(new View.OnTouchListener () {
             public boolean onTouch (View view, MotionEvent motionEvent){
                 isMove = false;
