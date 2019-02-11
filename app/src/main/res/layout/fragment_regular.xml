@@ -121,13 +121,20 @@
                 android:textAlignment="center"
                 android:textSize="18sp" />
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="@dimen/paddint_small"
+            android:layout_marginBottom="@dimen/paddint_small"
+            android:background="@color/colorBackgroundLight"
+            />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/ll_overview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
         android:background="@color/colorBackgroundCard"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
