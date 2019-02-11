@@ -10,11 +10,11 @@
     <color name="colorRed">#f44336</color>
     <color name="colorGreenGray">#3a9e7b</color>
     <color name="colorRedGray">#d64f73</color>
-    <color name="colorBackgroundCard">@color/white</color>
+    <color name="colorBackgroundCard">@color/colorWhite</color>
 
-    <color name="colorBackgroundListItem">@color/white</color>
-    <color name="colorTextListItem">@color/black</color>
+    <color name="colorBackgroundListItem">@color/colorWhite</color>
+    <color name="colorTextListItem">@color/colorBlack</color>
 
-    <color name="white">#FFFFFF</color>
-    <color name="black">#000000</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#000000</color>
 </resources>
