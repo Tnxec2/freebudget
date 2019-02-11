@@ -6,7 +6,11 @@
 
     <string name="activity_main_header">Monthly overview</string>
     <string name="activity_main_receipts">Income</string>
+    <string name="activity_main_receipts_planned">Income planned</string>
+    <string name="activity_main_receipts_unplanned">Income unplanned</string>
     <string name="activity_main_spending">Bills</string>
+    <string name="activity_main_spending_planned">Bills planned</string>
+    <string name="activity_main_spending_unplanned">Bills unplanned</string>
     <string name="activity_main_planned">planned</string>
     <string name="activity_main_fact">fact</string>
     <string name="activity_main_total">Budget</string>
@@ -40,7 +44,7 @@
     <string name="new_regular_transaction">New regular transaction</string>
     <string name="day">day</string>
     <string name="activity_category">category</string>
-    <string name="subTitleTransaction">Due on %1$s. Category %2$s</string>
+    <string name="subTitleTransaction">Due on %1$s. %2$s</string>
     <string name="wrongMonthInTheLine">Wrong month in the line: %1$s</string>
     <string name="wrongDayInTheLine">Wrong day in the line: %1$s</string>
     <string name="wrongLineFormat">Wrong line format: %1$s</string>
@@ -81,9 +85,6 @@
         <item>Extras</item>
         <item>Settings</item>
     </string-array>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
 

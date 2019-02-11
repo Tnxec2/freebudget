@@ -6,7 +6,11 @@
 
     <string name="activity_main_header">Monatsübersicht</string>
     <string name="activity_main_receipts">Einnahmen</string>
+    <string name="activity_main_receipts_planned">Einnahmen geplant</string>
+    <string name="activity_main_receipts_unplanned">Einnahmen ungeplant</string>
     <string name="activity_main_spending">Ausgaben</string>
+    <string name="activity_main_spending_planned">Ausgaben geplant</string>
+    <string name="activity_main_spending_unplanned">Ausgaben ungeplant</string>
     <string name="activity_main_planned">geplant</string>
     <string name="activity_main_fact">gebucht</string>
     <string name="activity_main_total">Summe</string>
@@ -40,7 +44,7 @@
     <string name="new_regular_transaction">Neue reguläre Bewegung</string>
     <string name="day">Tag</string>
     <string name="activity_category">Kategorie</string>
-    <string name="subTitleTransaction">Fällig am %1$s. Kategorie %2$s</string>
+    <string name="subTitleTransaction">Fällig am %1$s. %2$s</string>
     <string name="wrongMonthInTheLine">Falschen Monat in der Zeile: %1$s</string>
     <string name="wrongDayInTheLine">Falschen Tag in der Zeile: %1$s</string>
     <string name="wrongLineFormat">Falsches Zeilenformat: %1$s</string>
