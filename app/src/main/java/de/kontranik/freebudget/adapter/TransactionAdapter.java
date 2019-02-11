@@ -52,22 +52,25 @@ public class TransactionAdapter extends ArrayAdapter<Transaction>  {
 
         Transaction transaction = transactions.get(position);
 
-        String amount = String.format(Locale.getDefault(), "%1$,.2f", transaction.getAmount_fact());
-        if ( transaction.getAmount_planned() != 0 ) amount += " (" + String.format(Locale.getDefault(), "%1$,.2f",transaction.getAmount_planned()) + ")";
+        String amount_fact = String.format(Locale.getDefault(), "%1$,.2f", transaction.getAmount_fact());
+        String amount_planned = String.format(Locale.getDefault(), "%1$,.2f",transaction.getAmount_planned());
 
-        viewHolder.amountView.setText(amount);
+        viewHolder.textView_amount_planned.setText(amount_planned);
+        viewHolder.textView_amount_fact.setText(amount_fact);
 
         if (transaction.getAmount_fact() > 0 ) {
-            viewHolder.amountView.setTextColor(
+            viewHolder.textView_amount_fact.setTextColor(
                     ContextCompat.getColor(parent.getContext(), R.color.colorGreen));
          } else if ( transaction.getAmount_fact() < 0) {
-            viewHolder.amountView.setTextColor(
+            viewHolder.textView_amount_fact.setTextColor(
                     ContextCompat.getColor(parent.getContext(), R.color.colorRed));
-        } else if ( transaction.getAmount_planned() > 0) {
-            viewHolder.amountView.setTextColor(
+        }
+
+        if ( transaction.getAmount_planned() > 0) {
+            viewHolder.textView_amount_planned.setTextColor(
                     ContextCompat.getColor(parent.getContext(), R.color.colorGreen));
         } else if ( transaction.getAmount_planned() < 0) {
-            viewHolder.amountView.setTextColor(
+            viewHolder.textView_amount_planned.setTextColor(
                     ContextCompat.getColor(parent.getContext(), R.color.colorRed));
         }
 
@@ -86,12 +89,15 @@ public class TransactionAdapter extends ArrayAdapter<Transaction>  {
         // last edited hervorheben
         if ( markLastEdited && transaction.getId() == OverviewFragment.lastEditedId ) {
             viewHolder.descriptionView.setTextColor( ContextCompat.getColor(parent.getContext(), R.color.colorBackgroundListItem) );
-            viewHolder.amountView.setTextColor( ContextCompat.getColor(parent.getContext(), R.color.colorBackgroundListItem) );
+            viewHolder.textView_amount_planned.setTextColor( ContextCompat.getColor(parent.getContext(), R.color.colorBackgroundListItem) );
+            viewHolder.textView_amount_fact.setTextColor( ContextCompat.getColor(parent.getContext(), R.color.colorBackgroundListItem) );
             viewHolder.categoryView.setTextColor( ContextCompat.getColor(parent.getContext(), R.color.colorBackgroundListItem) );
             viewHolder.linearLayout_Item.setBackgroundColor( ContextCompat.getColor(parent.getContext(), R.color.colorBackgroundAccent) );
         } else {
             viewHolder.descriptionView.setTextColor( ContextCompat.getColor(parent.getContext(), R.color.colorTextListItem) );
             viewHolder.categoryView.setTextColor( ContextCompat.getColor(parent.getContext(), R.color.colorTextListItem) );
+            viewHolder.textView_amount_planned.setTextColor( ContextCompat.getColor(parent.getContext(), R.color.colorTextListItem) );
+            viewHolder.textView_amount_fact.setTextColor( ContextCompat.getColor(parent.getContext(), R.color.colorTextListItem) );
             viewHolder.linearLayout_Item.setBackgroundColor( ContextCompat.getColor(parent.getContext(), R.color.colorBackgroundListItem ));
         }
 
@@ -100,10 +106,11 @@ public class TransactionAdapter extends ArrayAdapter<Transaction>  {
 
     private class ViewHolder {
         final LinearLayout linearLayout_Item;
-        final TextView amountView, descriptionView, categoryView;
+        final TextView textView_amount_planned, textView_amount_fact, descriptionView, categoryView;
         ViewHolder(View view) {
             linearLayout_Item = view.findViewById(R.id.linearLayout_Item);
-            amountView = view.findViewById(R.id.textView_amount);
+            textView_amount_planned = view.findViewById(R.id.textView_amount_planned);
+            textView_amount_fact = view.findViewById(R.id.textView_amount_fact);
             descriptionView = view.findViewById(R.id.textView_description);
             categoryView = view.findViewById(R.id.textView_category);
         }
