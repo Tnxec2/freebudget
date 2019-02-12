@@ -341,6 +341,7 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
          */
 
         categoryList.clear();
+        maxCategoryWeight = 0;
 
         // als erstes komplett alle bewegungen für den Monat lesen
         List<Transaction> dbTransactions = dbAdapter.getTransactions(getContext(), this.year, this.month, false) ;
