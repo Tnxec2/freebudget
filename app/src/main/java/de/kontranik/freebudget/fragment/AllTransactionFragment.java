@@ -21,7 +21,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -30,7 +29,6 @@ import java.util.List;
 import java.util.Locale;
 
 import de.kontranik.freebudget.R;
-import de.kontranik.freebudget.activity.MainActivity;
 import de.kontranik.freebudget.activity.TransactionActivity;
 import de.kontranik.freebudget.adapter.TransactionAdapter;
 import de.kontranik.freebudget.database.DatabaseAdapter;
@@ -132,7 +130,7 @@ public class AllTransactionFragment extends Fragment {
         });
 
         // set list adapter
-        transactionAdapter = new TransactionAdapter(getContext(), R.layout.layout_transaction_item, transactions);
+        transactionAdapter = new TransactionAdapter(getContext(), R.layout.list_view_item_transaction_item, transactions);
         // set adapter
         listView_transactionsList.setAdapter(transactionAdapter);
         // Register the ListView  for Context menu
