@@ -365,7 +365,8 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
             total_fact += amount_fact;
 
             String categoryName = transaction.getCategory().trim();
-            if ( categoryName.length() > 0 && amount_fact < 0 ) {
+            if ( categoryName.length() == 0 ) categoryName = getResources().getString(R.string.activity_transaction_not_define);
+            if ( amount_fact < 0 ) {
                 boolean ix = false;
                 for (int i = 0; i < categoryList.size(); i++) {
                     Category category = categoryList.get(i);
