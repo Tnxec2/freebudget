@@ -363,22 +363,30 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
             }
             total_fact += amount_fact;
 
-            if ( transaction.getCategory().trim().length() > 0 ) {
-                if ( amount_fact < 0 ) {
-                    int ix = 0;
-                    for (Category category : categoryList) {
-                        if ( transaction.getCategory().equals(category.getName()) ) {
-                            category.setWeight(category.getWeight() + Math.abs(amount_fact));
-                            if ( category.getWeight() > maxCategoryWeight ) maxCategoryWeight = category.getWeight();
-                        }
-                    }
-                    if (ix == 0) {
-                        Category newCat = new Category(0, transaction.getCategory(), Math.abs(amount_fact));
-                        categoryList.add(newCat);
-                        if ( newCat.getWeight() > maxCategoryWeight ) maxCategoryWeight = newCat.getWeight();
+            String categoryName = transaction.getCategory().trim();
+            if ( categoryName.length() > 0 && amount_fact < 0 ) {
+                boolean ix = false;
+                for (int i = 0; i < categoryList.size(); i++) {
+                    Category category = categoryList.get(i);
+                    if (categoryName.equals(category.getName())) {
+                        ix = true;
+                        category.setWeight(category.getWeight() + Math.abs(amount_fact));
+                        if (category.getWeight() > maxCategoryWeight)
+                            maxCategoryWeight = category.getWeight();
+                        break;
                     }
                 }
+                if ( !ix ) {
+                    Category newCat;
+                    newCat = new Category(0, categoryName, Math.abs(amount_fact));
+                    categoryList.add(newCat);
+                    if ( newCat.getWeight() > maxCategoryWeight ) maxCategoryWeight = newCat.getWeight();
+                }
             }
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            categoryList.sort(Category.CategoryWeightComparator);
         }
 
         setSummen();
