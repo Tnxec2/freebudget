@@ -37,7 +37,7 @@ public class RegularTransactionAdapter extends ArrayAdapter<RegularTransaction> 
 
         ViewHolder viewHolder;
         if(convertView==null){
-            convertView = inflater.inflate(R.layout.layout_regular_transaction_item, parent,false);
+            convertView = inflater.inflate(R.layout.list_view_item_regular_transaction_item, parent,false);
             viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
         }
