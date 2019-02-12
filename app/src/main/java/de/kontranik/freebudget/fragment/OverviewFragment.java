@@ -2,23 +2,21 @@ package de.kontranik.freebudget.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.ClipData;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.view.ContextMenu;
+import android.view.Display;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Button;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -31,13 +29,12 @@ import java.util.Locale;
 
 import de.kontranik.freebudget.R;
 import de.kontranik.freebudget.activity.TransactionActivity;
-import de.kontranik.freebudget.adapter.TransactionAdapter;
+import de.kontranik.freebudget.adapter.CategoryAdapter;
 import de.kontranik.freebudget.database.DatabaseAdapter;
+import de.kontranik.freebudget.model.Category;
 import de.kontranik.freebudget.model.Transaction;
 import de.kontranik.freebudget.service.OnSwipeTouchListener;
-import de.kontranik.freebudget.service.PlanRegular;
 
-import static de.kontranik.freebudget.service.Constant.TRANS_ID;
 import static de.kontranik.freebudget.service.Constant.TRANS_STAT;
 import static de.kontranik.freebudget.service.Constant.TRANS_STAT_MINUS;
 import static de.kontranik.freebudget.service.Constant.TRANS_STAT_PLUS;
@@ -47,22 +44,21 @@ import static de.kontranik.freebudget.service.Constant.TRANS_TYP_PLANNED;
 
 public class OverviewFragment extends Fragment implements View.OnClickListener {
 
-    private static final String PREFS_KEY_LISTPOSITION = "LISTPOS";
-
-    private ListView listView_Transactions;
+    private ListView listView_categoryList;
     private TextView textView_Month;
     private TextView textView_receipts_planned, textView_spending_planned, textView_total_planned;
     private TextView textView_receipts_fact_planned, textView_receipts_fact_unplanned, textView_spending_fact_planned, textView_spending_fact_unplanned, textView_total_fact;
-    private Button btn_planRegular;
+
     private ImageButton btn_prevMonth, btn_nextMonth;
     private FloatingActionButton fab_add, fab_add_plus, fab_add_minus, fab_add_plus_planned, fab_add_minus_planned;
 
     private int year, month;
 
     private String[] months;
-
-    List<Transaction> transactionList = new ArrayList<>();
-    TransactionAdapter transactionAdapter;
+    private List<Category> categoryList = new ArrayList<>();
+    CategoryAdapter categoryAdapter;
+    public static double maxCategoryWeight = 0;
+    public static int maxWidth;
 
     Boolean isMove;
 
@@ -75,10 +71,6 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
     double spending_fact_unplanned = 0;
     double total_planned = 0;
     double total_fact = 0;
-
-    boolean showOnlyPlanned = false;
-
-    public static long lastEditedId = 0;
 
     public OverviewFragment() {
         // Required empty public constructor
@@ -95,7 +87,13 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
-        listView_Transactions = (ListView) view.findViewById(R.id.listView_transactions);
+        WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        maxWidth = size.x;
+
+        listView_categoryList = (ListView) view.findViewById(R.id.listView_categoryList);
         textView_Month = (TextView) view.findViewById(R.id.textView_Month);
 
         textView_receipts_planned = (TextView) view.findViewById(R.id.textView_receipts_planned);
@@ -106,8 +104,6 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         textView_spending_fact_unplanned = (TextView) view.findViewById(R.id.textView_spending_fact_unplanned);
         textView_total_planned = (TextView) view.findViewById(R.id.textView_total_planned);
         textView_total_fact = (TextView) view.findViewById(R.id.textView_total_fact);
-
-        btn_planRegular = (Button) view.findViewById(R.id.btn_planRegular);
 
         btn_prevMonth = (ImageButton) view.findViewById(R.id.btn_prevMonth);
         btn_nextMonth = (ImageButton) view.findViewById(R.id.btn_nextMonth);
@@ -126,11 +122,10 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
 
         setMonthTextView();
 
-        btn_planRegular.setOnClickListener(this);
         btn_prevMonth.setOnClickListener(this);
         btn_nextMonth.setOnClickListener(this);
 
-        LinearLayout mainLayout = (LinearLayout) view.findViewById(R.id.linearLayout1);
+        LinearLayout mainLayout = (LinearLayout) view.findViewById(R.id.linearLayout_overview);
         mainLayout.setOnTouchListener(new OnSwipeTouchListener(getContext()){
             public void onSwipeLeft(){
                 nextMonth();
@@ -140,14 +135,7 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-        listView_Transactions.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Transaction entry = transactionAdapter.getItem(position);
-                editTransaction(entry, TRANS_TYP_FACT);
-            }
-        });
-        listView_Transactions.setOnDragListener(new View.OnDragListener() {
+        listView_categoryList.setOnDragListener(new View.OnDragListener() {
             @Override
             public boolean onDrag(View v, DragEvent event) {
                 int action = event.getAction();
@@ -171,16 +159,10 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-        // set list adapter
-        transactionAdapter = new TransactionAdapter(view.getContext(), R.layout.layout_transaction_item, transactionList);
+        categoryAdapter = new CategoryAdapter(view.getContext(), R.layout.list_view_item_categorygraph, categoryList);
+        listView_categoryList.setAdapter(categoryAdapter);
 
-        // set adapter
-        listView_Transactions.setAdapter(transactionAdapter);
-        // Register the ListView  for Context menu
-        registerForContextMenu(listView_Transactions);
-
-
-        listView_Transactions.setOnTouchListener(new View.OnTouchListener() {
+        listView_categoryList.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 switch (motionEvent.getAction()) {
@@ -334,39 +316,8 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo)
-    {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater inflater = getActivity().getMenuInflater();
-        inflater.inflate(R.menu.transaction_list_popup_menu, menu);
-
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item){
-
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        int listPosition = info.position;
-
-        Transaction transaction = transactionList.get(listPosition);
-        if(item.getItemId()==R.id.popup_edit){
-            editTransaction(transaction, TRANS_TYP_FACT);
-        } else if (item.getItemId()==R.id.popup_edit_planned) {
-            editTransaction(transaction, TRANS_TYP_PLANNED);
-        } else if(item.getItemId()==R.id.popup_delete){
-            deleteTransaction(transaction);
-        }else{
-            return false;
-        }
-        return true;
-    }
-
-    @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.btn_planRegular:
-                planRegular();
-                break;
             case R.id.btn_prevMonth:
                 prevMonth();
                 break;
@@ -375,25 +326,6 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
                 break;
             default:
                 break;
-        }
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        if(outState!=null) {
-            outState.putInt(PREFS_KEY_LISTPOSITION, listView_Transactions.getFirstVisiblePosition());
-        }
-    }
-
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-
-        if(savedInstanceState!=null) {
-            int listpos = savedInstanceState.getInt(PREFS_KEY_LISTPOSITION);
-            listView_Transactions.setSelection(listpos);
         }
     }
 
@@ -408,16 +340,12 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
          * und danach neue Liste ge-added werden
          */
 
-        transactionList.clear();
-        //transactionList.addAll( dbAdapter.getTransactions(this.year, this.month, this.showOnlyPlanned) );
+        categoryList.clear();
 
         // als erstes komplett alle bewegungen für den Monat lesen
         List<Transaction> dbTransactions = dbAdapter.getTransactions(getContext(), this.year, this.month, false) ;
 
         clearSummen();
-
-        lastEditedId = 0;
-        long lastEditDate = 0;
 
         for (Transaction transaction: dbTransactions) {
             amount_planned = transaction.getAmount_planned();
@@ -435,15 +363,20 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
             }
             total_fact += amount_fact;
 
-            /*
-             * bereits gebuchte Transactionen überlesen
-             */
-            if ( !showOnlyPlanned || transaction.getAmount_fact() == 0 ) {
-                transactionList.add(transaction);
-
-                if ( transaction.getAmount_fact() != 0 && transaction.getDate_edit() > lastEditDate ) {
-                    lastEditDate = transaction.getDate_edit();
-                    lastEditedId = transaction.getId();
+            if ( transaction.getCategory().trim().length() > 0 ) {
+                if ( amount_fact < 0 ) {
+                    int ix = 0;
+                    for (Category category : categoryList) {
+                        if ( transaction.getCategory().equals(category.getName()) ) {
+                            category.setWeight(category.getWeight() + Math.abs(amount_fact));
+                            if ( category.getWeight() > maxCategoryWeight ) maxCategoryWeight = category.getWeight();
+                        }
+                    }
+                    if (ix == 0) {
+                        Category newCat = new Category(0, transaction.getCategory(), Math.abs(amount_fact));
+                        categoryList.add(newCat);
+                        if ( newCat.getWeight() > maxCategoryWeight ) maxCategoryWeight = newCat.getWeight();
+                    }
                 }
             }
         }
@@ -452,15 +385,8 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
 
         dbAdapter.close();
 
-        //
-        if ( transactionList.size() == 0) {
-            btn_planRegular.setVisibility(View.VISIBLE);
-        } else {
-            btn_planRegular.setVisibility(View.GONE);
-        }
-
         // und den Adapter aktualisieren
-        transactionAdapter.notifyDataSetChanged();
+        categoryAdapter.notifyDataSetChanged();
     }
 
     public void prevMonth(){
@@ -491,10 +417,6 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         this.textView_Month.setText(String.format(Locale.getDefault(),"%d / %s", this.year, this.months[this.month]));
     }
 
-    private void planRegular() {
-        PlanRegular.setRegularToPlanned(getContext(), year, month);
-        getTransactions();
-    }
 
     private void add(String transStat, String planned){
         setNormalStat();
@@ -558,28 +480,5 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         spending_fact_planned = 0;
         spending_fact_unplanned = 0;
         spending_planned = 0;
-    }
-
-    private void editTransaction(Transaction entry, String planned) {
-        if(entry!=null) {
-            Intent intent = new Intent(getContext(), TransactionActivity.class);
-            intent.putExtra(TRANS_ID, entry.getId());
-            intent.putExtra("click", 25);
-            intent.putExtra(TRANS_TYP, planned);
-            startActivity(intent);
-        }
-    }
-
-    private void deleteTransaction(Transaction entry) {
-        DatabaseAdapter databaseAdapter = new DatabaseAdapter(getContext());
-        databaseAdapter.open();
-        databaseAdapter.deleteTransaction(entry.getId());
-        databaseAdapter.close();
-        getTransactions();
-    }
-
-    public void changeShowOnlyPlanned(boolean b) {
-        this.showOnlyPlanned = b;
-        getTransactions();
     }
 }

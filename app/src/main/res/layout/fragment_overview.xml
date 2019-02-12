@@ -9,11 +9,10 @@
 
 
     <LinearLayout
-        android:id="@+id/linearLayout1"
+        android:id="@+id/linearLayout_overview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -271,27 +270,19 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="match_parent"
+        android:id="@+id/linearLayout_categorygraph"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/colorBackgroundCard"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout1">
-
-        <Button
-            android:id="@+id/btn_planRegular"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/put_regular"
-            android:visibility="gone" />
+        app:layout_constraintTop_toBottomOf="@id/linearLayout_overview">
 
         <ListView
-            android:id="@+id/listView_transactions"
+            android:id="@+id/listView_categoryList"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
@@ -371,6 +362,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:rippleColor="#FFF"
         app:srcCompat="@drawable/ic_remove_white_24dp" />
-
 
 </android.support.constraint.ConstraintLayout>
