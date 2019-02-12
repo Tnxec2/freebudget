@@ -1,11 +1,9 @@
-package de.kontranik.freebudget.fragment;
+package de.kontranik.freebudget.activity;
 
 import android.content.SharedPreferences;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.RadioButton;
@@ -13,42 +11,32 @@ import android.widget.RadioButton;
 import de.kontranik.freebudget.R;
 import de.kontranik.freebudget.config.Config;
 
-import static android.content.Context.MODE_PRIVATE;
-
-public class SettingsFragment extends Fragment {
+public class SettingsActivity extends AppCompatActivity {
 
     SharedPreferences settings;
     RadioButton radioButton_Description, radioButton_CategoryName, radioButton_Amount, radioButton_Date, radioButton_EditDate,
             radioButton_notsort, radioButton_AbsAmount;
     CheckBox checkBox_Sortdesc, checkBox_MarkLastEdited;
 
-    public SettingsFragment() {
-        // Required empty public constructor
-    }
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        settings = this.getActivity().getSharedPreferences(Config.PREFS_FILE, MODE_PRIVATE);
-        return inflater.inflate(R.layout.fragment_settings, container, false);
-    }
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_settings);
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        // Setup any handles to view objects here
+        settings = getSharedPreferences(Config.PREFS_FILE, MODE_PRIVATE);
 
-        radioButton_Description = (RadioButton) view.findViewById(R.id.radioButton_sort_description);
-        radioButton_CategoryName = (RadioButton) view.findViewById(R.id.radioButton_sort_categoryname);
-        radioButton_Amount = (RadioButton) view.findViewById(R.id.radioButton_sort_amount);
-        radioButton_AbsAmount = (RadioButton) view.findViewById(R.id.radioButton_sort_absamount);
-        radioButton_Date = (RadioButton) view.findViewById(R.id.radioButton_sort_date);
-        radioButton_EditDate = (RadioButton) view.findViewById(R.id.radioButton_sort_edit_date);
-        radioButton_notsort = (RadioButton) view.findViewById(R.id.radioButton_sort_notsort);
-        checkBox_Sortdesc = (CheckBox) view.findViewById(R.id.checkBox_sort_desc);
-        checkBox_MarkLastEdited = (CheckBox) view.findViewById(R.id.checkBox_markLastEdited);
 
-        Button buttonSave = (Button) view.findViewById(R.id.button);
+        radioButton_Description = (RadioButton) findViewById(R.id.radioButton_sort_description);
+        radioButton_CategoryName = (RadioButton) findViewById(R.id.radioButton_sort_categoryname);
+        radioButton_Amount = (RadioButton) findViewById(R.id.radioButton_sort_amount);
+        radioButton_AbsAmount = (RadioButton) findViewById(R.id.radioButton_sort_absamount);
+        radioButton_Date = (RadioButton) findViewById(R.id.radioButton_sort_date);
+        radioButton_EditDate = (RadioButton) findViewById(R.id.radioButton_sort_edit_date);
+        radioButton_notsort = (RadioButton) findViewById(R.id.radioButton_sort_notsort);
+        checkBox_Sortdesc = (CheckBox) findViewById(R.id.checkBox_sort_desc);
+        checkBox_MarkLastEdited = (CheckBox) findViewById(R.id.checkBox_markLastEdited);
+
+        Button buttonSave = (Button) findViewById(R.id.button);
 
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,5 +106,7 @@ public class SettingsFragment extends Fragment {
         prefEditor.putBoolean(Config.PREF_SORT_DESC, checkBox_Sortdesc.isChecked());
         prefEditor.putBoolean(Config.PREF_MARK_LAST_EDITED, checkBox_MarkLastEdited.isChecked());
         prefEditor.apply();
+
+        finish();
     }
 }

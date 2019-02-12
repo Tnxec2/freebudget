@@ -20,7 +20,6 @@ import de.kontranik.freebudget.adapter.DrawerItemCustomAdapter;
 import de.kontranik.freebudget.fragment.OverviewFragment;
 import de.kontranik.freebudget.fragment.AllTransactionFragment;
 import de.kontranik.freebudget.fragment.RegularFragment;
-import de.kontranik.freebudget.fragment.SettingsFragment;
 import de.kontranik.freebudget.fragment.ToolsFragment;
 import de.kontranik.freebudget.model.DrawerItem;
 
@@ -125,9 +124,9 @@ public class MainActivity extends AppCompatActivity {
                 fragment = new ToolsFragment();
                 break;
             case 5:
-                fragment = new SettingsFragment();
+                Intent open_settings = new Intent(this, SettingsActivity.class);
+                this.startActivityForResult(open_settings, 0);
                 break;
-
             default:
                 break;
         }
