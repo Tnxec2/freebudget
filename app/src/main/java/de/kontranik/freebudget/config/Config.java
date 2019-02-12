@@ -14,6 +14,7 @@ public class Config {
     public static final String PREF_SORT_DESC = "Order_desc";
     public static final String PREF_ORDER_BY_NOT_SORT = "not_sort";
     public static final String PREF_ORDER_BY_DESCRIPTION = DatabaseHelper.COLUMN_DESCRIPTION;
+    public static final String PREF_ORDER_BY_CATEGORY_NAME = DatabaseHelper.COLUMN_CATEGORY_NAME;
     public static final String PREF_ORDER_BY_AMOUNT = DatabaseHelper.COLUMN_AMOUNT;
     public static final String PREF_ORDER_BY_ABS_AMOUNT = "ABS(" + DatabaseHelper.COLUMN_AMOUNT + ")";
     public static final String PREF_ORDER_BY_EDIT_DATE = DatabaseHelper.COLUMN_EDIT_DATE;

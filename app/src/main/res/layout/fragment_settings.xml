@@ -43,6 +43,13 @@
             android:text="@string/app_settings_sort_description" />
 
         <RadioButton
+            android:id="@+id/radioButton_sort_categoryname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="@string/app_settings_sort_categoryname" />
+
+        <RadioButton
             android:id="@+id/radioButton_sort_edit_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

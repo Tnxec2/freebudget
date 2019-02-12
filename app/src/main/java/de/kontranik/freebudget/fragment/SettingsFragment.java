@@ -18,7 +18,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class SettingsFragment extends Fragment {
 
     SharedPreferences settings;
-    RadioButton radioButton_Description, radioButton_Amount, radioButton_Date, radioButton_EditDate,
+    RadioButton radioButton_Description, radioButton_CategoryName, radioButton_Amount, radioButton_Date, radioButton_EditDate,
             radioButton_notsort, radioButton_AbsAmount;
     CheckBox checkBox_Sortdesc, checkBox_MarkLastEdited;
 
@@ -39,6 +39,7 @@ public class SettingsFragment extends Fragment {
         // Setup any handles to view objects here
 
         radioButton_Description = (RadioButton) view.findViewById(R.id.radioButton_sort_description);
+        radioButton_CategoryName = (RadioButton) view.findViewById(R.id.radioButton_sort_categoryname);
         radioButton_Amount = (RadioButton) view.findViewById(R.id.radioButton_sort_amount);
         radioButton_AbsAmount = (RadioButton) view.findViewById(R.id.radioButton_sort_absamount);
         radioButton_Date = (RadioButton) view.findViewById(R.id.radioButton_sort_date);
@@ -60,6 +61,9 @@ public class SettingsFragment extends Fragment {
         switch (sort_order) {
             case Config.PREF_ORDER_BY_DESCRIPTION:
                 radioButton_Description.setChecked(true);
+                break;
+            case Config.PREF_ORDER_BY_CATEGORY_NAME:
+                radioButton_CategoryName.setChecked(true);
                 break;
             case Config.PREF_ORDER_BY_AMOUNT:
                 radioButton_Amount.setChecked(true);
@@ -88,6 +92,9 @@ public class SettingsFragment extends Fragment {
         // Einstellungen speichern
         if (radioButton_Description.isChecked()) {
             order_by = Config.PREF_ORDER_BY_DESCRIPTION;
+        }
+        if (radioButton_CategoryName.isChecked()) {
+            order_by = Config.PREF_ORDER_BY_CATEGORY_NAME;
         }
         if (radioButton_Amount.isChecked()) {
             order_by = Config.PREF_ORDER_BY_AMOUNT;
