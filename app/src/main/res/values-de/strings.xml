@@ -77,7 +77,7 @@
 
     <string-array name="navigation_drawer_items_array">
         <item>Übersicht</item>
-        <item>Geplante</item>
+        <item>Alle Bewegungen</item>
         <item>Reguläre</item>
         <item>Kategorie</item>
         <item>Extras</item>

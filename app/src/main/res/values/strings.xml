@@ -79,7 +79,7 @@
 
     <string-array name="navigation_drawer_items_array">
         <item>Overview</item>
-        <item>Planned</item>
+        <item>All transactions</item>
         <item>Regular</item>
         <item>Category</item>
         <item>Extras</item>
