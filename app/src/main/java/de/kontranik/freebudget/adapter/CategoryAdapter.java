@@ -41,22 +41,24 @@ public class CategoryAdapter extends ArrayAdapter<Category>  {
         Category category = categoryList.get(position);
 
         viewHolder.textView_CategoryName.setText(category.getName());
-        viewHolder.textView_CategoryWeight.setText("");
+        viewHolder.textView_CategoryWeight.setText(String.format("%.2f", category.getWeight()));
+        viewHolder.textView_CategoryWeightBackground.setText("");
 
-        ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) viewHolder.textView_CategoryWeight.getLayoutParams();
+        ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) viewHolder.textView_CategoryWeightBackground.getLayoutParams();
 
         layoutParams.width =  (int) ( category.getWeight() * OverviewFragment.maxWidth / OverviewFragment.maxCategoryWeight );
 
-        viewHolder.textView_CategoryWeight.setLayoutParams(layoutParams);
+        viewHolder.textView_CategoryWeightBackground.setLayoutParams(layoutParams);
 
         return convertView;
     }
 
     private class ViewHolder {
-        final TextView textView_CategoryName, textView_CategoryWeight;
+        final TextView textView_CategoryName, textView_CategoryWeight, textView_CategoryWeightBackground;
         ViewHolder(View view) {
             textView_CategoryName = view.findViewById(R.id.textView_CategoryName);
             textView_CategoryWeight = view.findViewById(R.id.textView_CategoryWeight);
+            textView_CategoryWeightBackground = view.findViewById(R.id.textView_CategoryWeightBackground);
         }
     }
 }
