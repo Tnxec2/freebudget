@@ -18,7 +18,7 @@ import android.widget.TextView;
 import de.kontranik.freebudget.R;
 import de.kontranik.freebudget.adapter.DrawerItemCustomAdapter;
 import de.kontranik.freebudget.fragment.OverviewFragment;
-import de.kontranik.freebudget.fragment.PlannedFragment;
+import de.kontranik.freebudget.fragment.AllTransactionFragment;
 import de.kontranik.freebudget.fragment.RegularFragment;
 import de.kontranik.freebudget.fragment.SettingsFragment;
 import de.kontranik.freebudget.fragment.ToolsFragment;
@@ -59,8 +59,8 @@ public class MainActivity extends AppCompatActivity {
 
                 // an Fragment übergeben
                 Fragment contentFragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
-                if ((contentFragment != null) && (findViewById(R.id.mainlayout_overview) != null)) {
-                    ((OverviewFragment)contentFragment).changeShowOnlyPlanned(isChecked);
+                if ((contentFragment != null) && (findViewById(R.id.mainlayout_alltransaction) != null)) {
+                    ( (AllTransactionFragment) contentFragment ).changeShowOnlyPlanned(isChecked);
                 }
             }
         });
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        DrawerItemCustomAdapter adapter = new DrawerItemCustomAdapter(this, R.layout.list_view_item_row, drawerItem);
+        DrawerItemCustomAdapter adapter = new DrawerItemCustomAdapter(this, R.layout.list_view_item_navigationdrawer, drawerItem);
         mDrawerList.setAdapter(adapter);
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
                 fragment = new OverviewFragment();
                 break;
             case 1:
-                fragment = new PlannedFragment();
+                fragment = new AllTransactionFragment();
                 break;
             case 2:
                 fragment = new RegularFragment();
@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (fragment != null) {
-            if (position == 0) {
+            if (position == 1) {
                 switchShowOnlyPlanned.setVisibility(View.VISIBLE);
                 switchShowOnlyPlanned.setEnabled(true);
             } else {
