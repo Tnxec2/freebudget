@@ -131,7 +131,7 @@ public class RegularFragment extends Fragment {
 
         // set list adapter
         transactionAdapter = new RegularTransactionAdapter(getContext(),
-                R.layout.layout_regular_transaction_item,
+                R.layout.list_view_item_regular_transaction_item,
                 transactionList);
         // set adapter
         listView_Transactions.setAdapter(transactionAdapter);
