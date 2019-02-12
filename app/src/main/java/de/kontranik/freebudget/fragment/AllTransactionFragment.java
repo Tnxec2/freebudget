@@ -9,14 +9,19 @@ import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.view.ContextMenu;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -25,27 +30,31 @@ import java.util.List;
 import java.util.Locale;
 
 import de.kontranik.freebudget.R;
+import de.kontranik.freebudget.activity.MainActivity;
 import de.kontranik.freebudget.activity.TransactionActivity;
 import de.kontranik.freebudget.adapter.TransactionAdapter;
 import de.kontranik.freebudget.database.DatabaseAdapter;
 import de.kontranik.freebudget.model.Transaction;
 import de.kontranik.freebudget.service.OnSwipeTouchListener;
+import de.kontranik.freebudget.service.PlanRegular;
 
 import static de.kontranik.freebudget.service.Constant.TRANS_ID;
 import static de.kontranik.freebudget.service.Constant.TRANS_STAT;
 import static de.kontranik.freebudget.service.Constant.TRANS_STAT_MINUS;
 import static de.kontranik.freebudget.service.Constant.TRANS_STAT_PLUS;
 import static de.kontranik.freebudget.service.Constant.TRANS_TYP;
+import static de.kontranik.freebudget.service.Constant.TRANS_TYP_FACT;
 import static de.kontranik.freebudget.service.Constant.TRANS_TYP_PLANNED;
 
-public class PlannedFragment extends Fragment {
+public class AllTransactionFragment extends Fragment {
 
     private static final String PREFS_KEY_LISTPOSITION = "LISTPOS";
 
     private TextView textView_Month;
     private ListView listView_transactionsList;
+    private Button btn_planRegular;
     private ImageButton btn_prevMonth, btn_nextMonth;
-    private FloatingActionButton fab_add, fab_add_plus, fab_add_minus;
+    private FloatingActionButton fab_add, fab_add_plus, fab_add_minus, fab_add_plus_planned, fab_add_minus_planned;
 
     private List<Transaction> transactions = new ArrayList<>();
 
@@ -57,7 +66,12 @@ public class PlannedFragment extends Fragment {
 
     boolean isMove;
 
-    public PlannedFragment() {
+    boolean showOnlyPlanned = false;
+
+    public static long lastEditedId = 0;
+
+
+    public AllTransactionFragment() {
         // Required empty public constructor
     }
 
@@ -65,7 +79,7 @@ public class PlannedFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_planned, container, false);
+        return inflater.inflate(R.layout.fragment_alltransaction, container, false);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -81,6 +95,17 @@ public class PlannedFragment extends Fragment {
         fab_add = (FloatingActionButton) view.findViewById(R.id.fab_add);
         fab_add_plus = (FloatingActionButton) view.findViewById(R.id.fab_add_plus);
         fab_add_minus = (FloatingActionButton) view.findViewById(R.id.fab_add_minus);
+        fab_add_plus_planned = (FloatingActionButton) view.findViewById(R.id.fab_add_plus_planned);
+        fab_add_minus_planned = (FloatingActionButton) view.findViewById(R.id.fab_add_minus_planned);
+
+        btn_planRegular = (Button) view.findViewById(R.id.btn_planRegular);
+
+        btn_planRegular.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                planRegular();
+            }
+        });
 
         btn_prevMonth.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,17 +121,13 @@ public class PlannedFragment extends Fragment {
             }
         });
 
-        listView_transactionsList = (ListView) view.findViewById(R.id.listView_transactionsList);
+        listView_transactionsList = (ListView) view.findViewById(R.id.listView_transactions);
 
         listView_transactionsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Transaction entry = transactionAdapter.getItem(position);
-                if(entry != null) {
-                    Intent intent = new Intent(getContext(), TransactionActivity.class);
-                    intent.putExtra(TRANS_ID, entry.getId());
-                    startActivity(intent);
-                }
+                editTransaction(entry, TRANS_TYP_FACT);
             }
         });
 
@@ -114,6 +135,8 @@ public class PlannedFragment extends Fragment {
         transactionAdapter = new TransactionAdapter(getContext(), R.layout.layout_transaction_item, transactions);
         // set adapter
         listView_transactionsList.setAdapter(transactionAdapter);
+        // Register the ListView  for Context menu
+        registerForContextMenu(listView_transactionsList);
 
         this.months = getResources().getStringArray(R.array.months);
 
@@ -121,8 +144,9 @@ public class PlannedFragment extends Fragment {
         year = date.get(Calendar.YEAR);
         month = date.get(Calendar.MONTH)+1;
 
+        setMonthTextView();
 
-        ConstraintLayout mainLayout = (ConstraintLayout) view.findViewById(R.id.mainlayout_planned);
+        ConstraintLayout mainLayout = (ConstraintLayout) view.findViewById(R.id.mainlayout_alltransaction);
         mainLayout.setOnTouchListener(new OnSwipeTouchListener(getContext()){
             public void onSwipeLeft(){
                 nextMonth();
@@ -189,6 +213,8 @@ public class PlannedFragment extends Fragment {
                     }
                     fab_add_plus.setVisibility(View.VISIBLE);
                     fab_add_minus.setVisibility(View.VISIBLE);
+                    fab_add_plus_planned.setVisibility(View.VISIBLE);
+                    fab_add_minus_planned.setVisibility(View.VISIBLE);
                     fab_add.setVisibility(View.INVISIBLE);
                     isMove = true;
                 } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
@@ -198,6 +224,8 @@ public class PlannedFragment extends Fragment {
                 } else if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                     fab_add_plus.setVisibility(View.VISIBLE);
                     fab_add_minus.setVisibility(View.VISIBLE);
+                    fab_add_plus_planned.setVisibility(View.VISIBLE);
+                    fab_add_minus_planned.setVisibility(View.VISIBLE);
                     fab_add.setVisibility(View.VISIBLE);
                 }
                 return true;
@@ -251,7 +279,53 @@ public class PlannedFragment extends Fragment {
             }
         });
 
-        setMonthTextView();
+
+        fab_add_plus_planned.setOnDragListener(new View.OnDragListener() {
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+                int action = event.getAction();
+                switch (action) {
+                    case DragEvent.ACTION_DRAG_STARTED:
+                        break;
+                    case DragEvent.ACTION_DRAG_ENTERED:
+                        break;
+                    case DragEvent.ACTION_DRAG_EXITED:
+                        break;
+                    case DragEvent.ACTION_DROP:
+                        add(TRANS_STAT_PLUS, TRANS_TYP_PLANNED);
+                        break;
+                    case DragEvent.ACTION_DRAG_ENDED:
+                        break;
+                    default:
+                        break;
+                }
+                return true;
+            }
+        });
+
+        fab_add_minus_planned.setOnDragListener(new View.OnDragListener() {
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+                int action = event.getAction();
+                switch (action) {
+                    case DragEvent.ACTION_DRAG_STARTED:
+                        // do nothing
+                        break;
+                    case DragEvent.ACTION_DRAG_ENTERED:
+                        break;
+                    case DragEvent.ACTION_DRAG_EXITED:
+                        break;
+                    case DragEvent.ACTION_DROP:
+                        add(TRANS_STAT_MINUS, TRANS_TYP_PLANNED);
+                        break;
+                    case DragEvent.ACTION_DRAG_ENDED:
+                        break;
+                    default:
+                        break;
+                }
+                return true;
+            }
+        });
     }
 
     @Override
@@ -279,12 +353,65 @@ public class PlannedFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo)
+    {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getActivity().getMenuInflater();
+        inflater.inflate(R.menu.transaction_list_popup_menu, menu);
+
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item){
+
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        int listPosition = info.position;
+
+        Transaction transaction = transactions.get(listPosition);
+        switch (item.getItemId()) {
+            case R.id.popup_edit:
+                editTransaction(transaction, TRANS_TYP_FACT);
+                break;
+            case R.id.popup_edit_planned:
+                editTransaction(transaction, TRANS_TYP_PLANNED);
+                break;
+            case R.id.popup_delete:
+                deleteTransaction(transaction);
+                break;
+        }
+        return true;
+    }
+
     private void getTransactions() {
         DatabaseAdapter databaseAdapter = new DatabaseAdapter(getContext());
         databaseAdapter.open();
 
         transactions.clear();
-        transactions.addAll(databaseAdapter.getTransactions(getContext(), this.year, this.month, true));
+        //transactions.addAll(databaseAdapter.getTransactions(getContext(), this.year, this.month, showOnlyPlanned));
+
+        lastEditedId = 0;
+        lastEditedId = 0;
+        long lastEditDate = 0;
+        List<Transaction> dbTransactions = databaseAdapter.getTransactions(getContext(), this.year, this.month, false) ;
+        for (Transaction transaction: dbTransactions) {
+            if ( !showOnlyPlanned || transaction.getAmount_fact() == 0 ) {
+                transactions.add(transaction);
+
+                if ( transaction.getAmount_fact() != 0 && transaction.getDate_edit() > lastEditDate ) {
+                    lastEditDate = transaction.getDate_edit();
+                    lastEditedId = transaction.getId();
+                }
+            }
+        }
+
+        //
+        if ( transactions.size() == 0) {
+            btn_planRegular.setVisibility(View.VISIBLE);
+        } else {
+            btn_planRegular.setVisibility(View.GONE);
+        }
+
         transactionAdapter.notifyDataSetChanged();
 
         databaseAdapter.close();
@@ -331,5 +458,35 @@ public class PlannedFragment extends Fragment {
         fab_add.setVisibility(View.VISIBLE);
         fab_add_plus.setVisibility(View.INVISIBLE);
         fab_add_minus.setVisibility(View.INVISIBLE);
+        fab_add_plus_planned.setVisibility(View.INVISIBLE);
+        fab_add_minus_planned.setVisibility(View.INVISIBLE);
+    }
+
+    public void changeShowOnlyPlanned(boolean b) {
+        this.showOnlyPlanned = b;
+        getTransactions();
+    }
+
+    private void editTransaction(Transaction entry, String planned) {
+        if(entry!=null) {
+            Intent intent = new Intent(getContext(), TransactionActivity.class);
+            intent.putExtra(TRANS_ID, entry.getId());
+            // intent.putExtra("click", 25);
+            intent.putExtra(TRANS_TYP, planned);
+            startActivity(intent);
+        }
+    }
+
+    private void deleteTransaction(Transaction entry) {
+        DatabaseAdapter databaseAdapter = new DatabaseAdapter(getContext());
+        databaseAdapter.open();
+        databaseAdapter.deleteTransaction(entry.getId());
+        databaseAdapter.close();
+        getTransactions();
+    }
+
+    private void planRegular() {
+        PlanRegular.setRegularToPlanned(getContext(), year, month);
+        getTransactions();
     }
 }
