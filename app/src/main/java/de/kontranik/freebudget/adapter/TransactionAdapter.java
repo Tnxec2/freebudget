@@ -17,7 +17,7 @@ import java.util.Locale;
 
 import de.kontranik.freebudget.R;
 import de.kontranik.freebudget.config.Config;
-import de.kontranik.freebudget.fragment.OverviewFragment;
+import de.kontranik.freebudget.fragment.AllTransactionFragment;
 import de.kontranik.freebudget.model.Transaction;
 
 import static de.kontranik.freebudget.config.Config.DATE_SHORT;
@@ -93,7 +93,7 @@ public class TransactionAdapter extends ArrayAdapter<Transaction>  {
                         R.string.subTitleTransaction, dateString, transaction.getCategory()) );
 
         // last edited hervorheben
-        if ( markLastEdited && transaction.getId() == OverviewFragment.lastEditedId ) {
+        if ( markLastEdited && transaction.getId() == AllTransactionFragment.lastEditedId ) {
             viewHolder.descriptionView.setTextColor( ContextCompat.getColor(parent.getContext(), R.color.colorBackgroundListItem) );
             viewHolder.categoryView.setTextColor( ContextCompat.getColor(parent.getContext(), R.color.colorBackgroundListItem) );
             viewHolder.linearLayout_Item.setBackgroundColor( ContextCompat.getColor(parent.getContext(), R.color.colorBackgroundAccent) );
