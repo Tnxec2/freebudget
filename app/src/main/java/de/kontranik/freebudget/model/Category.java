@@ -1,6 +1,8 @@
 package de.kontranik.freebudget.model;
 
-public class Category {
+import java.util.Comparator;
+
+public class Category implements Comparable<Category> {
     private long id;
     private String name;
     private double weight;
@@ -44,6 +46,35 @@ public class Category {
     public void setWeight(double weight) {
         this.weight = weight;
     }
+
+    @Override
+    public int compareTo(Category compareCategory) {
+
+        double compareWeight = ((Category) compareCategory).getWeight();
+
+        //ascending order
+        return (int) ( this.weight - compareWeight);
+
+        //descending order
+        //return compareWeight - this.weight;
+    }
+
+    public static Comparator<Category> CategoryWeightComparator
+            = new Comparator<Category>() {
+
+        public int compare(Category fruit1, Category fruit2) {
+
+            double catWeight1 = fruit1.getWeight();
+            double catWeight2 = fruit2.getWeight();
+
+            //ascending order
+            //return (int) ( catWeight1 - catWeight2 );
+
+            //descending order
+            return (int) ( catWeight2 - catWeight1 );
+        }
+
+    };
 
     @Override
     public String toString() {
