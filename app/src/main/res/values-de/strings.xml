@@ -89,6 +89,6 @@
     </string-array>
     <string name="mark_last_edited">Zuletzt geänderten Eintrag hervorheben</string>
     <string name="overview_list">Übersichtsliste</string>
-    <string name="close">Close</string>
+    <string name="close">Schliessen</string>
 
 </resources>
