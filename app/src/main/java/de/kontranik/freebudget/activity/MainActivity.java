@@ -20,7 +20,6 @@ import de.kontranik.freebudget.adapter.DrawerItemCustomAdapter;
 import de.kontranik.freebudget.fragment.OverviewFragment;
 import de.kontranik.freebudget.fragment.AllTransactionFragment;
 import de.kontranik.freebudget.fragment.RegularFragment;
-import de.kontranik.freebudget.fragment.ToolsFragment;
 import de.kontranik.freebudget.model.DrawerItem;
 
 public class MainActivity extends AppCompatActivity {
@@ -69,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         drawerItem[0] = new DrawerItem(R.drawable.ic_assessment_black_24dp, mNavigationDrawerItemTitles[0]);
         drawerItem[1] = new DrawerItem(R.drawable.ic_view_list_black_24dp, mNavigationDrawerItemTitles[1]);
         drawerItem[2] = new DrawerItem(R.drawable.ic_repeat_black_24dp, mNavigationDrawerItemTitles[2]);
+        drawerItem[2] = new DrawerItem(0, null);
         drawerItem[3] = new DrawerItem(R.drawable.ic_folder_black_24dp, mNavigationDrawerItemTitles[3]);
         drawerItem[4] = new DrawerItem(R.drawable.ic_menu_manage, mNavigationDrawerItemTitles[4]);
         drawerItem[5] = new DrawerItem(R.drawable.ic_settings_black_24dp, mNavigationDrawerItemTitles[5]);
@@ -121,7 +121,8 @@ public class MainActivity extends AppCompatActivity {
                 this.startActivityForResult(open_category, 0);
                 break;
             case 4:
-                fragment = new ToolsFragment();
+                Intent open_tools = new Intent(this, ToolsActivity.class);
+                this.startActivityForResult(open_tools, 0);
                 break;
             case 5:
                 Intent open_settings = new Intent(this, SettingsActivity.class);

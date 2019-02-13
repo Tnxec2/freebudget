@@ -27,6 +27,7 @@
     <string name="activity_transaction_not_define">not define</string>
     <string name="prev">previous</string>
     <string name="next">next</string>
+    <string name="tools">Tools</string>
     <string name="app_settings">Settings</string>
     <string name="app_settings_sort">Sort order by</string>
     <string name="app_settings_sort_description">Description</string>
@@ -78,6 +79,8 @@
     <string name="activity_transaction_edit_planned">Edit planned</string>
     <string name="mark_last_edited">Mark last edited</string>
     <string name="overview_list">Overview List</string>
+    <string name="close">Close</string>
+    <string name="request_write_permission">Write External Storage permission allows us to do store images. Please allow this permission in App Settings.</string>
 
     <string-array name="navigation_drawer_items_array">
         <item>Overview</item>
