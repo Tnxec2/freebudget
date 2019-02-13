@@ -37,6 +37,14 @@ public class SettingsActivity extends AppCompatActivity {
         checkBox_Sortdesc = (CheckBox) findViewById(R.id.checkBox_sort_desc);
         checkBox_MarkLastEdited = (CheckBox) findViewById(R.id.checkBox_markLastEdited);
 
+        Button btn_close = (Button) findViewById(R.id.btn_close);
+        btn_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         Button buttonSave = (Button) findViewById(R.id.button);
 
         buttonSave.setOnClickListener(new View.OnClickListener() {
