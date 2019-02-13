@@ -63,15 +63,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        DrawerItem[] drawerItem = new DrawerItem[6];
+        DrawerItem[] drawerItem = new DrawerItem[7];
 
         drawerItem[0] = new DrawerItem(R.drawable.ic_assessment_black_24dp, mNavigationDrawerItemTitles[0]);
         drawerItem[1] = new DrawerItem(R.drawable.ic_view_list_black_24dp, mNavigationDrawerItemTitles[1]);
         drawerItem[2] = new DrawerItem(R.drawable.ic_repeat_black_24dp, mNavigationDrawerItemTitles[2]);
-        drawerItem[2] = new DrawerItem(0, null);
-        drawerItem[3] = new DrawerItem(R.drawable.ic_folder_black_24dp, mNavigationDrawerItemTitles[3]);
-        drawerItem[4] = new DrawerItem(R.drawable.ic_menu_manage, mNavigationDrawerItemTitles[4]);
-        drawerItem[5] = new DrawerItem(R.drawable.ic_settings_black_24dp, mNavigationDrawerItemTitles[5]);
+        drawerItem[3] = new DrawerItem(0, null);
+        drawerItem[4] = new DrawerItem(R.drawable.ic_folder_black_24dp, mNavigationDrawerItemTitles[3]);
+        drawerItem[5] = new DrawerItem(R.drawable.ic_menu_manage, mNavigationDrawerItemTitles[4]);
+        drawerItem[6] = new DrawerItem(R.drawable.ic_settings_black_24dp, mNavigationDrawerItemTitles[5]);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -117,14 +117,16 @@ public class MainActivity extends AppCompatActivity {
                 fragment = new RegularFragment();
                 break;
             case 3:
+                break;
+            case 4:
                 Intent open_category = new Intent(this, CategoryListActivity.class);
                 this.startActivityForResult(open_category, 0);
                 break;
-            case 4:
+            case 5:
                 Intent open_tools = new Intent(this, ToolsActivity.class);
                 this.startActivityForResult(open_tools, 0);
                 break;
-            case 5:
+            case 6:
                 Intent open_settings = new Intent(this, SettingsActivity.class);
                 this.startActivityForResult(open_settings, 0);
                 break;
@@ -145,10 +147,10 @@ public class MainActivity extends AppCompatActivity {
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
             this.position = position;
         }
-
         mDrawerList.setItemChecked( this.position, true );
         mDrawerList.setSelection( this.position );
         setTitle( mNavigationDrawerItemTitles[this.position] );
+
 
         mDrawerLayout.closeDrawer(mDrawerList);
     }
