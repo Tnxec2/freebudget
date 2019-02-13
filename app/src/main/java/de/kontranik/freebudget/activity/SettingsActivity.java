@@ -25,6 +25,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         settings = getSharedPreferences(Config.PREFS_FILE, MODE_PRIVATE);
 
+        setTitle(R.string.app_settings);
 
         radioButton_Description = (RadioButton) findViewById(R.id.radioButton_sort_description);
         radioButton_CategoryName = (RadioButton) findViewById(R.id.radioButton_sort_categoryname);
