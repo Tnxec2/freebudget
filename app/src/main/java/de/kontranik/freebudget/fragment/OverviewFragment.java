@@ -17,6 +17,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -28,6 +29,7 @@ import java.util.List;
 import java.util.Locale;
 
 import de.kontranik.freebudget.R;
+import de.kontranik.freebudget.activity.MainActivity;
 import de.kontranik.freebudget.activity.TransactionActivity;
 import de.kontranik.freebudget.adapter.CategoryAdapter;
 import de.kontranik.freebudget.database.DatabaseAdapter;
@@ -114,6 +116,9 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         fab_add_plus_planned = (FloatingActionButton) view.findViewById(R.id.fab_add_plus_planned);
         fab_add_minus_planned = (FloatingActionButton) view.findViewById(R.id.fab_add_minus_planned);
 
+        Button button_AllTransactions = view.findViewById(R.id.button_AllTransactions);
+        Button button_Regular = view.findViewById(R.id.button_Regular);
+
         this.months = getResources().getStringArray(R.array.months);
 
         Calendar date = Calendar.getInstance();
@@ -122,6 +127,8 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
 
         setMonthTextView();
 
+        button_AllTransactions.setOnClickListener(this);
+        button_Regular.setOnClickListener(this);
         btn_prevMonth.setOnClickListener(this);
         btn_nextMonth.setOnClickListener(this);
 
@@ -312,6 +319,7 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
+        ((MainActivity)getActivity()).setPosition(MainActivity.INDEX_DRAWER_OVERVIEW);
         this.getTransactions();
     }
 
@@ -323,6 +331,12 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.btn_nextMonth:
                 nextMonth();
+                break;
+            case R.id.button_AllTransactions:
+                ((MainActivity)getActivity()).selectItem(MainActivity.INDEX_DRAWER_ALLTRANSACTION);
+                break;
+            case R.id.button_Regular:
+                ((MainActivity)getActivity()).selectItem(MainActivity.INDEX_DRAWER_REGULAR);
                 break;
             default:
                 break;
