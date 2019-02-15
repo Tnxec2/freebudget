@@ -81,6 +81,8 @@
     <string name="overview_list">Overview List</string>
     <string name="close">Close</string>
     <string name="request_write_permission">Write External Storage permission allows us to do store images. Please allow this permission in App Settings.</string>
+    <string name="all_transactions">All Transactions</string>
+    <string name="regular">Regular</string>
 
     <string-array name="navigation_drawer_items_array">
         <item>Overview</item>

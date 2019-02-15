@@ -90,5 +90,7 @@
     <string name="mark_last_edited">Zuletzt geänderten Eintrag hervorheben</string>
     <string name="overview_list">Übersichtsliste</string>
     <string name="close">Schliessen</string>
+    <string name="all_transactions">Alle Bewegungen</string>
+    <string name="regular">Reguläre</string>
 
 </resources>
