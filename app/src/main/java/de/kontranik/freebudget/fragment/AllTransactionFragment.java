@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.view.ContextMenu;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -78,7 +79,9 @@ public class AllTransactionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_alltransaction, container, false);
+        View v =  inflater.inflate(R.layout.fragment_alltransaction, container, false);
+        setHasOptionsMenu(true);
+        return v;
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -325,6 +328,26 @@ public class AllTransactionFragment extends Fragment {
                 return true;
             }
         });
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+        inflater.inflate(R.menu.all_transaction_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch(id){
+            case R.id.menuitem_load_regular :
+                planRegular();
+                break;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
