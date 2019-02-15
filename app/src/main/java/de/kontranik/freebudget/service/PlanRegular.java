@@ -25,7 +25,15 @@ public class PlanRegular {
 
         for ( RegularTransaction rt : regularTransactionList ) {
             if (!dbAdapter.checkTransactions(year, month, rt.getId())) {
-                Calendar cal = new GregorianCalendar(year, month - 1, rt.getDay(), 0, 0, 1);
+                /*
+                 * prüfen, wenn Tag grösser als aktueller monat zulässt,
+                 * dann auf letzen tag des monats setzen
+                 */
+                Calendar cal = new GregorianCalendar(year, month - 1, 1, 0, 0, 1);
+                int i = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+                if ( rt.getDay() > i ) rt.setDay(i);
+
+                cal = new GregorianCalendar(year, month - 1, rt.getDay(), 0, 0, 1);
 
                 Transaction transaction = new Transaction(0, rt.getId(), rt.getDescription(), rt.getCategory(), cal.getTimeInMillis(), rt.getAmount(), 0);
                 dbAdapter.insert(transaction);
