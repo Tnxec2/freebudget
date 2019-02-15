@@ -3,6 +3,7 @@ package de.kontranik.freebudget.activity;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -25,6 +26,10 @@ import de.kontranik.freebudget.model.DrawerItem;
 public class MainActivity extends AppCompatActivity {
 
     final static String FRAGMENT_POSITION_KEY = "FRAGMENT_POSITION_KEY";
+
+    public final static int INDEX_DRAWER_OVERVIEW = 0;
+    public final static int INDEX_DRAWER_ALLTRANSACTION = 1;
+    public final static int INDEX_DRAWER_REGULAR = 2;
 
     private String[] mNavigationDrawerItemTitles;
     private DrawerLayout mDrawerLayout;
@@ -65,9 +70,9 @@ public class MainActivity extends AppCompatActivity {
 
         DrawerItem[] drawerItem = new DrawerItem[7];
 
-        drawerItem[0] = new DrawerItem(R.drawable.ic_assessment_black_24dp, mNavigationDrawerItemTitles[0]);
-        drawerItem[1] = new DrawerItem(R.drawable.ic_view_list_black_24dp, mNavigationDrawerItemTitles[1]);
-        drawerItem[2] = new DrawerItem(R.drawable.ic_repeat_black_24dp, mNavigationDrawerItemTitles[2]);
+        drawerItem[INDEX_DRAWER_OVERVIEW] = new DrawerItem(R.drawable.ic_assessment_black_24dp, mNavigationDrawerItemTitles[INDEX_DRAWER_OVERVIEW]);
+        drawerItem[INDEX_DRAWER_ALLTRANSACTION] = new DrawerItem(R.drawable.ic_view_list_black_24dp, mNavigationDrawerItemTitles[INDEX_DRAWER_ALLTRANSACTION]);
+        drawerItem[INDEX_DRAWER_REGULAR] = new DrawerItem(R.drawable.ic_repeat_black_24dp, mNavigationDrawerItemTitles[INDEX_DRAWER_REGULAR]);
         drawerItem[3] = new DrawerItem(0, null);
         drawerItem[4] = new DrawerItem(R.drawable.ic_folder_black_24dp, mNavigationDrawerItemTitles[3]);
         drawerItem[5] = new DrawerItem(R.drawable.ic_menu_manage, mNavigationDrawerItemTitles[4]);
@@ -102,18 +107,18 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void selectItem(int position) {
+    public void selectItem(int position) {
 
         Fragment fragment = null;
 
         switch (position) {
-            case 0:
+            case INDEX_DRAWER_OVERVIEW:
                 fragment = new OverviewFragment();
                 break;
-            case 1:
+            case INDEX_DRAWER_ALLTRANSACTION:
                 fragment = new AllTransactionFragment();
                 break;
-            case 2:
+            case INDEX_DRAWER_REGULAR:
                 fragment = new RegularFragment();
                 break;
             case 3:
@@ -144,13 +149,15 @@ public class MainActivity extends AppCompatActivity {
             }
 
             FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.content_frame, fragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+
             this.position = position;
         }
-        mDrawerList.setItemChecked( this.position, true );
-        mDrawerList.setSelection( this.position );
-        setTitle( mNavigationDrawerItemTitles[this.position] );
 
+        setTitle( this.position );
 
         mDrawerLayout.closeDrawer(mDrawerList);
     }
@@ -166,9 +173,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void setTitle(CharSequence title) {
+    public void setTitle(int index) {
         TextView textViewTitle = (TextView) findViewById(R.id.title);
-        textViewTitle.setText(title);
+        textViewTitle.setText(mNavigationDrawerItemTitles[index]);
     }
 
     @Override
@@ -191,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState != null) {
             if ( savedInstanceState.containsKey(FRAGMENT_POSITION_KEY) ) {
                 position = savedInstanceState.getInt(FRAGMENT_POSITION_KEY);
-                setTitle( mNavigationDrawerItemTitles[this.position] );
+                setTitle( this.position );
             }
         }
     }
@@ -211,6 +218,17 @@ public class MainActivity extends AppCompatActivity {
     private void setTextSwitch(boolean isChecked) {
         if ( isChecked ) switchShowOnlyPlanned.setText(R.string.only_planned);
         else switchShowOnlyPlanned.setText(R.string.all);
+    }
+
+    public void setPosition(int index) {
+        this.position = index;
+        setDrawerSelection(index);
+        setTitle(index);
+    }
+
+    public void setDrawerSelection(int index) {
+        mDrawerList.setItemChecked( index, true );
+        mDrawerList.setSelection( index );
     }
 }
 
