@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Locale;
 
 import de.kontranik.freebudget.R;
+import de.kontranik.freebudget.activity.MainActivity;
 import de.kontranik.freebudget.activity.TransactionActivity;
 import de.kontranik.freebudget.adapter.TransactionAdapter;
 import de.kontranik.freebudget.database.DatabaseAdapter;
@@ -329,6 +330,7 @@ public class AllTransactionFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        ((MainActivity)getActivity()).setPosition(MainActivity.INDEX_DRAWER_ALLTRANSACTION);
         getTransactions();
     }
 
