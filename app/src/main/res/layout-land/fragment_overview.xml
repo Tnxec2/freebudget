@@ -11,10 +11,12 @@
     <LinearLayout
         android:id="@+id/linearLayout_overview"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
         android:background="@color/colorBackgroundCard"
         android:orientation="vertical"
         android:padding="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout_footer"
         app:layout_constraintEnd_toStartOf="@id/linearLayout_categoryList"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -148,8 +150,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
                     android:enabled="false"
+                    android:text=""
                     android:textAlignment="center"
                     android:textSize="18sp" />
 
@@ -212,8 +214,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
                     android:enabled="false"
+                    android:text=""
                     android:textAlignment="center"
                     android:textSize="18sp" />
 
@@ -259,6 +261,30 @@
             </TableRow>
 
         </TableLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout_footer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/linearLayout_categoryList"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/button_AllTransactions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/all_transactions" />
+
+        <Button
+            android:id="@+id/button_Regular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/regular" />
     </LinearLayout>
 
     <LinearLayout

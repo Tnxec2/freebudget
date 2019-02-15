@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     android:padding="@dimen/paddint_small">
 
-
     <LinearLayout
         android:id="@+id/linearLayout_overview"
         android:layout_width="match_parent"
@@ -274,7 +273,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/linearLayout_footer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/linearLayout_overview">
@@ -286,17 +285,42 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/linearLayout_footer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linearLayout_categorygraph">
+
+        <Button
+            android:id="@+id/button_AllTransactions"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/all_transactions" />
+
+        <Button
+            android:id="@+id/button_Regular"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/regular" />
+    </LinearLayout>
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
         android:src="@drawable/ic_add_white_24dp"
         app:backgroundTint="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:rippleColor="#FFF" />
 
     <android.support.design.widget.FloatingActionButton
@@ -305,7 +329,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="32dp"
         android:clickable="true"
         android:focusable="true"
         android:visibility="invisible"
@@ -321,7 +345,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="32dp"
         android:clickable="true"
         android:focusable="true"
         android:visibility="invisible"
@@ -335,15 +359,15 @@
         android:id="@+id/fab_add_minus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginBottom="32dp"
         android:clickable="true"
         android:focusable="true"
         android:visibility="invisible"
         app:backgroundTint="@color/colorRed"
-        app:layout_constraintBottom_toTopOf="@+id/fab_add"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/fab_add"
         app:rippleColor="#FFF"
         app:srcCompat="@drawable/ic_remove_white_24dp" />
 
@@ -351,15 +375,15 @@
         android:id="@+id/fab_add_minus_planned"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginBottom="32dp"
         android:clickable="true"
         android:focusable="true"
         android:visibility="invisible"
         app:backgroundTint="@color/colorRedGray"
-        app:layout_constraintBottom_toTopOf="@+id/fab_add_minus"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/fab_add_minus"
         app:rippleColor="#FFF"
         app:srcCompat="@drawable/ic_remove_white_24dp" />
 
