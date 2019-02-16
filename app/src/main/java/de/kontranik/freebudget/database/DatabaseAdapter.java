@@ -51,8 +51,8 @@ public class DatabaseAdapter {
                                             DatabaseHelper.COLUMN_DATE,
                                             DatabaseHelper.COLUMN_AMOUNT_PLANNED,
                                             DatabaseHelper.COLUMN_AMOUNT_FACT,
-                                            DatabaseHelper.COLUMN_CREATE_DATE,
-                                            DatabaseHelper.COLUMN_EDIT_DATE
+                                            DatabaseHelper.COLUMN_DATE_CREATE,
+                                            DatabaseHelper.COLUMN_DATE_EDIT
                                         };
         return  database.query(DatabaseHelper.TABLE_TRANSACTION, columns, null, null, null, null, sortOrder);
     }
@@ -71,8 +71,8 @@ public class DatabaseAdapter {
                 double amount_planned = cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.COLUMN_AMOUNT_PLANNED));
                 double amount_fact = cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.COLUMN_AMOUNT_FACT));
                 long date = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_DATE));
-                long date_create = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_CREATE_DATE));
-                long date_edit = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_EDIT_DATE));
+                long date_create = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_DATE_CREATE));
+                long date_edit = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_DATE_EDIT));
                 transactions.add(new Transaction(id, idRegular, description, category, date, amount_planned, amount_fact, date_create, date_edit));
             }
             while (cursor.moveToNext());
@@ -94,8 +94,8 @@ public class DatabaseAdapter {
                 DatabaseHelper.COLUMN_DATE,
                 DatabaseHelper.COLUMN_AMOUNT_PLANNED,
                 DatabaseHelper.COLUMN_AMOUNT_FACT,
-                DatabaseHelper.COLUMN_CREATE_DATE,
-                DatabaseHelper.COLUMN_EDIT_DATE
+                DatabaseHelper.COLUMN_DATE_CREATE,
+                DatabaseHelper.COLUMN_DATE_EDIT
         };
 
         String whereClause = DatabaseHelper.COLUMN_AMOUNT_FACT + " = 0 ";
@@ -110,8 +110,8 @@ public class DatabaseAdapter {
                 double amount_planned = cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.COLUMN_AMOUNT_PLANNED));
                 double amount_fact = cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.COLUMN_AMOUNT_FACT));
                 long date = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_DATE));
-                long date_create = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_CREATE_DATE));
-                long date_edit = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_EDIT_DATE));
+                long date_create = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_DATE_CREATE));
+                long date_edit = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_DATE_EDIT));
                 transactions.add(new Transaction(id, idRegular, description, category, date, amount_planned, amount_fact, date_create, date_edit));
             }
             while (cursor.moveToNext());
@@ -151,8 +151,8 @@ public class DatabaseAdapter {
                 DatabaseHelper.COLUMN_DATE,
                 DatabaseHelper.COLUMN_AMOUNT_PLANNED,
                 DatabaseHelper.COLUMN_AMOUNT_FACT,
-                DatabaseHelper.COLUMN_CREATE_DATE,
-                DatabaseHelper.COLUMN_EDIT_DATE
+                DatabaseHelper.COLUMN_DATE_CREATE,
+                DatabaseHelper.COLUMN_DATE_EDIT
         };
         this.cursor = database.query(
                 DatabaseHelper.TABLE_TRANSACTION, columns, whereClause, whereArgs, null, null, sortOrder);
@@ -166,8 +166,8 @@ public class DatabaseAdapter {
                 long date = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_DATE));
                 double amount_planned = cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.COLUMN_AMOUNT_PLANNED));
                 double amount_fact = cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.COLUMN_AMOUNT_FACT));
-                long create_date = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_CREATE_DATE));
-                long date_edit = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_EDIT_DATE));
+                long create_date = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_DATE_CREATE));
+                long date_edit = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_DATE_EDIT));
                 transactions.add( new Transaction(id, idRegular, description, category, date, amount_planned, amount_fact, create_date, date_edit) );
             }
             while (cursor.moveToNext());
@@ -230,7 +230,7 @@ public class DatabaseAdapter {
                                             DatabaseHelper.COLUMN_DESCRIPTION,
                                             DatabaseHelper.COLUMN_CATEGORY_NAME,
                                             DatabaseHelper.COLUMN_AMOUNT,
-                                            DatabaseHelper.COLUMN_CREATE_DATE
+                                            DatabaseHelper.COLUMN_DATE_CREATE
                                         };
          this.cursor = database.query(
                  DatabaseHelper.TABLE_REGULAR, columns, whereClause, whereArgs, null, null, sortOrder);
@@ -243,7 +243,7 @@ public class DatabaseAdapter {
                 int day = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_DAY));
                 double amount = cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.COLUMN_AMOUNT));
                 String description = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_DESCRIPTION));
-                long date = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_CREATE_DATE));
+                long date = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_DATE_CREATE));
                 regularTransactions.add(new RegularTransaction(id, month, day, description, category, amount, date));
             }
             while (cursor.moveToNext());
@@ -270,8 +270,8 @@ public class DatabaseAdapter {
             long date = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_DATE));
             double amount_planned = cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.COLUMN_AMOUNT_PLANNED));
             double amount_fact = cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.COLUMN_AMOUNT_FACT));
-            long create_date = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_CREATE_DATE));
-            long date_edit = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_EDIT_DATE));
+            long create_date = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_DATE_CREATE));
+            long date_edit = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_DATE_EDIT));
             entry = new Transaction(id, idRegular, description, category, date, amount_planned, amount_fact, create_date, date_edit);
         }
         cursor.close();
@@ -291,7 +291,7 @@ public class DatabaseAdapter {
             double amount = cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.COLUMN_AMOUNT));
             int day = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_DAY));
             int month = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_MONTH));
-            long date = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_CREATE_DATE));
+            long date = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_DATE_CREATE));
             entry = new RegularTransaction(id, month, day, description, category, amount, date);
         }
         cursor.close();
@@ -309,7 +309,7 @@ public class DatabaseAdapter {
                 DatabaseHelper.COLUMN_AMOUNT,
                 DatabaseHelper.COLUMN_MONTH,
                 DatabaseHelper.COLUMN_DAY,
-                DatabaseHelper.COLUMN_CREATE_DATE
+                DatabaseHelper.COLUMN_DATE_CREATE
         };
         Cursor cursor = database.query(DatabaseHelper.TABLE_REGULAR, columns, null, null, null, null, DatabaseHelper.COLUMN_ID);
 
@@ -321,7 +321,7 @@ public class DatabaseAdapter {
                 double amount = cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.COLUMN_AMOUNT));
                 int day = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_DAY));
                 int month = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLUMN_MONTH));
-                long date = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_CREATE_DATE));
+                long date = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_DATE_CREATE));
                 regularTransactions.add( new RegularTransaction(id, month, day, description, category, amount, date));
             }
             while (cursor.moveToNext());
@@ -340,8 +340,8 @@ public class DatabaseAdapter {
         cv.put(DatabaseHelper.COLUMN_DATE, transaction.getDate());
         cv.put(DatabaseHelper.COLUMN_AMOUNT_PLANNED, transaction.getAmount_planned());
         cv.put(DatabaseHelper.COLUMN_AMOUNT_FACT, transaction.getAmount_fact());
-        cv.put(DatabaseHelper.COLUMN_CREATE_DATE, new Date().getTime());
-        cv.put(DatabaseHelper.COLUMN_EDIT_DATE, new Date().getTime());
+        cv.put(DatabaseHelper.COLUMN_DATE_CREATE, new Date().getTime());
+        cv.put(DatabaseHelper.COLUMN_DATE_EDIT, new Date().getTime());
         return  database.insert(DatabaseHelper.TABLE_TRANSACTION, null, cv);
     }
 
@@ -353,7 +353,7 @@ public class DatabaseAdapter {
         cv.put(DatabaseHelper.COLUMN_DESCRIPTION, regularTransaction.getDescription());
         cv.put(DatabaseHelper.COLUMN_CATEGORY_NAME, regularTransaction.getCategory());
         cv.put(DatabaseHelper.COLUMN_AMOUNT, regularTransaction.getAmount());
-        cv.put(DatabaseHelper.COLUMN_CREATE_DATE, regularTransaction.getDate_create());
+        cv.put(DatabaseHelper.COLUMN_DATE_CREATE, regularTransaction.getDate_create());
         return  database.insert(DatabaseHelper.TABLE_REGULAR, null, cv);
     }
 
@@ -387,8 +387,8 @@ public class DatabaseAdapter {
         cv.put(DatabaseHelper.COLUMN_DATE, transaction.getDate());
         cv.put(DatabaseHelper.COLUMN_AMOUNT_PLANNED, transaction.getAmount_planned());
         cv.put(DatabaseHelper.COLUMN_AMOUNT_FACT, transaction.getAmount_fact());
-        cv.put(DatabaseHelper.COLUMN_CREATE_DATE, transaction.getDate_create());
-        cv.put(DatabaseHelper.COLUMN_EDIT_DATE, new Date().getTime());
+        cv.put(DatabaseHelper.COLUMN_DATE_CREATE, transaction.getDate_create());
+        cv.put(DatabaseHelper.COLUMN_DATE_EDIT, new Date().getTime());
         return database.update(DatabaseHelper.TABLE_TRANSACTION, cv, whereClause, null);
     }
 
@@ -404,7 +404,7 @@ public class DatabaseAdapter {
         cv.put(DatabaseHelper.COLUMN_DESCRIPTION, regularTransaction.getDescription());
         cv.put(DatabaseHelper.COLUMN_CATEGORY_NAME, regularTransaction.getCategory());
         cv.put(DatabaseHelper.COLUMN_AMOUNT, regularTransaction.getAmount());
-        cv.put(DatabaseHelper.COLUMN_CREATE_DATE, regularTransaction.getDate_create());
+        cv.put(DatabaseHelper.COLUMN_DATE_CREATE, regularTransaction.getDate_create());
         long result = database.update(DatabaseHelper.TABLE_REGULAR, cv, whereClause, null);
 
 

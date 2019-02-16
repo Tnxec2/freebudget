@@ -7,7 +7,7 @@ import android.content.Context;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "freebudget.db";
-    private static final int SCHEMA = 1; //new database version
+    private static final int SCHEMA = 2; //new database version
 
     static final String TABLE_CATEGORY = "t_category";
     static final String TABLE_REGULAR = "t_regular_transaction";
@@ -22,8 +22,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String COLUMN_MONTH = "month";
     public static final String COLUMN_DAY = "day";
-    public static final String COLUMN_CREATE_DATE = "create_date";
-    public static final String COLUMN_EDIT_DATE = "edit_date";
+    public static final String COLUMN_DATE_CREATE = "create_date";
+    public static final String COLUMN_DATE_EDIT = "edit_date";
+    public static final String COLUMN_DATE_START = "start_date";
+    public static final String COLUMN_DATE_END = "end_date";
 
     public static final String COLUMN_DATE = "date";
     public static final String COLUMN_AMOUNT_PLANNED = "amount_planned";
@@ -48,7 +50,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_DESCRIPTION + " TEXT, " +
                 COLUMN_CATEGORY_NAME + " TEXT, " +
                 COLUMN_AMOUNT + " REAL, " +
-                COLUMN_CREATE_DATE + " INTEGER " +
+                COLUMN_DATE_START + " INTEGER, " +
+                COLUMN_DATE_END + " INTEGER, " +
+                COLUMN_DATE_CREATE + " INTEGER " +
                 ");");
 
         db.execSQL("CREATE TABLE " + TABLE_TRANSACTION +
@@ -60,13 +64,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_DATE + " INTEGER, " +
                 COLUMN_AMOUNT_PLANNED + " REAL, " +
                 COLUMN_AMOUNT_FACT + " REAL, " +
-                COLUMN_CREATE_DATE + " INTEGER ," +
-                COLUMN_EDIT_DATE + " INTEGER " +
+                COLUMN_DATE_CREATE + " INTEGER ," +
+                COLUMN_DATE_EDIT + " INTEGER " +
                 ");");
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion,  int newVersion) {
-/*
+        if ( oldVersion < 2 ) {
+            db.execSQL("ALTER TABLE " +
+                    TABLE_REGULAR + " ADD COLUMN " + COLUMN_DATE_START + " INTEGER;");
+            db.execSQL("ALTER TABLE " +
+                    TABLE_REGULAR + " ADD COLUMN " + COLUMN_DATE_END + " INTEGER;");
+        }
+        /*
             // create old version table
             db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE +
                     " (" +
