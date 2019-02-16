@@ -11,6 +11,8 @@ public class RegularTransaction {
     private String category;
     private double amount;
     private long date_create;
+    private long date_start;
+    private long date_end;
 
     public RegularTransaction(long id) {
         this.id = id;
@@ -23,6 +25,8 @@ public class RegularTransaction {
         this.category = category;
         this.amount = amount;
         this.date_create = new Date().getTime();
+        this.date_start = 0;
+        this.date_end = 0;
     }
 
     public RegularTransaction(long id, int month, int day, String description, String category, double amount) {
@@ -33,6 +37,8 @@ public class RegularTransaction {
         this.category = category;
         this.amount = amount;
         this.date_create = new Date().getTime();
+        this.date_start = 0;
+        this.date_end = 0;
     }
 
     public RegularTransaction(long id, int month, int day, String description, String category, double amount, long date_create) {
@@ -43,6 +49,8 @@ public class RegularTransaction {
         this.category = category;
         this.amount = amount;
         this.date_create = date_create;
+        this.date_start = 0;
+        this.date_end = 0;
     }
 
     public RegularTransaction(int month, int day, String description, String category, double amount, long date_create) {
@@ -52,6 +60,8 @@ public class RegularTransaction {
         this.category = category;
         this.amount = amount;
         this.date_create = date_create;
+        this.date_start = 0;
+        this.date_end = 0;
     }
 
     public Long getId() {
@@ -108,5 +118,21 @@ public class RegularTransaction {
 
     public void setDay(int day) {
         this.day = day;
+    }
+
+    public long getDate_start() {
+        return date_start;
+    }
+
+    public void setDate_start(long date_start) {
+        this.date_start = date_start;
+    }
+
+    public long getDate_end() {
+        return date_end;
+    }
+
+    public void setDate_end(long date_end) {
+        this.date_end = date_end;
     }
 }
