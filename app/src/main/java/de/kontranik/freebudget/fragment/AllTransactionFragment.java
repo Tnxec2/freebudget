@@ -221,7 +221,7 @@ public class AllTransactionFragment extends Fragment {
                     isMove = true;
                 } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                     if(!isMove) {
-                        add(TRANS_STAT_MINUS, TRANS_TYP_PLANNED);
+                        add(TRANS_STAT_MINUS, TRANS_TYP_FACT);
                     }
                 } else if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                     fab_add_plus.setVisibility(View.VISIBLE);
@@ -246,7 +246,7 @@ public class AllTransactionFragment extends Fragment {
                     case DragEvent.ACTION_DRAG_EXITED:
                         break;
                     case DragEvent.ACTION_DROP:
-                        add(TRANS_STAT_PLUS, TRANS_TYP_PLANNED);
+                        add(TRANS_STAT_PLUS, TRANS_TYP_FACT);
                         break;
                     case DragEvent.ACTION_DRAG_ENDED:
                         break;
@@ -270,7 +270,7 @@ public class AllTransactionFragment extends Fragment {
                     case DragEvent.ACTION_DRAG_EXITED:
                         break;
                     case DragEvent.ACTION_DROP:
-                        add(TRANS_STAT_MINUS, TRANS_TYP_PLANNED);
+                        add(TRANS_STAT_MINUS, TRANS_TYP_FACT);
                         break;
                     case DragEvent.ACTION_DRAG_ENDED:
                         break;
