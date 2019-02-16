@@ -53,7 +53,6 @@
             android:inputType="numberDecimal" />
     </LinearLayout>
 
-
     <LinearLayout
         android:id="@+id/linearLayout_regular"
         android:layout_width="0dp"
@@ -114,6 +113,54 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout_extra_settings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout_regular" >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="start date" />
+
+            <EditText
+                android:id="@+id/editText_start_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:inputType="date" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="end date" />
+
+            <EditText
+                android:id="@+id/editText_end_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:inputType="date" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/linearLayout2_regular"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -124,7 +171,7 @@
         android:paddingRight="@dimen/paddint_small"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout_regular">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout_extra_settings">
 
         <Button
             android:id="@+id/button_saveAndClose_regular"

@@ -35,8 +35,18 @@ public class PlanRegular {
 
                 cal = new GregorianCalendar(year, month - 1, rt.getDay(), 0, 0, 1);
 
-                Transaction transaction = new Transaction(0, rt.getId(), rt.getDescription(), rt.getCategory(), cal.getTimeInMillis(), rt.getAmount(), 0);
-                dbAdapter.insert(transaction);
+                /*
+                 * inserten nur wenn Datum im Rahmen von START-END oder START-END nicht eingegeben sind
+                 */
+                if (
+                        ( rt.getDate_start() > 0 && cal.getTimeInMillis() >= rt.getDate_start() )
+                    ||
+                        ( rt.getDate_end() > 0 && cal.getTimeInMillis() <= rt.getDate_end() )
+                    ||
+                        ( rt.getDate_start() == 0 && rt.getDate_end() == 0 ) ) {
+                    Transaction transaction = new Transaction(0, rt.getId(), rt.getDescription(), rt.getCategory(), cal.getTimeInMillis(), rt.getAmount(), 0);
+                    dbAdapter.insert(transaction);
+                }
             }
         }
     }

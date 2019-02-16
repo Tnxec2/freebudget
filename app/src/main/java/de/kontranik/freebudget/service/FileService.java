@@ -60,7 +60,8 @@ public class FileService {
                 } else {
                     s_create_date = new Date().getTime();
                 }
-                regularTransactionList.add( new RegularTransaction(s_id, s_month, s_day, s_description, s_category, s_amount, s_create_date));
+                regularTransactionList.add(
+                        new RegularTransaction(s_id, s_month, s_day, s_description, s_category, s_amount, 0, 0, s_create_date));
             } else {
                 throw new Exception(context.getResources().getString(R.string.wrongLineFormat, line));
             }

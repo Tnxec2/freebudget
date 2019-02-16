@@ -41,7 +41,9 @@ public class RegularTransaction {
         this.date_end = 0;
     }
 
-    public RegularTransaction(long id, int month, int day, String description, String category, double amount, long date_create) {
+    public RegularTransaction(
+            long id, int month, int day, String description, String category, double amount,
+            long date_start, long date_end, long date_create) {
         this.id = id;
         this.month = month;
         this.day = day;
@@ -49,8 +51,8 @@ public class RegularTransaction {
         this.category = category;
         this.amount = amount;
         this.date_create = date_create;
-        this.date_start = 0;
-        this.date_end = 0;
+        this.date_start = date_start;
+        this.date_end = date_end;
     }
 
     public RegularTransaction(int month, int day, String description, String category, double amount, long date_create) {

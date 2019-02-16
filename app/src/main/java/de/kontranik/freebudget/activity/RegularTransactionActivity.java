@@ -1,5 +1,6 @@
 package de.kontranik.freebudget.activity;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,10 +9,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import de.kontranik.freebudget.R;
@@ -37,12 +41,16 @@ public class RegularTransactionActivity extends AppCompatActivity {
     private EditText editTextAmount;
     private EditText editTextDay;
     private Spinner spinnerMonth;
+    private EditText editText_start_date, editText_end_date;
     private Button buttonDelete, buttonCopy;
     private RadioButton radioButtonReceipts, radioButtonSpending;
 
     private DatabaseAdapter dbAdapter;
 
     private long transactionID = 0;
+
+    DatePickerDialog datePickerDialog;
+    private long date_start, date_end;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,10 +72,37 @@ public class RegularTransactionActivity extends AppCompatActivity {
         buttonDelete = (Button) findViewById(R.id.button_delete_regular);
         buttonCopy = (Button) findViewById(R.id.button_copy_regular);
 
+        editText_start_date = (EditText) findViewById(R.id.editText_start_date);
+        editText_end_date = (EditText) findViewById(R.id.editText_end_date);
+
         dbAdapter = new DatabaseAdapter(this);
 
         radioButtonReceipts = (RadioButton) findViewById(R.id.radioButton_receipts_regular);
         radioButtonSpending = (RadioButton) findViewById(R.id.radioButton_spending_regular);
+
+        // perform click event on edit text
+        editText_start_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // calender class's instance and get current date , month and year from calender
+                final Calendar newCalendar = Calendar.getInstance();
+                if (date_start == 0) {
+
+                    date_start = newCalendar.getTimeInMillis();
+                }
+
+                DatePickerDialog StartTime = new DatePickerDialog(RegularTransactionActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        Calendar newDate = Calendar.getInstance();
+                        newDate.set(year, monthOfYear, dayOfMonth);
+                        date_start = newDate.getTimeInMillis();
+                        SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
+                        editText_start_date.setText(dateFormatter.format(newDate.getTime()));
+                    }
+
+                }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+            }
+        });
 
         dbAdapter.open();
         List<Category> categoryArrayList = dbAdapter.getAllCategory();
