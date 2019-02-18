@@ -16,9 +16,11 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.RadioButton;
 
+import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import de.kontranik.freebudget.R;
 
@@ -213,7 +215,12 @@ public class TransactionActivity extends AppCompatActivity {
         this.year = year;
         this.month = month;
         this.day = day;
-        editTextDate.setText( String.format("%02d/%02d/%04d", day, month, year) );
+        Calendar cal = Calendar.getInstance();
+        cal.set(year, month-1, day);
+
+        DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
+
+        editTextDate.setText( df.format( cal.getTimeInMillis()) );
     }
 
     // find Index of Spinner by Value
