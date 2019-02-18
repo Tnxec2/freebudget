@@ -128,8 +128,8 @@ public class RegularTransactionActivity extends AppCompatActivity {
                 DatePickerDialog datePickerDialog = new DatePickerDialog(RegularTransactionActivity.this, new DatePickerDialog.OnDateSetListener() {
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         Calendar datePickerDate = Calendar.getInstance();
-                        datePickerDate.set(year, monthOfYear, dayOfMonth, 0, 0, 1);
-                        datePickerDate.set(Calendar.MILLISECOND, 0);
+                        datePickerDate.set(year, monthOfYear, dayOfMonth, 23, 59, 59);
+                        datePickerDate.set(Calendar.MILLISECOND, 998);
                         date_end = datePickerDate.getTimeInMillis();
                         setDateText(textView_end_date, date_end);
                     }
