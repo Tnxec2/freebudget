@@ -2,7 +2,6 @@ package de.kontranik.freebudget.service;
 
 import android.content.Context;
 import android.os.Environment;
-import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -43,8 +42,7 @@ public class FileService {
 
         while ((line = br.readLine()) != null) {
             String[] str = line.split(CSV_DELIMITER);
-            Log.d("NIK", line);
-            if (str.length > 4) {
+            if (str.length > 6) {
                 long s_id = 0;
                 int s_month = Integer.valueOf(str[0].trim());
                 if (s_month < 0 || s_month > 12) throw new Exception( context.getResources().getString(R.string.wrongMonthInTheLine, line));
@@ -54,14 +52,25 @@ public class FileService {
                 String s_category = str[3].trim();
                 double s_amount = Double.valueOf(str[4].trim().replace(',', '.'));
 
+                long s_date_start = 0;
+                if (str[5].trim().length() > 0) {
+                    s_date_start = new SimpleDateFormat(DATE_SHORT, Locale.US).parse(str[5].trim()).getTime();
+                }
+
+                long s_date_end = 0;
+                if (str[6].trim().length() > 0) {
+                    s_date_end = new SimpleDateFormat(DATE_SHORT, Locale.US).parse(str[6].trim()).getTime();
+                    s_date_end += 24 * 60 * 60 * 1000 - 1; // vollen Tag setzen
+                }
+
                 long s_create_date;
-                if (str.length > 5 && str[5].trim().length() > 0) {
-                    s_create_date = new SimpleDateFormat(DATE_LONG, Locale.US).parse(str[5].trim()).getTime();
+                if (str.length > 7 && str[7].trim().length() > 0) {
+                    s_create_date = new SimpleDateFormat(DATE_LONG, Locale.US).parse(str[7].trim()).getTime();
                 } else {
                     s_create_date = new Date().getTime();
                 }
                 regularTransactionList.add(
-                        new RegularTransaction(s_id, s_month, s_day, s_description, s_category, s_amount, 0, 0, s_create_date));
+                        new RegularTransaction(s_id, s_month, s_day, s_description, s_category, s_amount, s_date_start, s_date_end, s_create_date));
             } else {
                 throw new Exception(context.getResources().getString(R.string.wrongLineFormat, line));
             }
@@ -83,6 +92,7 @@ public class FileService {
         List<RegularTransaction> regularTransactions = dbAdapter.getAllRegular();
 
         DateFormat df1 = new SimpleDateFormat(DATE_LONG, Locale.US);
+        DateFormat df2 = new SimpleDateFormat(DATE_SHORT, Locale.US);
 
         String FILENAME = fileName + "_" + df1.format(new Date()) + ".csv";
         File directory = Environment.getExternalStorageDirectory();
@@ -92,14 +102,23 @@ public class FileService {
 
         for (RegularTransaction regularTransaction: regularTransactions) {
 
-            out.append(
-                String.valueOf(regularTransaction.getMonth()) + CSV_DELIMITER +
-                String.valueOf(regularTransaction.getDay()) + CSV_DELIMITER +
-                regularTransaction.getDescription() + CSV_DELIMITER +
-                regularTransaction.getCategory() + CSV_DELIMITER +
-                String.valueOf(regularTransaction.getAmount()) + CSV_DELIMITER +
-                df1.format(regularTransaction.getDate_create()) + CSV_NEW_LINE
-            );
+            out.append(String.valueOf(regularTransaction.getMonth())).append(CSV_DELIMITER);
+            out.append(String.valueOf(regularTransaction.getDay())).append(CSV_DELIMITER);
+            out.append(regularTransaction.getDescription()).append(CSV_DELIMITER);
+            out.append(regularTransaction.getCategory()).append(CSV_DELIMITER);
+            out.append(String.valueOf(regularTransaction.getAmount())).append(CSV_DELIMITER);
+            if ( regularTransaction.getDate_start() > 0 ) {
+                out.append(df2.format(regularTransaction.getDate_start())).append(CSV_DELIMITER);
+            } else {
+                out.append(CSV_DELIMITER);
+            }
+            if ( regularTransaction.getDate_end() > 0 ) {
+                out.append(df2.format(regularTransaction.getDate_end())).append(CSV_DELIMITER);
+            } else {
+                out.append(CSV_DELIMITER);
+            }
+            out.append(df1.format(regularTransaction.getDate_create())).append(CSV_DELIMITER);
+            out.append( CSV_NEW_LINE );
         }
 
         out.close();
