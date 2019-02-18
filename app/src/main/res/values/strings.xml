@@ -85,6 +85,8 @@
     <string name="regular">Regular</string>
     <string name="start_date">start date</string>
     <string name="end_date">end date</string>
+    <string name="start">start</string>
+    <string name="end">end</string>
     <string name="not_set">not set</string>
 
     <string-array name="navigation_drawer_items_array">
