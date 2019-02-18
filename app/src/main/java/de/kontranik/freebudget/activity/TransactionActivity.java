@@ -44,7 +44,7 @@ public class TransactionActivity extends AppCompatActivity {
     private EditText editTextDescription;
     private AutoCompleteTextView acTextViewCategory;
     private EditText editTextAmountPlanned, editTextAmountFact;
-    private EditText editTextDate;
+    private Button button_date;
     private Button buttonDelete, buttonCopy;
     private ImageButton buttonCopyAmount;
     private RadioButton radioButtonReceipts, radioButtonSpending;
@@ -76,7 +76,7 @@ public class TransactionActivity extends AppCompatActivity {
         buttonCopyAmount = (ImageButton) findViewById(R.id.btn_copy_amount);
 
         // initiate the date picker and a button
-        editTextDate = (EditText) findViewById(R.id.editText_date);
+        button_date = (Button) findViewById(R.id.button_date);
 
         dbAdapter = new DatabaseAdapter(this);
 
@@ -105,7 +105,7 @@ public class TransactionActivity extends AppCompatActivity {
         radioButtonSpending = (RadioButton) findViewById(R.id.radioButton_spending);
 
         // perform click event on edit text
-        editTextDate.setOnClickListener(new View.OnClickListener() {
+        button_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // calender class's instance and get current date , month and year from calender
@@ -220,7 +220,7 @@ public class TransactionActivity extends AppCompatActivity {
 
         DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
 
-        editTextDate.setText( df.format( cal.getTimeInMillis()) );
+        button_date.setText( df.format( cal.getTimeInMillis()) );
     }
 
     // find Index of Spinner by Value
