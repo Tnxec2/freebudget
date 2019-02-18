@@ -129,7 +129,7 @@ public class RegularTransactionActivity extends AppCompatActivity {
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         Calendar datePickerDate = Calendar.getInstance();
                         datePickerDate.set(year, monthOfYear, dayOfMonth, 23, 59, 59);
-                        datePickerDate.set(Calendar.MILLISECOND, 998);
+                        datePickerDate.set(Calendar.MILLISECOND, 999);
                         date_end = datePickerDate.getTimeInMillis();
                         setDateText(textView_end_date, date_end);
                     }
