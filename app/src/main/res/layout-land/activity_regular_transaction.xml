@@ -117,6 +117,63 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/linearLayout_extra_settings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/start_date" />
+
+                <Button
+                    android:id="@+id/button_start_date"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/start_date" />
+
+                <ImageButton
+                    android:id="@+id/imageButton_clear_start_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_clear" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/end_date" />
+
+                <Button
+                    android:id="@+id/button_end_date"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/end_date" />
+
+                <ImageButton
+                    android:id="@+id/imageButton_clear_end_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_clear" />
+            </LinearLayout>
+        </LinearLayout>
+
     </LinearLayout>
 
 
@@ -128,52 +185,39 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:id="@+id/linearLayout2_regular"
+        <Button
+            android:id="@+id/button_saveAndClose_regular"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_weight="1"
+            android:onClick="saveAndClose"
+            android:text="@string/activity_transaction_saveAclose" />
 
-            <Button
-                android:id="@+id/button_saveAndClose_regular"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="saveAndClose"
-                android:text="@string/activity_transaction_saveAclose" />
-
-            <Button
-                android:id="@+id/button_delete_regular"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="delete"
-                android:text="@string/activity_transaction_delete" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linearLayout3_regular"
+        <Button
+            android:id="@+id/button_save_regular"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorBackgroundCard"
-            android:orientation="horizontal">
+            android:layout_weight="1"
+            android:onClick="save"
+            android:text="@string/activity_transaction_save" />
 
-            <Button
-                android:id="@+id/button_save_regular"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="save"
-                android:text="@string/activity_transaction_save" />
+        <Button
+            android:id="@+id/button_delete_regular"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="delete"
+            android:text="@string/activity_transaction_delete" />
 
-            <Button
-                android:id="@+id/button_copy_regular"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="copy"
-                android:text="@string/activity_transaction_copy" />
-        </LinearLayout>
+
+        <Button
+            android:id="@+id/button_copy_regular"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="copy"
+            android:text="@string/activity_transaction_copy" />
+
     </LinearLayout>
 
 
