@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.text.DateFormat;
 import java.util.List;
 import java.util.Locale;
 
@@ -57,9 +58,19 @@ public class RegularTransactionAdapter extends ArrayAdapter<RegularTransaction> 
             viewHolder.amountView.setTextColor(
                     ContextCompat.getColor(parent.getContext(), R.color.colorRed));
         }
-        viewHolder.categoryView.setText(
-                parent.getResources().getString(
-                        R.string.subTitleTransaction, String.valueOf(regularTransaction.getDay()), regularTransaction.getCategory()) );
+
+        String text = parent.getResources().getString(
+                R.string.subTitleTransaction, String.valueOf(regularTransaction.getDay()), regularTransaction.getCategory());
+
+        DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
+
+        if ( regularTransaction.getDate_start() > 0)
+            text += ", start: " + df.format(regularTransaction.getDate_start());
+
+        if ( regularTransaction.getDate_end() > 0)
+            text += ", end: " + df.format(regularTransaction.getDate_end());
+
+        viewHolder.categoryView.setText( text );
 
         return convertView;
     }
