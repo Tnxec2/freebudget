@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
@@ -19,8 +18,6 @@ import de.kontranik.freebudget.R;
 import de.kontranik.freebudget.config.Config;
 import de.kontranik.freebudget.fragment.AllTransactionFragment;
 import de.kontranik.freebudget.model.Transaction;
-
-import static de.kontranik.freebudget.config.Config.DATE_SHORT;
 
 public class TransactionAdapter extends ArrayAdapter<Transaction>  {
 
@@ -82,8 +79,8 @@ public class TransactionAdapter extends ArrayAdapter<Transaction>  {
 
         viewHolder.descriptionView.setText(transaction.getDescription());
 
-        DateFormat df = new SimpleDateFormat(DATE_SHORT, Locale.getDefault());
-        String dateString = "not set";
+        DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
+        String dateString = parent.getContext().getString(R.string.not_set);
         if ( transaction.getDate() > 0 ) {
             dateString = df.format(transaction.getDate());
         }
