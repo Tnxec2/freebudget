@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
@@ -63,6 +64,7 @@ public class RegularTransactionAdapter extends ArrayAdapter<RegularTransaction> 
                 R.string.subTitleTransaction, String.valueOf(regularTransaction.getDay()), regularTransaction.getCategory());
 
         DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
+        //SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy H:mm:ss S");
 
         if ( regularTransaction.getDate_start() > 0)
             text += ", " + getContext().getString(R.string.start) + ": " + df.format(regularTransaction.getDate_start());
