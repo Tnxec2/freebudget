@@ -45,7 +45,6 @@ public class RegularFragment extends Fragment {
     private TextView textView_Month;
     private TextView textView_receipts, textView_spending, textView_total;
     private FloatingActionButton fab_add, fab_add_plus, fab_add_minus;
-    private ImageButton btn_prevMonth, btn_nextMonth;
 
     private int month;
     private String[] months;
@@ -84,8 +83,8 @@ public class RegularFragment extends Fragment {
         fab_add_plus = (FloatingActionButton) view.findViewById(R.id.fab_add_plus_regular);
         fab_add_minus = (FloatingActionButton) view.findViewById(R.id.fab_add_minus_regular);
 
-        btn_prevMonth = (ImageButton) view.findViewById(R.id.btn_prevMonth);
-        btn_nextMonth = (ImageButton) view.findViewById(R.id.btn_nextMonth);
+        ImageButton btn_prevMonth = (ImageButton) view.findViewById(R.id.btn_prevMonth);
+        ImageButton btn_nextMonth = (ImageButton) view.findViewById(R.id.btn_nextMonth);
 
         btn_prevMonth.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -311,18 +310,28 @@ public class RegularFragment extends Fragment {
 
         transactionList.addAll( databaseAdapter.getRegular(this.month) );
 
+        long today = Calendar.getInstance().getTimeInMillis();
+
         double amount;
         double receipts = 0;
         double spending = 0;
         double total = 0;
         for (RegularTransaction transaction: transactionList) {
-            amount = transaction.getAmount();
-            if (amount > 0) {
-                receipts += amount;
-            } else {
-                spending += Math.abs(amount);
+            if (
+                ( transaction.getDate_start() == 0 && transaction.getDate_end() == 0 )
+                    ||
+                ( transaction.getDate_start() > 0 && today >= transaction.getDate_start() )
+                    ||
+                ( transaction.getDate_end() > 0 && today <= transaction.getDate_end() )
+            ) {
+                amount = transaction.getAmount();
+                if (amount > 0) {
+                    receipts += amount;
+                } else {
+                    spending += Math.abs(amount);
+                }
+                total += amount;
             }
-            total += amount;
         }
 
         textView_spending.setText(String.format(Locale.getDefault(),"%1$,.2f", spending));
