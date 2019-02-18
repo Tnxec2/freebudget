@@ -365,7 +365,7 @@ public class DatabaseAdapter {
         cv.put(DatabaseHelper.COLUMN_CATEGORY_NAME, regularTransaction.getCategory());
         cv.put(DatabaseHelper.COLUMN_AMOUNT, regularTransaction.getAmount());
         cv.put(DatabaseHelper.COLUMN_DATE_START, regularTransaction.getDate_start());
-        cv.put(DatabaseHelper.COLUMN_DATE_EDIT, regularTransaction.getDate_end());
+        cv.put(DatabaseHelper.COLUMN_DATE_END, regularTransaction.getDate_end());
         cv.put(DatabaseHelper.COLUMN_DATE_CREATE, regularTransaction.getDate_create());
         return  database.insert(DatabaseHelper.TABLE_REGULAR, null, cv);
     }
@@ -418,7 +418,7 @@ public class DatabaseAdapter {
         cv.put(DatabaseHelper.COLUMN_CATEGORY_NAME, regularTransaction.getCategory());
         cv.put(DatabaseHelper.COLUMN_AMOUNT, regularTransaction.getAmount());
         cv.put(DatabaseHelper.COLUMN_DATE_START, regularTransaction.getDate_start());
-        cv.put(DatabaseHelper.COLUMN_DATE_EDIT, regularTransaction.getDate_end());
+        cv.put(DatabaseHelper.COLUMN_DATE_END, regularTransaction.getDate_end());
         cv.put(DatabaseHelper.COLUMN_DATE_CREATE, regularTransaction.getDate_create());
         long result = database.update(DatabaseHelper.TABLE_REGULAR, cv, whereClause, null);
 
