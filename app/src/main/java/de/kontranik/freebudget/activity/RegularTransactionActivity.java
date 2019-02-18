@@ -14,7 +14,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -45,7 +44,7 @@ public class RegularTransactionActivity extends AppCompatActivity {
     private EditText editTextAmount;
     private EditText editTextDay;
     private Spinner spinnerMonth;
-    private TextView textView_start_date, textView_end_date;
+    private Button button_start_date, button_end_date;
     private Button buttonDelete, buttonCopy;
     private RadioButton radioButtonReceipts, radioButtonSpending;
 
@@ -75,8 +74,8 @@ public class RegularTransactionActivity extends AppCompatActivity {
         buttonDelete = (Button) findViewById(R.id.button_delete_regular);
         buttonCopy = (Button) findViewById(R.id.button_copy_regular);
 
-        textView_start_date = (TextView) findViewById(R.id.textView_start_date);
-        textView_end_date = (TextView) findViewById(R.id.textView_end_date);
+        button_start_date = (Button) findViewById(R.id.button_start_date);
+        button_end_date = (Button) findViewById(R.id.button_end_date);
 
         ImageButton imageButton_clear_start_date = (ImageButton) findViewById(R.id.imageButton_clear_start_date);
         ImageButton imageButton_clear_end_date = (ImageButton) findViewById(R.id.imageButton_clear_end_date);
@@ -87,7 +86,7 @@ public class RegularTransactionActivity extends AppCompatActivity {
         radioButtonSpending = (RadioButton) findViewById(R.id.radioButton_spending_regular);
 
         // perform click event on edit text
-        textView_start_date.setOnClickListener(new View.OnClickListener() {
+        button_start_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // calender class's instance and get current date , month and year from calender
@@ -105,7 +104,7 @@ public class RegularTransactionActivity extends AppCompatActivity {
                         datePickerDate.set(Calendar.MILLISECOND, 0);
                         date_start = datePickerDate.getTimeInMillis();
 
-                        setDateText(textView_start_date, date_start);
+                        setDateText(button_start_date, date_start);
                     }
 
                 }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
@@ -115,7 +114,7 @@ public class RegularTransactionActivity extends AppCompatActivity {
         });
 
         // perform click event on edit text
-        textView_end_date.setOnClickListener(new View.OnClickListener() {
+        button_end_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // calender class's instance and get current date , month and year from calender
@@ -131,7 +130,7 @@ public class RegularTransactionActivity extends AppCompatActivity {
                         datePickerDate.set(year, monthOfYear, dayOfMonth, 23, 59, 59);
                         datePickerDate.set(Calendar.MILLISECOND, 999);
                         date_end = datePickerDate.getTimeInMillis();
-                        setDateText(textView_end_date, date_end);
+                        setDateText(button_end_date, date_end);
                     }
 
                 }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
@@ -144,7 +143,7 @@ public class RegularTransactionActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 date_start = 0;
-                textView_start_date.setText(R.string.not_set);
+                button_start_date.setText(R.string.not_set);
             }
         });
 
@@ -152,7 +151,7 @@ public class RegularTransactionActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 date_end = 0;
-                textView_end_date.setText(R.string.not_set);
+                button_end_date.setText(R.string.not_set);
             }
         });
 
@@ -227,8 +226,8 @@ public class RegularTransactionActivity extends AppCompatActivity {
             date_end = 0;
         }
 
-        setDateText(textView_start_date, date_start);
-        setDateText(textView_end_date, date_end);
+        setDateText(button_start_date, date_start);
+        setDateText(button_end_date, date_end);
     }
 
     @Override
@@ -246,11 +245,11 @@ public class RegularTransactionActivity extends AppCompatActivity {
         if (savedInstanceState != null) {
             if ( savedInstanceState.containsKey(REGULAR_DATE_START) ) {
                 date_start = savedInstanceState.getLong(REGULAR_DATE_START);
-                setDateText(textView_start_date, date_start);
+                setDateText(button_start_date, date_start);
             }
             if ( savedInstanceState.containsKey(REGULAR_DATE_END) ) {
                 date_end = savedInstanceState.getLong(REGULAR_DATE_END);
-                setDateText(textView_end_date, date_end);
+                setDateText(button_end_date, date_end);
             }
         }
     }
@@ -327,12 +326,12 @@ public class RegularTransactionActivity extends AppCompatActivity {
         startActivityForResult(intent, PICK_CATEGORY_REQUEST );
     }
 
-    private void setDateText( TextView textBox, long date) {
+    private void setDateText( Button button, long date) {
         if ( date == 0 ) {
-            textBox.setText(R.string.not_set);
+            button.setText(R.string.not_set);
         } else {
             DateFormat dateFormatter = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
-            textBox.setText(dateFormatter.format(date));
+            button.setText(dateFormatter.format(date));
         }
     }
 }

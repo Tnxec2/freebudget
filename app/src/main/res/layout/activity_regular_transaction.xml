@@ -131,15 +131,12 @@
                 android:layout_weight="1"
                 android:text="@string/start_date" />
 
-            <TextView
-                android:id="@+id/textView_start_date"
+            <Button
+                android:id="@+id/button_start_date"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:clickable="true"
-                android:singleLine="true"
-                android:text="@string/start_date"
-                style="@android:style/Widget.Button" />
+                android:text="@string/start_date"  />
 
             <ImageButton
                 android:id="@+id/imageButton_clear_start_date"
@@ -158,14 +155,11 @@
                 android:layout_weight="1"
                 android:text="@string/end_date" />
 
-            <TextView
-                android:id="@+id/textView_end_date"
-                style="@android:style/Widget.Button"
+            <Button
+                android:id="@+id/button_end_date"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:clickable="true"
-                android:singleLine="true"
                 android:text="@string/end_date" />
             <ImageButton
                 android:id="@+id/imageButton_clear_end_date"
