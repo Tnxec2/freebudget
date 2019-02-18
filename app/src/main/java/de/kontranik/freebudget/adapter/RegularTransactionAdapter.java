@@ -65,10 +65,10 @@ public class RegularTransactionAdapter extends ArrayAdapter<RegularTransaction> 
         DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
 
         if ( regularTransaction.getDate_start() > 0)
-            text += ", start: " + df.format(regularTransaction.getDate_start());
+            text += ", " + getContext().getString(R.string.start) + ": " + df.format(regularTransaction.getDate_start());
 
         if ( regularTransaction.getDate_end() > 0)
-            text += ", end: " + df.format(regularTransaction.getDate_end());
+            text += ", " + getContext().getString(R.string.end) + ": " + df.format(regularTransaction.getDate_end());
 
         viewHolder.categoryView.setText( text );
 
