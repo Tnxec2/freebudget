@@ -1,9 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+        }
+    }
     compileSdkVersion 26
     buildToolsVersion '28.0.3'
-
     def versionPropsFile = file('version.properties')
     def code = 1;
     if (versionPropsFile.canRead()) {
@@ -13,24 +16,21 @@ android {
         List<String> runTasks = gradle.startParameter.getTaskNames();
         def value = 0
         for (String item : runTasks)
-            if ( item.contains("assembleRelease")) {
+            if (item.contains("assembleRelease")) {
                 value = 1;
             }
         code = Integer.parseInt(versionProps['VERSION_CODE']).intValue() + value
-        versionProps['VERSION_CODE']=code.toString()
+        versionProps['VERSION_CODE'] = code.toString()
         versionProps.store(versionPropsFile.newWriter(), null)
-    }
-    else {
+    } else {
         throw new GradleException("Could not read version.properties!")
     }
-
-
     defaultConfig {
         applicationId "de.kontranik.freebudget"
         minSdkVersion 16
         targetSdkVersion 26
         versionCode code
-        versionName "1.0."+ code
+        versionName "1.0." + code
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         android.defaultConfig.vectorDrawables.useSupportLibrary true
     }
@@ -56,7 +56,7 @@ android {
 
 dependencies {
     implementation 'com.android.support:support-v4:26.1.0'
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -64,7 +64,6 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation 'com.android.support:design:26.+'
     testCompile 'junit:junit:4.12'
-
     implementation 'com.github.bumptech.glide:glide:3.7.0'
     implementation 'com.android.support:recyclerview-v7:26.+'
 }
