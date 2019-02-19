@@ -6,7 +6,7 @@ import android.content.Context;
 
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final String DATABASE_NAME = "freebudget.db";
+    public static final String DATABASE_NAME = "freebudget.db";
     private static final int SCHEMA = 2; //new database version
 
     static final String TABLE_CATEGORY = "t_category";
