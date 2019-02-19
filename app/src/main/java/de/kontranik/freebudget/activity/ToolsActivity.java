@@ -15,6 +15,7 @@ import android.widget.Toast;
 import java.io.IOException;
 
 import de.kontranik.freebudget.R;
+import de.kontranik.freebudget.service.BackupAndRestore;
 import de.kontranik.freebudget.service.FileService;
 
 import static de.kontranik.freebudget.activity.OpenFileActivity.RESULT_FILENAME;
@@ -45,6 +46,10 @@ public class ToolsActivity extends AppCompatActivity {
         Button btn_ExportRegular = (Button) findViewById(R.id.btn_export_regular);
         Button btn_ImportNormal = (Button) findViewById(R.id.btn_import_normal);
         Button btn_ExportNormal = (Button) findViewById(R.id.btn_export_normal);
+
+        Button btn_backup = (Button) findViewById(R.id.btn_backup);
+        Button btn_restore = (Button) findViewById(R.id.btn_restore);
+
         Button btn_close = (Button) findViewById(R.id.btn_close);
 
         btn_ImportRegular.setOnClickListener(new View.OnClickListener() {
@@ -71,6 +76,18 @@ public class ToolsActivity extends AppCompatActivity {
                 exportNormal(v);
             }
         });
+        btn_backup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                backup(v);
+            }
+        });
+        btn_restore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                restore(v);
+            }
+        });
         btn_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,7 +106,7 @@ public class ToolsActivity extends AppCompatActivity {
         try {
             String filename = "export_freebudget_regular_transaction";
             String result = FileService.exportFileRegular(filename, this);
-            Toast.makeText(this, this.getResources().getString(R.string.exportOK, result), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, this.getResources().getString(R.string.exportOK_filename, result), Toast.LENGTH_LONG).show();
         } catch (IOException e) {
             //e.printStackTrace();
             Toast.makeText(this, this.getResources().getString(R.string.exportFail, e.getLocalizedMessage()),
@@ -106,10 +123,37 @@ public class ToolsActivity extends AppCompatActivity {
         try {
             String filename = "export_freebudget_transaction";
             String result = FileService.exportFileTransaction(filename, this);
-            Toast.makeText(this, this.getResources().getString(R.string.exportOK, result), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, this.getResources().getString(R.string.exportOK_filename, result), Toast.LENGTH_LONG).show();
         } catch (IOException e) {
             //e.printStackTrace();
             Toast.makeText(this, this.getResources().getString(R.string.exportFail, e.getLocalizedMessage()),
+                    Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void backup(View view) {
+        try {
+            if ( BackupAndRestore.exportDB(view.getContext()) ) {
+                Toast.makeText(this, this.getResources().getString(R.string.exportOK),
+                        Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, this.getResources().getString(R.string.exportFail),
+                        Toast.LENGTH_LONG).show();
+            }
+        } catch (IOException e) {
+            Toast.makeText(this, this.getResources().getString(R.string.exportFail, e.getLocalizedMessage()),
+                    Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void restore(View view) {
+        try {
+            if ( BackupAndRestore.importDB(view.getContext())) {
+                Toast.makeText(this, this.getResources().getString(R.string.importOK),
+                        Toast.LENGTH_LONG).show();
+            }
+        } catch (IOException e) {
+            Toast.makeText(this, this.getResources().getString(R.string.importFail, e.getLocalizedMessage()),
                     Toast.LENGTH_LONG).show();
         }
     }
@@ -125,7 +169,7 @@ public class ToolsActivity extends AppCompatActivity {
                     try {
                         FileService.importFileRegular(fileName, this);
                         Toast.makeText(this,
-                                this.getResources().getString(R.string.importOK, fileName),
+                                this.getResources().getString(R.string.importOK_filename, fileName),
                                 Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -141,7 +185,7 @@ public class ToolsActivity extends AppCompatActivity {
                     try {
                         FileService.importFileTransaction(fileName, this);
                         Toast.makeText(this,
-                                this.getResources().getString(R.string.importOK),
+                                this.getResources().getString(R.string.importOK_filename, fileName),
                                 Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
                         e.printStackTrace();
