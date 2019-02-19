@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (fragment != null) {
-            if (position == 1) {
+            if (position == INDEX_DRAWER_ALLTRANSACTION) {
                 switchShowOnlyPlanned.setVisibility(View.VISIBLE);
                 switchShowOnlyPlanned.setEnabled(true);
             } else {
@@ -151,7 +151,11 @@ public class MainActivity extends AppCompatActivity {
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.content_frame, fragment);
-            fragmentTransaction.addToBackStack(null);
+            if ( position > 0 ) {
+                fragmentTransaction.addToBackStack(null);
+            } else {
+                fragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            }
             fragmentTransaction.commit();
 
             this.position = position;
