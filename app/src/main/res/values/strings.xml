@@ -52,9 +52,11 @@
     <string name="wrongLineFormat">Wrong line format: %1$s</string>
     <string name="importFromFile">Import from file: %1$s</string>
     <string name="importFail">Import fail. Error: %1$s</string>
-    <string name="importOK">Import OK. File: %1$s</string>
+    <string name="importOK">Import OK.</string>
+    <string name="importOK_filename">Import OK. File: %1$s</string>
     <string name="exportFail">Export fail. Error: %1$s</string>
-    <string name="exportOK">Export OK. File: %1$s</string>
+    <string name="exportOK">Export OK.</string>
+    <string name="exportOK_filename">Export OK. File: %1$s</string>
     <string name="date">date</string>
     <string name="put_regular">put regular</string>
     <string name="activity_transaction_edit">Edit</string>

@@ -60,8 +60,8 @@
     <string name="only_planned">nur offene</string>
     <string name="all">alle</string>
     <string name="activity_transaction_amount">Betrag</string>
-    <string name="importOK">Import OK. Datei: %1$s</string>
-    <string name="exportOK">Export OK. Datei: %1$s</string>
+    <string name="importOK_filename">Import OK. Datei: %1$s</string>
+    <string name="exportOK_filename">Export OK. Datei: %1$s</string>
     <string name="delete">Löschen</string>
     <string name="save">Speichern</string>
     <string name="category_name">Kategoriename</string>
@@ -97,5 +97,7 @@
     <string name="start">Start</string>
     <string name="end">End</string>
     <string name="not_set">keine</string>
+    <string name="exportOK">Export OK.</string>
+    <string name="importOK">Import OK.</string>
 
 </resources>
