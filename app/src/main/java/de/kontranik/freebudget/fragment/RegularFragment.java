@@ -112,8 +112,7 @@ public class RegularFragment extends Fragment {
 
         this.months = getResources().getStringArray(R.array.months);
 
-        Calendar date = Calendar.getInstance();
-        month = date.get(Calendar.MONTH)+1;
+        month = 0;
         textView_Month.setText(this.months[month]);
 
         listView_Transactions.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -287,16 +286,22 @@ public class RegularFragment extends Fragment {
     }
 
     public void prevMonth(){
-        if (this.month == 0 ) return;
-        this.month = this.month - 1;
-        this.textView_Month.setText(this.months[this.month]);
+        if (month == 1 ) {
+            month = 12;
+        } else {
+            month = month - 1;
+        }
+        this.textView_Month.setText(this.months[month]);
         this.getTransactions();
     }
 
     public void nextMonth(){
-        if (this.month == 12 ) return;
-        this.month = this.month + 1;
-        this.textView_Month.setText(this.months[this.month]);
+        if (month == 12 ) {
+            month = 1;
+        } else {
+            month = month + 1;
+        }
+        this.textView_Month.setText(this.months[month]);
         this.getTransactions();
     }
 
