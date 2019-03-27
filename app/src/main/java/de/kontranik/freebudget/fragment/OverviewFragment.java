@@ -46,6 +46,8 @@ import static de.kontranik.freebudget.service.Constant.TRANS_TYP_PLANNED;
 
 public class OverviewFragment extends Fragment implements View.OnClickListener {
 
+    MainActivity main;
+
     private ListView listView_categoryList;
     private TextView textView_Month;
     private TextView textView_receipts_planned, textView_spending_planned, textView_total_planned;
@@ -54,7 +56,7 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
     private ImageButton btn_prevMonth, btn_nextMonth;
     private FloatingActionButton fab_add, fab_add_plus, fab_add_minus, fab_add_plus_planned, fab_add_minus_planned;
 
-    private int year, month;
+    // private int year, month;
 
     private String[] months;
     private List<Category> categoryList = new ArrayList<>();
@@ -122,8 +124,8 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         this.months = getResources().getStringArray(R.array.months);
 
         Calendar date = Calendar.getInstance();
-        year = date.get(Calendar.YEAR);
-        month = date.get(Calendar.MONTH)+1;
+
+        main = (MainActivity) getActivity();
 
         setMonthTextView();
 
@@ -319,7 +321,7 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        ((MainActivity)getActivity()).setPosition(MainActivity.INDEX_DRAWER_OVERVIEW);
+        main.setPosition(main.INDEX_DRAWER_OVERVIEW);
         this.getTransactions();
     }
 
@@ -333,10 +335,10 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
                 nextMonth();
                 break;
             case R.id.button_AllTransactions:
-                ((MainActivity)getActivity()).selectItem(MainActivity.INDEX_DRAWER_ALLTRANSACTION);
+                main.selectItem(main.INDEX_DRAWER_ALLTRANSACTION);
                 break;
             case R.id.button_Regular:
-                ((MainActivity)getActivity()).selectItem(MainActivity.INDEX_DRAWER_REGULAR);
+                main.selectItem(main.INDEX_DRAWER_REGULAR);
                 break;
             default:
                 break;
@@ -358,7 +360,7 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         maxCategoryWeight = 0;
 
         // als erstes komplett alle bewegungen für den Monat lesen
-        List<Transaction> dbTransactions = dbAdapter.getTransactions(getContext(), this.year, this.month, false) ;
+        List<Transaction> dbTransactions = dbAdapter.getTransactions(getContext(), main.year, main.month, false) ;
 
         clearSummen();
 
@@ -414,31 +416,19 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
     }
 
     public void prevMonth(){
-        if (this.month == 1 ) {
-            if ( this.year == 2000 ) return;
-            this.month = 12;
-            this.year--;
-        } else {
-            this.month = this.month - 1;
-        }
+        main.prevMonth();
         setMonthTextView();
         this.getTransactions();
     }
 
     public void nextMonth(){
-        if (this.month == 12 ) {
-            if ( this.year == 3000 ) return;
-            this.month = 1;
-            this.year++;
-        } else {
-            this.month = this.month + 1;
-        }
+        main.nextMonth();
         setMonthTextView();
         this.getTransactions();
     }
 
     private void setMonthTextView() {
-        this.textView_Month.setText(String.format(Locale.getDefault(),"%d / %s", this.year, this.months[this.month]));
+        this.textView_Month.setText(String.format(Locale.getDefault(),"%d / %s", main.year, this.months[main.month]));
     }
 
 

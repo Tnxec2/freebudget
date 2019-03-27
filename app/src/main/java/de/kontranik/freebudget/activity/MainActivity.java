@@ -16,6 +16,8 @@ import android.support.v7.widget.Toolbar;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import java.util.Calendar;
+
 import de.kontranik.freebudget.R;
 import de.kontranik.freebudget.adapter.DrawerItemCustomAdapter;
 import de.kontranik.freebudget.fragment.OverviewFragment;
@@ -37,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     Toolbar toolbar;
     Switch switchShowOnlyPlanned;
     android.support.v7.app.ActionBarDrawerToggle mDrawerToggle;
+
+    public int month, year;
 
     int position;
 
@@ -87,6 +91,14 @@ public class MainActivity extends AppCompatActivity {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         setupDrawerToggle();
+
+        Calendar date = Calendar.getInstance();
+        if ( month == 0) {
+            month = date.get(Calendar.MONTH) + 1;
+        }
+        if ( year == 0 ) {
+            year = date.get(Calendar.YEAR);
+        }
 
         // If turn the screen orientation then the savedInstanceState is not null.
         // In this condition, do not need to add new fragment again.
@@ -233,6 +245,26 @@ public class MainActivity extends AppCompatActivity {
     public void setDrawerSelection(int index) {
         mDrawerList.setItemChecked( index, true );
         mDrawerList.setSelection( index );
+    }
+
+    public void prevMonth(){
+        if (month == 1 ) {
+            if ( year == 2000 ) return;
+            month = 12;
+            year--;
+        } else {
+            month = month - 1;
+        }
+    }
+
+    public void nextMonth(){
+        if (month == 12 ) {
+            if ( year == 3000 ) return;
+            month = 1;
+            year++;
+        } else {
+            month = month + 1;
+        }
     }
 }
 

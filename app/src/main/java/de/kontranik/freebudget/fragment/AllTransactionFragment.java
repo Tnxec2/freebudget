@@ -50,6 +50,8 @@ public class AllTransactionFragment extends Fragment {
 
     private static final String PREFS_KEY_LISTPOSITION = "LISTPOS";
 
+    MainActivity main;
+
     private TextView textView_Month;
     private ListView listView_transactionsList;
     private Button btn_planRegular;
@@ -59,8 +61,6 @@ public class AllTransactionFragment extends Fragment {
     private List<Transaction> transactions = new ArrayList<>();
 
     TransactionAdapter transactionAdapter;
-
-    private int year, month;
 
     private String[] months;
 
@@ -143,8 +143,8 @@ public class AllTransactionFragment extends Fragment {
         this.months = getResources().getStringArray(R.array.months);
 
         Calendar date = Calendar.getInstance();
-        year = date.get(Calendar.YEAR);
-        month = date.get(Calendar.MONTH)+1;
+
+        main = (MainActivity) getActivity();
 
         setMonthTextView();
 
@@ -353,7 +353,7 @@ public class AllTransactionFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        ((MainActivity)getActivity()).setPosition(MainActivity.INDEX_DRAWER_ALLTRANSACTION);
+        main.setPosition(main.INDEX_DRAWER_ALLTRANSACTION);
         getTransactions();
     }
 
@@ -416,7 +416,7 @@ public class AllTransactionFragment extends Fragment {
         lastEditedId = 0;
         lastEditedId = 0;
         long lastEditDate = 0;
-        List<Transaction> dbTransactions = databaseAdapter.getTransactions(getContext(), this.year, this.month, false) ;
+        List<Transaction> dbTransactions = databaseAdapter.getTransactions(getContext(), main.year, main.month, false) ;
         for (Transaction transaction: dbTransactions) {
             if ( !showOnlyPlanned || transaction.getAmount_fact() == 0 ) {
                 transactions.add(transaction);
@@ -441,31 +441,19 @@ public class AllTransactionFragment extends Fragment {
     }
 
     public void prevMonth(){
-        if (this.month == 1 ) {
-            if ( this.year == 2000 ) return;
-            this.month = 12;
-            this.year--;
-        } else {
-            this.month = this.month - 1;
-        }
+        main.prevMonth();
         setMonthTextView();
         this.getTransactions();
     }
 
     public void nextMonth(){
-        if (this.month == 12 ) {
-            if ( this.year == 3000 ) return;
-            this.month = 1;
-            this.year++;
-        } else {
-            this.month = this.month + 1;
-        }
+        main.nextMonth();
         setMonthTextView();
         this.getTransactions();
     }
 
     private void setMonthTextView() {
-        this.textView_Month.setText(String.format(Locale.getDefault(),"%d / %s", this.year, this.months[this.month]));
+        this.textView_Month.setText(String.format(Locale.getDefault(),"%d / %s", main.year, this.months[main.month]));
     }
 
     public void add(String transStat, String planned){
@@ -509,7 +497,7 @@ public class AllTransactionFragment extends Fragment {
     }
 
     private void planRegular() {
-        PlanRegular.setRegularToPlanned(getContext(), year, month);
+        PlanRegular.setRegularToPlanned(getContext(), main.year, main.month);
         getTransactions();
     }
 }
