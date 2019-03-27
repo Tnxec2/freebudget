@@ -99,5 +99,9 @@
     <string name="not_set">keine</string>
     <string name="exportOK">Export OK.</string>
     <string name="importOK">Import OK.</string>
+    <string name="yes">Ja</string>
+    <string name="no">Nein</string>
+    <string name="do_you_want_restore">Möchten Sie die Datenbank wiederherstellen?</string>
+    <string name="db_restore">Datenbank wiederherstellen</string>
 
 </resources>

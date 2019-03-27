@@ -1,10 +1,12 @@
 package de.kontranik.freebudget.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -85,7 +87,7 @@ public class ToolsActivity extends AppCompatActivity {
         btn_restore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                restore(v);
+                restoreDialog(v);
             }
         });
         btn_close.setOnClickListener(new View.OnClickListener() {
@@ -146,10 +148,43 @@ public class ToolsActivity extends AppCompatActivity {
         }
     }
 
+    private void restoreDialog(final View view) {
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                view.getContext());
+
+        // set title
+        alertDialogBuilder.setTitle(R.string.db_restore);
+
+        // set dialog message
+        alertDialogBuilder.setMessage(R.string.do_you_want_restore);
+        alertDialogBuilder.setCancelable(false);
+        alertDialogBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // if this button is clicked, close
+                // current activity
+                restore(view);
+            }
+        });
+        alertDialogBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // if this button is clicked, just close
+                // the dialog box and do nothing
+                dialog.cancel();
+            }
+        });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
+    }
+
     private void restore(View view) {
         try {
-            if ( BackupAndRestore.importDB(view.getContext())) {
-                Toast.makeText(this, this.getResources().getString(R.string.importOK),
+            if (BackupAndRestore.importDB(view.getContext())) {
+                Toast.makeText(this, view.getResources().getString(R.string.importOK),
                         Toast.LENGTH_LONG).show();
             }
         } catch (IOException e) {

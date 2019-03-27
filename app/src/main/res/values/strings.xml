@@ -90,6 +90,10 @@
     <string name="start">start</string>
     <string name="end">end</string>
     <string name="not_set">not set</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="do_you_want_restore">Do you want to restore the database?!</string>
+    <string name="db_restore">Restore Database</string>
 
     <string-array name="navigation_drawer_items_array">
         <item>Overview</item>
