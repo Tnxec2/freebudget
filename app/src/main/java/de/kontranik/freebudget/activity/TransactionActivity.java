@@ -147,9 +147,12 @@ public class TransactionActivity extends AppCompatActivity {
 
             acTextViewCategory.setText(transaction.getCategory());
 
-            editTextAmountFact.setText(String.valueOf(Math.abs(transaction.getAmount_fact())));
-            editTextAmountPlanned.setText(String.valueOf(Math.abs(transaction.getAmount_planned())));
-
+            if ( transaction.getAmount_fact() != 0 ) {
+                editTextAmountFact.setText(String.valueOf(Math.abs(transaction.getAmount_fact())));
+            }
+            if ( transaction.getAmount_planned() != 0 ) {
+                editTextAmountPlanned.setText(String.valueOf(Math.abs(transaction.getAmount_planned())));
+            }
             if (transaction.getDate() > 0) displayDate = transaction.getDate();
             else displayDate = new Date().getTime();
 
@@ -198,6 +201,7 @@ public class TransactionActivity extends AppCompatActivity {
         editTextAmountPlanned.setEnabled(planned);
         editTextAmountFact.setEnabled(!planned);
         buttonCopyAmount.setEnabled(!planned);
+
     }
 
     @Override
