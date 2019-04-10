@@ -286,7 +286,7 @@ public class RegularFragment extends Fragment {
     }
 
     public void prevMonth(){
-        if (month == 1 ) {
+        if (month == 0 ) {
             month = 12;
         } else {
             month = month - 1;
@@ -297,7 +297,7 @@ public class RegularFragment extends Fragment {
 
     public void nextMonth(){
         if (month == 12 ) {
-            month = 1;
+            month = 0;
         } else {
             month = month + 1;
         }
