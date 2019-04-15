@@ -60,7 +60,9 @@
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:stretchColumns="*">
+            android:shrinkColumns="0"
+            android:stretchColumns="*"
+            >
 
             <TableRow
                 android:layout_width="match_parent"
@@ -72,11 +74,6 @@
                     android:text=""
                     android:textAlignment="center"
                     android:textSize="18sp" />
-
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
 
                 <TextView
                     android:id="@+id/textView_title_planned"
@@ -105,11 +102,6 @@
                     android:text="@string/activity_main_receipts_planned"
                     android:textSize="18sp" />
 
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
                 <TextView
                     android:id="@+id/textView_receipts_planned"
                     android:layout_width="wrap_content"
@@ -136,11 +128,6 @@
                     android:layout_height="wrap_content"
                     android:text="@string/activity_main_receipts_unplanned"
                     android:textSize="18sp" />
-
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -169,11 +156,6 @@
                     android:text="@string/activity_main_spending_planned"
                     android:textSize="18sp" />
 
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
                 <TextView
                     android:id="@+id/textView_spending_planned"
                     android:layout_width="wrap_content"
@@ -200,11 +182,6 @@
                     android:layout_height="wrap_content"
                     android:text="@string/activity_main_spending_unplanned"
                     android:textSize="18sp" />
-
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -233,11 +210,6 @@
                     android:text="@string/activity_main_total"
                     android:textSize="18sp" />
 
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
                 <TextView
                     android:id="@+id/textView_total_planned"
                     android:layout_width="wrap_content"
@@ -255,6 +227,54 @@
                     android:textAlignment="center"
                     android:textSize="18sp"
                     android:textStyle="bold" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/receipts_planned_rest"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/textView_receipts_planned_rest"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/receipts_planned_rest"
+                    android:textAlignment="center"
+                    android:textSize="18sp"  />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""  />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/spending_planned_rest"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/textView_spending_planned_rest"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/spending_planned_rest"
+                    android:textAlignment="center"
+                    android:textSize="18sp"  />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""  />
             </TableRow>
 
         </TableLayout>

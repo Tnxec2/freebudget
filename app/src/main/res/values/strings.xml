@@ -94,6 +94,8 @@
     <string name="no">No</string>
     <string name="do_you_want_restore">Do you want to restore the database?!</string>
     <string name="db_restore">Restore Database</string>
+    <string name="receipts_planned_rest">Income planned rest</string>
+    <string name="spending_planned_rest">Bills planned rest</string>
 
     <string-array name="navigation_drawer_items_array">
         <item>Overview</item>

@@ -52,6 +52,7 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
     private TextView textView_Month;
     private TextView textView_receipts_planned, textView_spending_planned, textView_total_planned;
     private TextView textView_receipts_fact_planned, textView_receipts_fact_unplanned, textView_spending_fact_planned, textView_spending_fact_unplanned, textView_total_fact;
+    private TextView textView_receipts_planned_rest, textView_spending_planned_rest;
 
     private ImageButton btn_prevMonth, btn_nextMonth;
     private FloatingActionButton fab_add, fab_add_plus, fab_add_minus, fab_add_plus_planned, fab_add_minus_planned;
@@ -75,6 +76,10 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
     double spending_fact_unplanned = 0;
     double total_planned = 0;
     double total_fact = 0;
+
+    double receipts_planned_rest = 0;
+    double spending_planned_rest = 0;
+    double total_diff = 0;
 
     public OverviewFragment() {
         // Required empty public constructor
@@ -108,6 +113,9 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         textView_spending_fact_unplanned = (TextView) view.findViewById(R.id.textView_spending_fact_unplanned);
         textView_total_planned = (TextView) view.findViewById(R.id.textView_total_planned);
         textView_total_fact = (TextView) view.findViewById(R.id.textView_total_fact);
+
+        textView_receipts_planned_rest = (TextView) view.findViewById(R.id.textView_receipts_planned_rest);
+        textView_spending_planned_rest = (TextView) view.findViewById(R.id.textView_spending_planned_rest);
 
         btn_prevMonth = (ImageButton) view.findViewById(R.id.btn_prevMonth);
         btn_nextMonth = (ImageButton) view.findViewById(R.id.btn_nextMonth);
@@ -377,6 +385,9 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
             } else if ( amount_fact < 0 ) {
                 if ( amount_planned < 0 ) spending_fact_planned += Math.abs(amount_fact);
                 else spending_fact_unplanned += Math.abs(amount_fact);
+            } else if ( amount_fact == 0 ) {
+                if ( amount_planned > 0 ) receipts_planned_rest += amount_planned;
+                if ( amount_planned < 0 ) spending_planned_rest += Math.abs(amount_planned);
             }
             total_fact += amount_fact;
 
@@ -470,6 +481,12 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
 
         textView_total_fact.setText(String.format(Locale.getDefault(),"%1$,.2f", total_fact));
         textView_total_planned.setText(String.format(Locale.getDefault(),"%1$,.2f", total_planned));
+
+        textView_receipts_planned_rest.setText(String.format(Locale.getDefault(),"%1$,.2f", receipts_planned_rest));
+        textView_receipts_planned_rest.setTextColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
+
+        textView_spending_planned_rest.setText(String.format(Locale.getDefault(),"%1$,.2f", spending_planned_rest));
+        textView_spending_planned_rest.setTextColor(ContextCompat.getColor(getContext(), R.color.colorRed));
 
         if (total_planned > 0) {
             textView_total_planned.setTextColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
