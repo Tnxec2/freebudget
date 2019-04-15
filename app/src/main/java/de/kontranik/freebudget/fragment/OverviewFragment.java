@@ -52,7 +52,7 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
     private TextView textView_Month;
     private TextView textView_receipts_planned, textView_spending_planned, textView_total_planned;
     private TextView textView_receipts_fact_planned, textView_receipts_fact_unplanned, textView_spending_fact_planned, textView_spending_fact_unplanned, textView_total_fact;
-    private TextView textView_receipts_planned_rest, textView_spending_planned_rest;
+    private TextView textView_receipts_planned_rest, textView_spending_planned_rest, textView_total_diff;
 
     private ImageButton btn_prevMonth, btn_nextMonth;
     private FloatingActionButton fab_add, fab_add_plus, fab_add_minus, fab_add_plus_planned, fab_add_minus_planned;
@@ -116,6 +116,8 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
 
         textView_receipts_planned_rest = (TextView) view.findViewById(R.id.textView_receipts_planned_rest);
         textView_spending_planned_rest = (TextView) view.findViewById(R.id.textView_spending_planned_rest);
+
+        textView_total_diff = (TextView) view.findViewById(R.id.textView_total_diff);
 
         btn_prevMonth = (ImageButton) view.findViewById(R.id.btn_prevMonth);
         btn_nextMonth = (ImageButton) view.findViewById(R.id.btn_nextMonth);
@@ -418,6 +420,8 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
             categoryList.sort(Category.CategoryWeightComparator);
         }
 
+        total_diff = total_fact + receipts_planned_rest - spending_planned_rest;
+
         setSummen();
 
         dbAdapter.close();
@@ -488,6 +492,8 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         textView_spending_planned_rest.setText(String.format(Locale.getDefault(),"%1$,.2f", spending_planned_rest));
         textView_spending_planned_rest.setTextColor(ContextCompat.getColor(getContext(), R.color.colorRed));
 
+        textView_total_diff.setText(String.format(Locale.getDefault(),"%1$,.2f", total_diff));
+
         if (total_planned > 0) {
             textView_total_planned.setTextColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
         } else {
@@ -497,6 +503,12 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
             textView_total_fact.setTextColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
         } else {
             textView_total_fact.setTextColor(ContextCompat.getColor(getContext(), R.color.colorRed));
+        }
+
+        if (total_diff > 0) {
+            textView_total_diff.setTextColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
+        } else {
+            textView_total_diff.setTextColor(ContextCompat.getColor(getContext(), R.color.colorRed));
         }
     }
 
@@ -511,5 +523,8 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         spending_fact_planned = 0;
         spending_fact_unplanned = 0;
         spending_planned = 0;
+        receipts_planned_rest = 0;
+        spending_planned_rest = 0;
+        total_diff = 0;
     }
 }

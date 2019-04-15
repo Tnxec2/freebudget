@@ -105,5 +105,6 @@
     <string name="db_restore">Datenbank wiederherstellen</string>
     <string name="receipts_planned_rest">Rest geplante Einnahmen</string>
     <string name="spending_planned_rest">Rest geplante Ausgaben</string>
+    <string name="total_diff">Differenz gesamt</string>
 
 </resources>
