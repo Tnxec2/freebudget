@@ -11,3 +11,8 @@
 	- copy amount from regular
 	- correct the date of payment
 3) have the overview about your free budget under control
+
+![menu](screens/menu.png?raw=true "menu")
+![regular](screens/regular.png?raw=true "regular")
+![all](screens/all.png?raw=true "all")
+![overview](screens/overview.png?raw=true "overview")
