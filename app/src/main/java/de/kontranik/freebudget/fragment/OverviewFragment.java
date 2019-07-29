@@ -17,6 +17,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -199,6 +200,18 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
             }
         });
 
+        listView_categoryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
+
+                //If you wanna send any data to nextActicity.class you can use
+                main.category = categoryList.get(position).getName();
+                main.selectItem(main.INDEX_DRAWER_ALLTRANSACTION);
+            }
+
+        });
+
         fab_add.setOnTouchListener(new View.OnTouchListener () {
             public boolean onTouch (View view, MotionEvent motionEvent){
                 isMove = false;
@@ -345,9 +358,11 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
                 nextMonth();
                 break;
             case R.id.button_AllTransactions:
+                main.category = null;
                 main.selectItem(main.INDEX_DRAWER_ALLTRANSACTION);
                 break;
             case R.id.button_Regular:
+                main.category = null;
                 main.selectItem(main.INDEX_DRAWER_REGULAR);
                 break;
             default:

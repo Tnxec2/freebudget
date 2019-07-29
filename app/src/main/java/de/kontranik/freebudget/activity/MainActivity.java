@@ -42,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
 
     public int month, year;
 
+    public String category;
+
     int position;
 
     @Override
@@ -191,7 +193,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void setTitle(int index) {
         TextView textViewTitle = (TextView) findViewById(R.id.title);
-        textViewTitle.setText(mNavigationDrawerItemTitles[index]);
+        String title = mNavigationDrawerItemTitles[index];
+        if ( index == INDEX_DRAWER_ALLTRANSACTION ) {
+            title = this.category;
+        }
+        textViewTitle.setText(title);
     }
 
     @Override

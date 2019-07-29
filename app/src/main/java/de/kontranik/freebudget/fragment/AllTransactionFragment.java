@@ -419,17 +419,19 @@ public class AllTransactionFragment extends Fragment {
         List<Transaction> dbTransactions = databaseAdapter.getTransactions(getContext(), main.year, main.month, false) ;
         for (Transaction transaction: dbTransactions) {
             if ( !showOnlyPlanned || transaction.getAmount_fact() == 0 ) {
-                transactions.add(transaction);
+                if ( main.category == null || ( main.category != null && main.category.equals(transaction.getCategory() ) )) {
+                    transactions.add(transaction);
 
-                if ( transaction.getAmount_fact() != 0 && transaction.getDate_edit() > lastEditDate ) {
-                    lastEditDate = transaction.getDate_edit();
-                    lastEditedId = transaction.getId();
+                    if ( transaction.getAmount_fact() != 0 && transaction.getDate_edit() > lastEditDate ) {
+                        lastEditDate = transaction.getDate_edit();
+                        lastEditedId = transaction.getId();
+                    }
                 }
             }
         }
 
         //
-        if ( transactions.size() == 0) {
+        if ( transactions.size() == 0 && !showOnlyPlanned) {
             btn_planRegular.setVisibility(View.VISIBLE);
         } else {
             btn_planRegular.setVisibility(View.GONE);
