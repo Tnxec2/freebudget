@@ -1,0 +1,91 @@
+package de.kontranik.freebudget.adapter
+
+import android.content.Context
+import de.kontranik.freebudget.model.RegularTransaction.description
+import de.kontranik.freebudget.model.RegularTransaction.amount
+import de.kontranik.freebudget.model.RegularTransaction.day
+import de.kontranik.freebudget.model.RegularTransaction.category
+import de.kontranik.freebudget.model.RegularTransaction.date_start
+import de.kontranik.freebudget.model.RegularTransaction.date_end
+import de.kontranik.freebudget.model.RegularTransaction
+import android.widget.ArrayAdapter
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import de.kontranik.freebudget.R
+import androidx.core.content.ContextCompat
+import android.widget.TextView
+import java.text.DateFormat
+import java.util.*
+
+class RegularTransactionAdapter(
+    context: Context?,
+    private val layout: Int,
+    private val regularTransactions: MutableList<RegularTransaction>
+) : ArrayAdapter<RegularTransaction?>(
+    context!!, layout, regularTransactions
+) {
+    private val inflater: LayoutInflater
+    fun updateTransactionsList(newlist: List<RegularTransaction>?) {
+        regularTransactions.clear()
+        regularTransactions.addAll(newlist!!)
+        notifyDataSetChanged()
+    }
+
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        var convertView = convertView
+        val viewHolder: ViewHolder
+        if (convertView == null) {
+            convertView =
+                inflater.inflate(R.layout.list_view_item_regular_transaction_item, parent, false)
+            viewHolder = ViewHolder(convertView)
+            convertView.tag = viewHolder
+        } else {
+            viewHolder = convertView.tag as ViewHolder
+        }
+        val regularTransaction = regularTransactions[position]
+        viewHolder.descriptionView.text = regularTransaction.description
+        viewHolder.amountView.text =
+            String.format(Locale.getDefault(), "%1$,.2f", regularTransaction.amount)
+        if (regularTransaction.amount > 0) {
+            viewHolder.amountView.setTextColor(
+                ContextCompat.getColor(parent.context, R.color.colorGreen)
+            )
+        } else {
+            viewHolder.amountView.setTextColor(
+                ContextCompat.getColor(parent.context, R.color.colorRed)
+            )
+        }
+        var text = parent.resources.getString(
+            R.string.subTitleTransaction,
+            java.lang.String.valueOf(regularTransaction.day),
+            regularTransaction.category
+        )
+        val df = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault())
+        //SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy H:mm:ss S");
+        if (regularTransaction.date_start > 0) text += ", " + context.getString(R.string.start) + ": " + df.format(
+            regularTransaction.date_start
+        )
+        if (regularTransaction.date_end > 0) text += ", " + context.getString(R.string.end) + ": " + df.format(
+            regularTransaction.date_end
+        )
+        viewHolder.categoryView.text = text
+        return convertView!!
+    }
+
+    private inner class ViewHolder internal constructor(view: View) {
+        val amountView: TextView
+        val descriptionView: TextView
+        val categoryView: TextView
+
+        init {
+            descriptionView = view.findViewById(R.id.textView_description_regular)
+            amountView = view.findViewById(R.id.textView_amount_regular)
+            categoryView = view.findViewById(R.id.textView_category_regular)
+        }
+    }
+
+    init {
+        inflater = LayoutInflater.from(context)
+    }
+}
