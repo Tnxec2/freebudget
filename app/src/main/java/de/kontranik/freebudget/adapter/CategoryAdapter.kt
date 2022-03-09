@@ -1,8 +1,6 @@
 package de.kontranik.freebudget.adapter
 
 import android.content.Context
-import de.kontranik.freebudget.model.Category.name
-import de.kontranik.freebudget.model.Category.weight
 import android.widget.ArrayAdapter
 import android.view.LayoutInflater
 import android.view.View
@@ -20,16 +18,16 @@ class CategoryAdapter(
 ) : ArrayAdapter<Category?>(
     context!!, layout, categoryList
 ) {
-    private val inflater: LayoutInflater
+    private val inflater: LayoutInflater = LayoutInflater.from(context)
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        var convertView = convertView
+        var view = convertView
         val viewHolder: ViewHolder
-        if (convertView == null) {
-            convertView = inflater.inflate(layout, parent, false)
-            viewHolder = ViewHolder(convertView)
-            convertView.tag = viewHolder
+        if (view == null) {
+            view = inflater.inflate(layout, parent, false)
+            viewHolder = ViewHolder(view)
+            view.tag = viewHolder
         } else {
-            viewHolder = convertView.tag as ViewHolder
+            viewHolder = view.tag as ViewHolder
         }
         val category = categoryList[position]
         viewHolder.textView_CategoryName.text = category.name
@@ -40,23 +38,13 @@ class CategoryAdapter(
         layoutParams.width =
             (category.weight * OverviewFragment.maxWidth / OverviewFragment.maxCategoryWeight).toInt()
         viewHolder.textView_CategoryWeightBackground.layoutParams = layoutParams
-        return convertView!!
+        return view!!
     }
 
     private inner class ViewHolder internal constructor(view: View) {
-        val textView_CategoryName: TextView
-        val textView_CategoryWeight: TextView
-        val textView_CategoryWeightBackground: TextView
-
-        init {
-            textView_CategoryName = view.findViewById(R.id.textView_CategoryName)
-            textView_CategoryWeight = view.findViewById(R.id.textView_CategoryWeight)
-            textView_CategoryWeightBackground =
-                view.findViewById(R.id.textView_CategoryWeightBackground)
-        }
+        val textView_CategoryName: TextView = view.findViewById(R.id.textView_CategoryName)
+        val textView_CategoryWeight: TextView = view.findViewById(R.id.textView_CategoryWeight)
+        val textView_CategoryWeightBackground: TextView = view.findViewById(R.id.textView_CategoryWeightBackground)
     }
 
-    init {
-        inflater = LayoutInflater.from(context)
-    }
 }

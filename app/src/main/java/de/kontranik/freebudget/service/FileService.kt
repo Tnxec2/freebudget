@@ -1,33 +1,11 @@
 package de.kontranik.freebudget.service
 
-import de.kontranik.freebudget.model.RegularTransaction.month
-import de.kontranik.freebudget.model.RegularTransaction.day
-import de.kontranik.freebudget.model.RegularTransaction.description
-import de.kontranik.freebudget.model.RegularTransaction.category
-import de.kontranik.freebudget.model.RegularTransaction.amount
-import de.kontranik.freebudget.model.RegularTransaction.date_start
-import de.kontranik.freebudget.model.RegularTransaction.date_end
-import de.kontranik.freebudget.model.RegularTransaction.date_create
-import de.kontranik.freebudget.model.Transaction.regular_id
-import de.kontranik.freebudget.model.Transaction.description
-import de.kontranik.freebudget.model.Transaction.category
-import de.kontranik.freebudget.model.Transaction.date
-import de.kontranik.freebudget.model.Transaction.amount_planned
-import de.kontranik.freebudget.model.Transaction.amount_fact
-import de.kontranik.freebudget.model.Transaction.date_create
-import de.kontranik.freebudget.model.RegularTransaction.id
+
 import kotlin.Throws
 import android.os.Environment
-import de.kontranik.freebudget.database.DatabaseHelper
 import de.kontranik.freebudget.model.RegularTransaction
 import de.kontranik.freebudget.R
 import de.kontranik.freebudget.database.DatabaseAdapter
-import android.view.View.OnTouchListener
-import android.view.GestureDetector
-import android.view.MotionEvent
-import android.view.GestureDetector.SimpleOnGestureListener
-import de.kontranik.freebudget.service.OnSwipeTouchListener.GestureListener
-import android.app.Activity
 import android.content.Context
 import de.kontranik.freebudget.config.Config
 import de.kontranik.freebudget.model.Transaction
@@ -38,6 +16,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 object FileService {
+    @JvmStatic
     @Throws(Exception::class)
     fun importFileRegular(filename: String?, context: Context): Boolean {
         val regularTransactionList: MutableList<RegularTransaction> = ArrayList()
@@ -113,6 +92,7 @@ object FileService {
         return true
     }
 
+    @JvmStatic
     @Throws(IOException::class)
     fun exportFileRegular(fileName: String, context: Context?): String {
         val dbAdapter = DatabaseAdapter(context)
@@ -120,10 +100,10 @@ object FileService {
         val regularTransactions = dbAdapter.allRegular
         val df1: DateFormat = SimpleDateFormat(Config.DATE_LONG, Locale.US)
         val df2: DateFormat = SimpleDateFormat(Config.DATE_SHORT, Locale.US)
-        val FILENAME = fileName + "_" + df1.format(Date()) + ".csv"
+        val fileName = fileName + "_" + df1.format(Date()) + ".csv"
         val directory = Environment.getExternalStorageDirectory()
-        val file_export = File(directory, FILENAME)
-        val out = FileWriter(file_export)
+        val fileExport = File(directory, fileName)
+        val out = FileWriter(fileExport)
         for (regularTransaction in regularTransactions) {
             out.append(java.lang.String.valueOf(regularTransaction.month))
                 .append(Config.CSV_DELIMITER)
@@ -148,9 +128,10 @@ object FileService {
         }
         out.close()
         dbAdapter.close()
-        return file_export.absolutePath
+        return fileExport.absolutePath
     }
 
+    @JvmStatic
     @Throws(Exception::class)
     fun importFileTransaction(filename: String?, context: Context): Boolean {
         val transactionList: MutableList<Transaction> = ArrayList()
@@ -206,6 +187,7 @@ object FileService {
         return true
     }
 
+    @JvmStatic
     @Throws(IOException::class)
     fun exportFileTransaction(fileName: String, context: Context?): String {
         val dbAdapter = DatabaseAdapter(context)
@@ -213,10 +195,10 @@ object FileService {
         val transactions = dbAdapter.getTransactions(context)
         val df1: DateFormat = SimpleDateFormat(Config.DATE_LONG, Locale.US)
         val df2: DateFormat = SimpleDateFormat(Config.DATE_SHORT, Locale.US)
-        val FILENAME = fileName + "_" + df1.format(Date()) + ".csv"
+        val fileName = fileName + "_" + df1.format(Date()) + ".csv"
         val directory = Environment.getExternalStorageDirectory()
-        val file_export = File(directory, FILENAME)
-        val out = FileWriter(file_export)
+        val fileExport = File(directory, fileName)
+        val out = FileWriter(fileExport)
         for (transaction in transactions) {
             out.append(
                 transaction.regular_id.toString() + Config.CSV_DELIMITER +
@@ -228,6 +210,6 @@ object FileService {
         }
         out.close()
         dbAdapter.close()
-        return file_export.absolutePath
+        return fileExport.absolutePath
     }
 }

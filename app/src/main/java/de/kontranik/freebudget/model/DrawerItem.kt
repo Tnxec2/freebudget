@@ -1,4 +1,3 @@
 package de.kontranik.freebudget.model
 
-class DrawerItem     // Constructor.
-    (var icon: Int, var name: String)
+class DrawerItem(var icon: Int, var name: String)

@@ -1,12 +1,6 @@
 package de.kontranik.freebudget.adapter
 
 import android.content.Context
-import de.kontranik.freebudget.model.RegularTransaction.description
-import de.kontranik.freebudget.model.RegularTransaction.amount
-import de.kontranik.freebudget.model.RegularTransaction.day
-import de.kontranik.freebudget.model.RegularTransaction.category
-import de.kontranik.freebudget.model.RegularTransaction.date_start
-import de.kontranik.freebudget.model.RegularTransaction.date_end
 import de.kontranik.freebudget.model.RegularTransaction
 import android.widget.ArrayAdapter
 import android.view.LayoutInflater
@@ -22,10 +16,11 @@ class RegularTransactionAdapter(
     context: Context?,
     private val layout: Int,
     private val regularTransactions: MutableList<RegularTransaction>
-) : ArrayAdapter<RegularTransaction?>(
+) : ArrayAdapter<RegularTransaction>(
     context!!, layout, regularTransactions
 ) {
-    private val inflater: LayoutInflater
+    private val inflater: LayoutInflater = LayoutInflater.from(context)
+
     fun updateTransactionsList(newlist: List<RegularTransaction>?) {
         regularTransactions.clear()
         regularTransactions.addAll(newlist!!)
@@ -33,15 +28,15 @@ class RegularTransactionAdapter(
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        var convertView = convertView
+        var view = convertView
         val viewHolder: ViewHolder
-        if (convertView == null) {
-            convertView =
+        if (view == null) {
+            view =
                 inflater.inflate(R.layout.list_view_item_regular_transaction_item, parent, false)
-            viewHolder = ViewHolder(convertView)
-            convertView.tag = viewHolder
+            viewHolder = ViewHolder(view)
+            view.tag = viewHolder
         } else {
-            viewHolder = convertView.tag as ViewHolder
+            viewHolder = view.tag as ViewHolder
         }
         val regularTransaction = regularTransactions[position]
         viewHolder.descriptionView.text = regularTransaction.description
@@ -70,22 +65,13 @@ class RegularTransactionAdapter(
             regularTransaction.date_end
         )
         viewHolder.categoryView.text = text
-        return convertView!!
+        return view!!
     }
 
     private inner class ViewHolder internal constructor(view: View) {
-        val amountView: TextView
-        val descriptionView: TextView
-        val categoryView: TextView
-
-        init {
-            descriptionView = view.findViewById(R.id.textView_description_regular)
-            amountView = view.findViewById(R.id.textView_amount_regular)
-            categoryView = view.findViewById(R.id.textView_category_regular)
-        }
+        val amountView: TextView = view.findViewById(R.id.textView_amount_regular)
+        val descriptionView: TextView = view.findViewById(R.id.textView_description_regular)
+        val categoryView: TextView = view.findViewById(R.id.textView_category_regular)
     }
 
-    init {
-        inflater = LayoutInflater.from(context)
-    }
 }

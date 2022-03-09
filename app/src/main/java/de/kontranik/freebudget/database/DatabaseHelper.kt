@@ -1,9 +1,8 @@
 package de.kontranik.freebudget.database
 
 import android.content.Context
-import android.database.sqlite.SQLiteOpenHelper
-import de.kontranik.freebudget.database.DatabaseHelper
 import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteOpenHelper
 
 class DatabaseHelper(context: Context?) : SQLiteOpenHelper(context, DATABASE_NAME, null, SCHEMA) {
     override fun onCreate(db: SQLiteDatabase) {

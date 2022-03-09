@@ -39,6 +39,7 @@ import java.io.IOException
  * Source: http://stackoverflow.com/questions/18322401/is-it-posible-backup-and-restore-a-database-file-in-android-non-root-devices
  */
 object BackupAndRestore {
+    @JvmStatic
     @Throws(IOException::class)
     fun importDB(context: Context): Boolean {
         val sd = Environment.getExternalStorageDirectory()
@@ -56,6 +57,7 @@ object BackupAndRestore {
         return false
     }
 
+    @JvmStatic
     @Throws(IOException::class)
     fun exportDB(context: Context): Boolean {
         val sd = Environment.getExternalStorageDirectory()

@@ -1,86 +1,77 @@
 package de.kontranik.freebudget.activity
 
-import android.support.v7.app.AppCompatActivity
+import android.content.SharedPreferences
+import android.os.Bundle
 import android.view.View
-import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
+import de.kontranik.freebudget.R
 import de.kontranik.freebudget.config.Config
+import de.kontranik.freebudget.databinding.ActivitySettingsBinding
 
 class SettingsActivity : AppCompatActivity() {
-    var settings: SharedPreferences? = null
-    var radioButton_Description: RadioButton? = null
-    var radioButton_CategoryName: RadioButton? = null
-    var radioButton_Amount: RadioButton? = null
-    var radioButton_Date: RadioButton? = null
-    var radioButton_EditDate: RadioButton? = null
-    var radioButton_notsort: RadioButton? = null
-    var radioButton_AbsAmount: RadioButton? = null
-    var checkBox_Sortdesc: CheckBox? = null
-    var checkBox_MarkLastEdited: CheckBox? = null
-    protected fun onCreate(savedInstanceState: Bundle?) {
+    private lateinit var binding: ActivitySettingsBinding
+
+    private lateinit var settings: SharedPreferences
+
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
+
+        binding = ActivitySettingsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         settings = getSharedPreferences(Config.PREFS_FILE, MODE_PRIVATE)
         setTitle(R.string.app_settings)
-        radioButton_Description = findViewById(R.id.radioButton_sort_description) as RadioButton?
-        radioButton_CategoryName = findViewById(R.id.radioButton_sort_categoryname) as RadioButton?
-        radioButton_Amount = findViewById(R.id.radioButton_sort_amount) as RadioButton?
-        radioButton_AbsAmount = findViewById(R.id.radioButton_sort_absamount) as RadioButton?
-        radioButton_Date = findViewById(R.id.radioButton_sort_date) as RadioButton?
-        radioButton_EditDate = findViewById(R.id.radioButton_sort_edit_date) as RadioButton?
-        radioButton_notsort = findViewById(R.id.radioButton_sort_notsort) as RadioButton?
-        checkBox_Sortdesc = findViewById(R.id.checkBox_sort_desc) as CheckBox?
-        checkBox_MarkLastEdited = findViewById(R.id.checkBox_markLastEdited) as CheckBox?
-        val btn_close = findViewById(R.id.btn_close) as Button
-        btn_close.setOnClickListener { finish() }
-        val buttonSave = findViewById(R.id.button) as Button
-        buttonSave.setOnClickListener { v -> saveConfig(v) }
-        val sort_order: String =
-            settings.getString(Config.PREF_ORDER_BY, Config.PREF_ORDER_BY_NOT_SORT)
-        when (sort_order) {
-            Config.PREF_ORDER_BY_DESCRIPTION -> radioButton_Description.setChecked(true)
-            Config.PREF_ORDER_BY_CATEGORY_NAME -> radioButton_CategoryName.setChecked(true)
-            Config.PREF_ORDER_BY_AMOUNT -> radioButton_Amount.setChecked(true)
-            Config.PREF_ORDER_BY_ABS_AMOUNT -> radioButton_AbsAmount.setChecked(true)
-            Config.PREF_ORDER_BY_DATE -> radioButton_Date.setChecked(true)
-            Config.PREF_ORDER_BY_EDIT_DATE -> radioButton_EditDate.setChecked(true)
-            Config.PREF_ORDER_BY_NOT_SORT -> radioButton_notsort.setChecked(true)
-            else -> radioButton_Description.setChecked(true)
+
+        binding.btnClose.setOnClickListener { finish() }
+        binding.buttonSave.setOnClickListener { v -> saveConfig(v) }
+
+        when (settings.getString(Config.PREF_ORDER_BY, Config.PREF_ORDER_BY_NOT_SORT)!!) {
+            Config.PREF_ORDER_BY_DESCRIPTION -> binding.radioButtonSortDescription.isChecked = true
+            Config.PREF_ORDER_BY_CATEGORY_NAME -> binding.radioButtonSortCategoryname.isChecked =
+                true
+            Config.PREF_ORDER_BY_AMOUNT -> binding.radioButtonSortAmount.isChecked = true
+            Config.PREF_ORDER_BY_ABS_AMOUNT -> binding.radioButtonSortAbsamount.isChecked = true
+            Config.PREF_ORDER_BY_DATE -> binding.radioButtonSortDate.isChecked = true
+            Config.PREF_ORDER_BY_EDIT_DATE -> binding.radioButtonSortEditDate.isChecked = true
+            Config.PREF_ORDER_BY_NOT_SORT -> binding.radioButtonSortNotsort.isChecked = true
+            else -> binding.radioButtonSortDescription.isChecked = true
         }
-        checkBox_Sortdesc.setChecked(settings.getBoolean(Config.PREF_SORT_DESC, false))
-        checkBox_MarkLastEdited.setChecked(settings.getBoolean(Config.PREF_MARK_LAST_EDITED, false))
+        binding.checkBoxSortDesc.isChecked = settings.getBoolean(Config.PREF_SORT_DESC, false)
+        binding.checkBoxMarkLastEdited.isChecked =
+            settings.getBoolean(Config.PREF_MARK_LAST_EDITED, false)
     }
 
     fun saveConfig(view: View?) {
         var order_by = Config.PREF_ORDER_BY_NOT_SORT
-        // Einstellungen speichern
-        if (radioButton_Description.isChecked()) {
+
+        if (binding.radioButtonSortDescription.isChecked) {
             order_by = Config.PREF_ORDER_BY_DESCRIPTION
         }
-        if (radioButton_CategoryName.isChecked()) {
+        if (binding.radioButtonSortCategoryname.isChecked) {
             order_by = Config.PREF_ORDER_BY_CATEGORY_NAME
         }
-        if (radioButton_Amount.isChecked()) {
+        if (binding.radioButtonSortAmount.isChecked) {
             order_by = Config.PREF_ORDER_BY_AMOUNT
         }
-        if (radioButton_AbsAmount.isChecked()) {
+        if (binding.radioButtonSortAbsamount.isChecked) {
             order_by = Config.PREF_ORDER_BY_ABS_AMOUNT
         }
-        if (radioButton_Date.isChecked()) {
+        if (binding.radioButtonSortDate.isChecked) {
             order_by = Config.PREF_ORDER_BY_DATE
         }
-        if (radioButton_EditDate.isChecked()) {
+        if (binding.radioButtonSortEditDate.isChecked) {
             order_by = Config.PREF_ORDER_BY_EDIT_DATE
         }
-        if (radioButton_notsort.isChecked()) {
+        if (binding.radioButtonSortNotsort.isChecked) {
             order_by = Config.PREF_ORDER_BY_NOT_SORT
         }
 
-        // сохраняем его в настройках
         val prefEditor: SharedPreferences.Editor = settings.edit()
         prefEditor.putString(Config.PREF_ORDER_BY, order_by)
-        prefEditor.putBoolean(Config.PREF_SORT_DESC, checkBox_Sortdesc.isChecked())
-        prefEditor.putBoolean(Config.PREF_MARK_LAST_EDITED, checkBox_MarkLastEdited.isChecked())
+        prefEditor.putBoolean(Config.PREF_SORT_DESC, binding.checkBoxSortDesc.isChecked)
+        prefEditor.putBoolean(Config.PREF_MARK_LAST_EDITED, binding.checkBoxMarkLastEdited.isChecked)
         prefEditor.apply()
+
         finish()
     }
 }

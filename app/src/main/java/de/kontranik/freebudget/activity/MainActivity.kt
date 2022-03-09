@@ -1,105 +1,58 @@
 package de.kontranik.freebudget.activity
 
-import de.kontranik.freebudget.model.Category.name
-import de.kontranik.freebudget.database.DatabaseAdapter.open
-import de.kontranik.freebudget.database.DatabaseAdapter.getCategory
-import de.kontranik.freebudget.database.DatabaseAdapter.close
-import de.kontranik.freebudget.database.DatabaseAdapter.allCategory
-import de.kontranik.freebudget.model.Category.id
-import de.kontranik.freebudget.database.DatabaseAdapter.update
-import de.kontranik.freebudget.database.DatabaseAdapter.insert
-import de.kontranik.freebudget.database.DatabaseAdapter.deleteCategory
-import de.kontranik.freebudget.fragment.AllTransactionFragment.changeShowOnlyPlanned
-import de.kontranik.freebudget.service.SoftKeyboard.showKeyboard
-import de.kontranik.freebudget.database.DatabaseAdapter.getRegularById
-import de.kontranik.freebudget.model.RegularTransaction.description
-import de.kontranik.freebudget.model.RegularTransaction.category
-import de.kontranik.freebudget.model.RegularTransaction.day
-import de.kontranik.freebudget.model.RegularTransaction.amount
-import de.kontranik.freebudget.model.RegularTransaction.month
-import de.kontranik.freebudget.model.RegularTransaction.date_start
-import de.kontranik.freebudget.model.RegularTransaction.date_end
-import de.kontranik.freebudget.service.SoftKeyboard.hideKeyboard
-import de.kontranik.freebudget.database.DatabaseAdapter.deleteRegularTransaction
-import de.kontranik.freebudget.service.FileService.exportFileRegular
-import de.kontranik.freebudget.service.FileService.exportFileTransaction
-import de.kontranik.freebudget.service.BackupAndRestore.exportDB
-import de.kontranik.freebudget.service.BackupAndRestore.importDB
-import de.kontranik.freebudget.service.FileService.importFileRegular
-import de.kontranik.freebudget.service.FileService.importFileTransaction
-import de.kontranik.freebudget.database.DatabaseAdapter.getTransaction
-import de.kontranik.freebudget.model.Transaction.description
-import de.kontranik.freebudget.model.Transaction.category
-import de.kontranik.freebudget.model.Transaction.amount_fact
-import de.kontranik.freebudget.model.Transaction.amount_planned
-import de.kontranik.freebudget.model.Transaction.date
-import de.kontranik.freebudget.model.Transaction.regular_id
-import de.kontranik.freebudget.database.DatabaseAdapter.deleteTransaction
-import androidx.appcompat.app.AppCompatActivity
-import de.kontranik.freebudget.database.DatabaseAdapter
-import android.os.Bundle
-import de.kontranik.freebudget.R
-import android.widget.AdapterView.OnItemClickListener
 import android.content.Intent
-import de.kontranik.freebudget.activity.CategoryListActivity
-import android.app.Activity
-import androidx.drawerlayout.widget.DrawerLayout
-import de.kontranik.freebudget.fragment.AllTransactionFragment
-import de.kontranik.freebudget.model.DrawerItem
-import de.kontranik.freebudget.activity.MainActivity
-import de.kontranik.freebudget.adapter.DrawerItemCustomAdapter
-import de.kontranik.freebudget.activity.MainActivity.DrawerItemClickListener
-import de.kontranik.freebudget.fragment.OverviewFragment
-import de.kontranik.freebudget.fragment.RegularFragment
-import de.kontranik.freebudget.activity.ToolsActivity
-import de.kontranik.freebudget.activity.SettingsActivity
-import android.os.Build
-import android.os.Environment
-import de.kontranik.freebudget.activity.OpenFileActivity
-import de.kontranik.freebudget.service.SoftKeyboard
-import android.app.DatePickerDialog
-import android.app.DatePickerDialog.OnDateSetListener
-import de.kontranik.freebudget.model.RegularTransaction
-import de.kontranik.freebudget.activity.RegularTransactionActivity
-import android.content.SharedPreferences
-import de.kontranik.freebudget.service.FileService
-import de.kontranik.freebudget.service.BackupAndRestore
-import android.content.DialogInterface
-import androidx.core.content.ContextCompat
-import android.content.pm.PackageManager
+import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.AdapterView.OnItemClickListener
+import android.widget.ListView
+import android.widget.Switch
+import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SwitchCompat
 import androidx.appcompat.widget.Toolbar
-import androidx.core.app.ActivityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import de.kontranik.freebudget.activity.TransactionActivity
+import de.kontranik.freebudget.R
+import de.kontranik.freebudget.adapter.DrawerItemCustomAdapter
+import de.kontranik.freebudget.databinding.ActivityMainBinding
+import de.kontranik.freebudget.fragment.AllTransactionFragment
+import de.kontranik.freebudget.fragment.OverviewFragment
+import de.kontranik.freebudget.fragment.RegularFragment
+import de.kontranik.freebudget.model.DrawerItem
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
-    private var mNavigationDrawerItemTitles: Array<String>
-    private var mDrawerLayout: DrawerLayout? = null
-    private var mDrawerList: ListView? = null
-    var toolbar: Toolbar? = null
-    var switchShowOnlyPlanned: Switch? = null
+    private lateinit var binding: ActivityMainBinding
+
+    private lateinit var mNavigationDrawerItemTitles: Array<String>
+
+
+    private lateinit var toolbar: Toolbar
+    private lateinit var switchShowOnlyPlanned: SwitchCompat
+
     var mDrawerToggle: ActionBarDrawerToggle? = null
     var month = 0
     var year = 0
     var category: String? = null
-    var position = 0
+    var position: Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         mNavigationDrawerItemTitles =
             resources.getStringArray(R.array.navigation_drawer_items_array)
-        mDrawerLayout = findViewById<View>(R.id.drawer_layout) as DrawerLayout
-        mDrawerList = findViewById<View>(R.id.left_drawer) as ListView
+
         setupToolbar()
-        switchShowOnlyPlanned = findViewById<View>(R.id.switchShowPlannedOnly) as Switch
+        switchShowOnlyPlanned = findViewById<View>(R.id.switchShowPlannedOnly) as SwitchCompat
         setTextSwitch(false)
-        switchShowOnlyPlanned!!.setOnCheckedChangeListener { buttonView, isChecked -> // do something, the isChecked will be
+        switchShowOnlyPlanned.setOnCheckedChangeListener { buttonView, isChecked -> // do something, the isChecked will be
             // true if the switch is in the On position
             setTextSwitch(isChecked)
 
@@ -109,7 +62,7 @@ class MainActivity : AppCompatActivity() {
                 (contentFragment as AllTransactionFragment).changeShowOnlyPlanned(isChecked)
             }
         }
-        val drawerItem = arrayOfNulls<DrawerItem>(7)
+        val drawerItem = hashMapOf<Int, DrawerItem>()
         drawerItem[INDEX_DRAWER_OVERVIEW] = DrawerItem(
             R.drawable.ic_assessment_black_24dp,
             mNavigationDrawerItemTitles[INDEX_DRAWER_OVERVIEW]
@@ -122,7 +75,7 @@ class MainActivity : AppCompatActivity() {
             R.drawable.ic_repeat_black_24dp,
             mNavigationDrawerItemTitles[INDEX_DRAWER_REGULAR]
         )
-        drawerItem[3] = DrawerItem(0, null)
+        drawerItem[3] = DrawerItem(0, "")
         drawerItem[4] = DrawerItem(R.drawable.ic_folder_black_24dp, mNavigationDrawerItemTitles[3])
         drawerItem[5] = DrawerItem(R.drawable.ic_menu_manage, mNavigationDrawerItemTitles[4])
         drawerItem[6] =
@@ -130,11 +83,11 @@ class MainActivity : AppCompatActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(false)
         supportActionBar!!.setHomeButtonEnabled(true)
         val adapter =
-            DrawerItemCustomAdapter(this, R.layout.list_view_item_navigationdrawer, drawerItem)
-        mDrawerList!!.adapter = adapter
-        mDrawerList!!.onItemClickListener = DrawerItemClickListener()
-        mDrawerLayout = findViewById<View>(R.id.drawer_layout) as DrawerLayout
-        mDrawerLayout!!.setDrawerListener(mDrawerToggle)
+            DrawerItemCustomAdapter(this, R.layout.list_view_item_navigationdrawer, drawerItem.values.toTypedArray())
+        binding.leftDrawer.adapter = adapter
+        binding.leftDrawer.onItemClickListener = DrawerItemClickListener()
+
+        binding.drawerLayout.setDrawerListener(mDrawerToggle)
         setupDrawerToggle()
         val date = Calendar.getInstance()
         if (month == 0) {
@@ -183,11 +136,11 @@ class MainActivity : AppCompatActivity() {
         }
         if (fragment != null) {
             if (position == INDEX_DRAWER_ALLTRANSACTION) {
-                switchShowOnlyPlanned!!.visibility = View.VISIBLE
-                switchShowOnlyPlanned!!.isEnabled = true
+                switchShowOnlyPlanned.visibility = View.VISIBLE
+                switchShowOnlyPlanned.isEnabled = true
             } else {
-                switchShowOnlyPlanned!!.visibility = View.INVISIBLE
-                switchShowOnlyPlanned!!.isEnabled = false
+                switchShowOnlyPlanned.visibility = View.INVISIBLE
+                switchShowOnlyPlanned.isEnabled = false
             }
             val fragmentManager = supportFragmentManager
             val fragmentTransaction = fragmentManager.beginTransaction()
@@ -204,7 +157,7 @@ class MainActivity : AppCompatActivity() {
             this.position = position
         }
         setTitle(this.position)
-        mDrawerLayout!!.closeDrawer(mDrawerList!!)
+        binding.drawerLayout.closeDrawer(binding.leftDrawer)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -236,11 +189,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey(FRAGMENT_POSITION_KEY)) {
-                position = savedInstanceState.getInt(FRAGMENT_POSITION_KEY)
-                setTitle(position)
-            }
+        if (savedInstanceState.containsKey(FRAGMENT_POSITION_KEY)) {
+            position = savedInstanceState.getInt(FRAGMENT_POSITION_KEY)
+            setTitle(position)
         }
     }
 
@@ -253,7 +204,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupDrawerToggle() {
         mDrawerToggle = ActionBarDrawerToggle(
             this,
-            mDrawerLayout,
+            binding.drawerLayout,
             toolbar,
             R.string.app_name,
             R.string.app_name
@@ -263,20 +214,20 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setTextSwitch(isChecked: Boolean) {
-        if (isChecked) switchShowOnlyPlanned!!.setText(R.string.only_planned) else switchShowOnlyPlanned!!.setText(
+        if (isChecked) switchShowOnlyPlanned.setText(R.string.only_planned) else switchShowOnlyPlanned.setText(
             R.string.all
         )
     }
 
-    fun setPosition(index: Int) {
+    fun updatePosition(index: Int) {
         position = index
         setDrawerSelection(index)
         setTitle(index)
     }
 
-    fun setDrawerSelection(index: Int) {
-        mDrawerList!!.setItemChecked(index, true)
-        mDrawerList!!.setSelection(index)
+    private fun setDrawerSelection(index: Int) {
+        binding.leftDrawer.setItemChecked(index, true)
+        binding.leftDrawer.setSelection(index)
     }
 
     fun prevMonth() {
@@ -285,7 +236,7 @@ class MainActivity : AppCompatActivity() {
             month = 12
             year--
         } else {
-            month = month - 1
+            month -= 1
         }
     }
 
@@ -295,7 +246,7 @@ class MainActivity : AppCompatActivity() {
             month = 1
             year++
         } else {
-            month = month + 1
+            month += 1
         }
     }
 

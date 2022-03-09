@@ -1,44 +1,24 @@
 package de.kontranik.freebudget.database
 
-import de.kontranik.freebudget.model.Transaction.category
-import de.kontranik.freebudget.model.Transaction.regular_id
-import de.kontranik.freebudget.model.Transaction.description
-import de.kontranik.freebudget.model.Transaction.date
-import de.kontranik.freebudget.model.Transaction.amount_planned
-import de.kontranik.freebudget.model.Transaction.amount_fact
-import de.kontranik.freebudget.model.RegularTransaction.category
-import de.kontranik.freebudget.model.RegularTransaction.month
-import de.kontranik.freebudget.model.RegularTransaction.day
-import de.kontranik.freebudget.model.RegularTransaction.description
-import de.kontranik.freebudget.model.RegularTransaction.amount
-import de.kontranik.freebudget.model.RegularTransaction.date_start
-import de.kontranik.freebudget.model.RegularTransaction.date_end
-import de.kontranik.freebudget.model.RegularTransaction.date_create
-import de.kontranik.freebudget.model.Transaction.id
-import de.kontranik.freebudget.model.Transaction.date_create
-import de.kontranik.freebudget.model.RegularTransaction.id
-import de.kontranik.freebudget.model.Category.name
-import de.kontranik.freebudget.model.Category.id
-import de.kontranik.freebudget.database.DatabaseHelper
-import android.database.sqlite.SQLiteDatabase
-import de.kontranik.freebudget.database.DatabaseAdapter
-import de.kontranik.freebudget.model.RegularTransaction
-import android.database.DatabaseUtils
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
-import android.content.SharedPreferences
 import android.database.Cursor
+import android.database.DatabaseUtils
+import android.database.sqlite.SQLiteDatabase
 import de.kontranik.freebudget.config.Config
 import de.kontranik.freebudget.model.Category
+import de.kontranik.freebudget.model.RegularTransaction
 import de.kontranik.freebudget.model.Transaction
 import java.util.*
 
+@SuppressLint("Range")
 class DatabaseAdapter(context: Context) {
     private var order_by: String? = null
     private var sort_desc = false
     private val dbHelper: DatabaseHelper
     private var database: SQLiteDatabase? = null
-    private var cursor: Cursor? = null
+
     fun open(): DatabaseAdapter {
         database = dbHelper.writableDatabase
         return this
@@ -71,6 +51,7 @@ class DatabaseAdapter(context: Context) {
             sortOrder
         )
     }
+
 
     fun getTransactions(context: Context): List<Transaction> {
         val transactions: MutableList<Transaction> = ArrayList()
@@ -201,7 +182,7 @@ class DatabaseAdapter(context: Context) {
             DatabaseHelper.COLUMN_DATE_CREATE,
             DatabaseHelper.COLUMN_DATE_EDIT
         )
-        cursor = database!!.query(
+        var cursor = database!!.query(
             DatabaseHelper.TABLE_TRANSACTION, columns, whereClause, whereArgs, null, null, sortOrder
         )
         if (cursor.moveToFirst()) {
@@ -260,7 +241,7 @@ class DatabaseAdapter(context: Context) {
         val columns = arrayOf(
             DatabaseHelper.COLUMN_ID
         )
-        cursor = database!!.query(
+        var cursor = database!!.query(
             DatabaseHelper.TABLE_TRANSACTION, columns, whereClause, whereArgs, null, null, null
         )
         if (cursor.moveToFirst()) {
@@ -286,7 +267,7 @@ class DatabaseAdapter(context: Context) {
             DatabaseHelper.COLUMN_DATE_END,
             DatabaseHelper.COLUMN_DATE_CREATE
         )
-        cursor = database!!.query(
+        var cursor = database!!.query(
             DatabaseHelper.TABLE_REGULAR, columns, whereClause, whereArgs, null, null, sortOrder
         )
         if (cursor.moveToFirst()) {

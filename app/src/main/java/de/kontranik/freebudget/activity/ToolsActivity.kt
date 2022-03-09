@@ -1,114 +1,55 @@
 package de.kontranik.freebudget.activity
 
 import android.Manifest
-import de.kontranik.freebudget.model.Category.name
-import de.kontranik.freebudget.database.DatabaseAdapter.open
-import de.kontranik.freebudget.database.DatabaseAdapter.getCategory
-import de.kontranik.freebudget.database.DatabaseAdapter.close
-import de.kontranik.freebudget.database.DatabaseAdapter.allCategory
-import de.kontranik.freebudget.model.Category.id
-import de.kontranik.freebudget.database.DatabaseAdapter.update
-import de.kontranik.freebudget.database.DatabaseAdapter.insert
-import de.kontranik.freebudget.database.DatabaseAdapter.deleteCategory
-import de.kontranik.freebudget.fragment.AllTransactionFragment.changeShowOnlyPlanned
-import de.kontranik.freebudget.service.SoftKeyboard.showKeyboard
-import de.kontranik.freebudget.database.DatabaseAdapter.getRegularById
-import de.kontranik.freebudget.model.RegularTransaction.description
-import de.kontranik.freebudget.model.RegularTransaction.category
-import de.kontranik.freebudget.model.RegularTransaction.day
-import de.kontranik.freebudget.model.RegularTransaction.amount
-import de.kontranik.freebudget.model.RegularTransaction.month
-import de.kontranik.freebudget.model.RegularTransaction.date_start
-import de.kontranik.freebudget.model.RegularTransaction.date_end
-import de.kontranik.freebudget.service.SoftKeyboard.hideKeyboard
-import de.kontranik.freebudget.database.DatabaseAdapter.deleteRegularTransaction
-import de.kontranik.freebudget.service.FileService.exportFileRegular
-import de.kontranik.freebudget.service.FileService.exportFileTransaction
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
+import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import de.kontranik.freebudget.R
+import de.kontranik.freebudget.databinding.ActivityToolsBinding
 import de.kontranik.freebudget.service.BackupAndRestore.exportDB
 import de.kontranik.freebudget.service.BackupAndRestore.importDB
+import de.kontranik.freebudget.service.FileService.exportFileRegular
+import de.kontranik.freebudget.service.FileService.exportFileTransaction
 import de.kontranik.freebudget.service.FileService.importFileRegular
 import de.kontranik.freebudget.service.FileService.importFileTransaction
-import de.kontranik.freebudget.database.DatabaseAdapter.getTransaction
-import de.kontranik.freebudget.model.Transaction.description
-import de.kontranik.freebudget.model.Transaction.category
-import de.kontranik.freebudget.model.Transaction.amount_fact
-import de.kontranik.freebudget.model.Transaction.amount_planned
-import de.kontranik.freebudget.model.Transaction.date
-import de.kontranik.freebudget.model.Transaction.regular_id
-import de.kontranik.freebudget.database.DatabaseAdapter.deleteTransaction
-import androidx.appcompat.app.AppCompatActivity
-import de.kontranik.freebudget.database.DatabaseAdapter
-import android.os.Bundle
-import de.kontranik.freebudget.R
-import android.widget.AdapterView.OnItemClickListener
-import android.content.Intent
-import de.kontranik.freebudget.activity.CategoryListActivity
-import android.app.Activity
-import androidx.drawerlayout.widget.DrawerLayout
-import de.kontranik.freebudget.fragment.AllTransactionFragment
-import de.kontranik.freebudget.model.DrawerItem
-import de.kontranik.freebudget.activity.MainActivity
-import de.kontranik.freebudget.adapter.DrawerItemCustomAdapter
-import de.kontranik.freebudget.activity.MainActivity.DrawerItemClickListener
-import de.kontranik.freebudget.fragment.OverviewFragment
-import de.kontranik.freebudget.fragment.RegularFragment
-import de.kontranik.freebudget.activity.ToolsActivity
-import de.kontranik.freebudget.activity.SettingsActivity
-import android.os.Build
-import android.os.Environment
-import de.kontranik.freebudget.activity.OpenFileActivity
-import de.kontranik.freebudget.service.SoftKeyboard
-import android.app.DatePickerDialog
-import android.app.DatePickerDialog.OnDateSetListener
-import de.kontranik.freebudget.model.RegularTransaction
-import de.kontranik.freebudget.activity.RegularTransactionActivity
-import android.content.SharedPreferences
-import de.kontranik.freebudget.service.FileService
-import de.kontranik.freebudget.service.BackupAndRestore
-import android.content.DialogInterface
-import androidx.core.content.ContextCompat
-import android.content.pm.PackageManager
-import android.util.Log
-import android.view.View
-import android.widget.*
-import androidx.appcompat.app.AlertDialog
-import androidx.core.app.ActivityCompat
-import de.kontranik.freebudget.activity.TransactionActivity
 import java.io.IOException
-import java.lang.Exception
 
 class ToolsActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityToolsBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_tools)
+        binding = ActivityToolsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setTitle(R.string.tools)
         if (Build.VERSION.SDK_INT >= 23) {
             if (!checkPermission()) {
                 requestPermission() // Code for permission
             }
         }
-        val btn_ImportRegular = findViewById<View>(R.id.btn_import_regular) as Button
-        val btn_ExportRegular = findViewById<View>(R.id.btn_export_regular) as Button
-        val btn_ImportNormal = findViewById<View>(R.id.btn_import_normal) as Button
-        val btn_ExportNormal = findViewById<View>(R.id.btn_export_normal) as Button
-        val btn_backup = findViewById<View>(R.id.btn_backup) as Button
-        val btn_restore = findViewById<View>(R.id.btn_restore) as Button
-        val btn_close = findViewById<View>(R.id.btn_close) as Button
-        btn_ImportRegular.setOnClickListener { v -> importRegular(v) }
-        btn_ExportRegular.setOnClickListener { v -> exportRegular(v) }
-        btn_ImportNormal.setOnClickListener { v -> importNormal(v) }
-        btn_ExportNormal.setOnClickListener { v -> exportNormal(v) }
-        btn_backup.setOnClickListener { v -> backup(v) }
-        btn_restore.setOnClickListener { v -> restoreDialog(v) }
-        btn_close.setOnClickListener { finish() }
+
+        binding.btnImportRegular.setOnClickListener { importRegular() }
+        binding.btnExportRegular.setOnClickListener { exportRegular() }
+        binding.btnImportNormal.setOnClickListener { importNormal() }
+        binding.btnExportNormal.setOnClickListener { exportNormal() }
+        binding.btnBackup.setOnClickListener { v -> backup() }
+        binding.btnRestore.setOnClickListener { v -> restoreDialog() }
+        binding.btnClose.setOnClickListener { finish() }
     }
 
-    private fun importRegular(view: View) {
-        val open_import = Intent(this, OpenFileActivity::class.java)
-        this.startActivityForResult(open_import, RESULT_OPEN_FILENAME_REGULAR)
+    private fun importRegular() {
+        val openImport = Intent(this, OpenFileActivity::class.java)
+        this.startActivityForResult(openImport, RESULT_OPEN_FILENAME_REGULAR)
     }
 
-    private fun exportRegular(view: View) {
+    private fun exportRegular() {
         try {
             val filename = "export_freebudget_regular_transaction"
             val result = exportFileRegular(filename, this)
@@ -126,12 +67,12 @@ class ToolsActivity : AppCompatActivity() {
         }
     }
 
-    private fun importNormal(view: View) {
-        val open_import = Intent(this, OpenFileActivity::class.java)
-        this.startActivityForResult(open_import, RESULT_OPEN_FILENAME_NORMAL)
+    private fun importNormal() {
+        val openImport = Intent(this, OpenFileActivity::class.java)
+        this.startActivityForResult(openImport, RESULT_OPEN_FILENAME_NORMAL)
     }
 
-    private fun exportNormal(view: View) {
+    private fun exportNormal() {
         try {
             val filename = "export_freebudget_transaction"
             val result = exportFileTransaction(filename, this)
@@ -149,9 +90,9 @@ class ToolsActivity : AppCompatActivity() {
         }
     }
 
-    private fun backup(view: View) {
+    private fun backup() {
         try {
-            if (exportDB(view.context)) {
+            if (exportDB(this)) {
                 Toast.makeText(
                     this, this.resources.getString(R.string.exportOK),
                     Toast.LENGTH_LONG
@@ -170,9 +111,9 @@ class ToolsActivity : AppCompatActivity() {
         }
     }
 
-    private fun restoreDialog(view: View) {
+    private fun restoreDialog() {
         val alertDialogBuilder = AlertDialog.Builder(
-            view.context
+            this
         )
 
         // set title
@@ -183,7 +124,7 @@ class ToolsActivity : AppCompatActivity() {
         alertDialogBuilder.setCancelable(false)
         alertDialogBuilder.setPositiveButton(R.string.yes) { dialog, id -> // if this button is clicked, close
             // current activity
-            restore(view)
+            restore()
         }
         alertDialogBuilder.setNegativeButton(R.string.no) { dialog, id -> // if this button is clicked, just close
             // the dialog box and do nothing
@@ -197,11 +138,11 @@ class ToolsActivity : AppCompatActivity() {
         alertDialog.show()
     }
 
-    private fun restore(view: View) {
+    private fun restore() {
         try {
-            if (importDB(view.context)) {
+            if (importDB(this)) {
                 Toast.makeText(
-                    this, view.resources.getString(R.string.importOK),
+                    this, resources.getString(R.string.importOK),
                     Toast.LENGTH_LONG
                 ).show()
             }

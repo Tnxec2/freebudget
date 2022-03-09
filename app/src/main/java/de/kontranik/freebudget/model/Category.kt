@@ -21,8 +21,8 @@ class Category : Comparable<Category> {
         this.name = name
     }
 
-    override fun compareTo(compareCategory: Category): Int {
-        val compareWeight = compareCategory.weight
+    override fun compareTo(other: Category): Int {
+        val compareWeight = other.weight
 
         //ascending order
         return (weight - compareWeight).toInt()
@@ -36,6 +36,7 @@ class Category : Comparable<Category> {
     }
 
     companion object {
+        @JvmField
         var CategoryWeightComparator = java.util.Comparator<Category> { fruit1, fruit2 ->
             val catWeight1 = fruit1.weight
             val catWeight2 = fruit2.weight
