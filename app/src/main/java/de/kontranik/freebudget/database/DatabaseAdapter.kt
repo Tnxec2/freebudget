@@ -6,6 +6,7 @@ import android.content.Context
 import android.database.Cursor
 import android.database.DatabaseUtils
 import android.database.sqlite.SQLiteDatabase
+import android.util.Log
 import de.kontranik.freebudget.config.Config
 import de.kontranik.freebudget.model.Category
 import de.kontranik.freebudget.model.RegularTransaction
@@ -93,8 +94,8 @@ class DatabaseAdapter(context: Context) {
         return transactions
     }
 
-    fun getAllPlannedTransactions(context: Context): List<Transaction> {
-        val transactions: MutableList<Transaction> = ArrayList()
+    fun getAllPlannedTransactions(context: Context): MutableList<Transaction> {
+        val transactions: MutableList<Transaction> = mutableListOf()
         val sortOrder = getSortFromSettings(context)
         val columns = arrayOf(
             DatabaseHelper.COLUMN_ID,
@@ -159,8 +160,8 @@ class DatabaseAdapter(context: Context) {
         e_year: Int,
         e_month: Int,
         showOnlyPlanned: Boolean
-    ): List<Transaction> {
-        val transactions = ArrayList<Transaction>()
+    ): MutableList<Transaction> {
+        val transactions = mutableListOf<Transaction>()
         val cal: Calendar = GregorianCalendar(e_year, e_month - 1, 1)
         val timeStringStart = cal.timeInMillis.toString()
         cal.add(Calendar.MONTH, 1)
@@ -251,8 +252,8 @@ class DatabaseAdapter(context: Context) {
         return false
     }
 
-    fun getRegular(month: Int): List<RegularTransaction> {
-        val regularTransactions = ArrayList<RegularTransaction>()
+    fun getRegular(month: Int): MutableList<RegularTransaction> {
+        val regularTransactions = mutableListOf<RegularTransaction>()
         val whereClause = DatabaseHelper.COLUMN_MONTH + " = ?"
         val whereArgs = arrayOf(month.toString())
         val sortOrder = DatabaseHelper.COLUMN_DAY
@@ -379,9 +380,9 @@ class DatabaseAdapter(context: Context) {
         return entry
     }
 
-    val allRegular: List<RegularTransaction>
+    val allRegular: MutableList<RegularTransaction>
         get() {
-            val regularTransactions: MutableList<RegularTransaction> = ArrayList()
+            val regularTransactions: MutableList<RegularTransaction> = mutableListOf()
             val columns = arrayOf(
                 DatabaseHelper.COLUMN_ID,
                 DatabaseHelper.COLUMN_DESCRIPTION,
@@ -527,9 +528,9 @@ class DatabaseAdapter(context: Context) {
         return result
     }
 
-    val allCategory: List<Category>
+    val allCategory: MutableList<Category>
         get() {
-            val categories: MutableList<Category> = ArrayList()
+            val categories: MutableList<Category> = mutableListOf()
             val columns = arrayOf(
                 DatabaseHelper.COLUMN_ID,
                 DatabaseHelper.COLUMN_CATEGORY_NAME

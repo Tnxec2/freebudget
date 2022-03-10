@@ -4,14 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:excludeFromRecents="true"
     android:padding="@dimen/paddint_small"
     tools:context=".activity.CategoryListActivity">
 
-
     <ListView
         android:id="@+id/listView_categoryList"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/linearLayout_categorySave"
         app:layout_constraintEnd_toEndOf="parent"
@@ -25,8 +23,7 @@
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@id/btn_categoryClose"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/listView_categoryList">
+        app:layout_constraintStart_toStartOf="parent">
 
         <EditText
             android:id="@+id/editText_categoryName"
@@ -54,12 +51,11 @@
 
     <Button
         android:id="@+id/btn_categoryClose"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="@string/ok"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/linearLayout_categorySave" />
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
-import android.support.annotation.RequiresApi
 import android.view.View
 import android.widget.*
 import android.widget.AdapterView.OnItemClickListener
@@ -24,7 +23,6 @@ class OpenFileActivity : AppCompatActivity(), View.OnClickListener, OnItemClickL
     var selectedFilePath: String? = null /* Full path, i.e. /mnt/sdcard/folder/file.txt */
     var selectedFileName: String? = null /* File Name Only, i.e file.txt */
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

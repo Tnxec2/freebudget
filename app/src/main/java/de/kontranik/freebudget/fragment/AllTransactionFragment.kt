@@ -326,7 +326,7 @@ class AllTransactionFragment : Fragment() {
     }
 
     private fun planRegular() {
-        setRegularToPlanned(context, main!!.year, main!!.month)
+        setRegularToPlanned(requireContext(), main!!.year, main!!.month)
         getTransactions()
     }
 

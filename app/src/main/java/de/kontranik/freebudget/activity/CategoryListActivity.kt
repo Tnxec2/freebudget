@@ -22,6 +22,7 @@ class CategoryListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCategoryListBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         setTitle(R.string.activity_category)
 

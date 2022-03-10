@@ -7,7 +7,7 @@ import java.util.*
 
 object PlanRegular {
     @JvmStatic
-    fun setRegularToPlanned(context: Context?, year: Int, month: Int) {
+    fun setRegularToPlanned(context: Context, year: Int, month: Int) {
         val dbAdapter = DatabaseAdapter(context)
         dbAdapter.open()
 

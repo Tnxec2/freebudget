@@ -94,7 +94,7 @@ object FileService {
 
     @JvmStatic
     @Throws(IOException::class)
-    fun exportFileRegular(fileName: String, context: Context?): String {
+    fun exportFileRegular(fileName: String, context: Context): String {
         val dbAdapter = DatabaseAdapter(context)
         dbAdapter.open()
         val regularTransactions = dbAdapter.allRegular
@@ -189,7 +189,7 @@ object FileService {
 
     @JvmStatic
     @Throws(IOException::class)
-    fun exportFileTransaction(fileName: String, context: Context?): String {
+    fun exportFileTransaction(fileName: String, context: Context): String {
         val dbAdapter = DatabaseAdapter(context)
         dbAdapter.open()
         val transactions = dbAdapter.getTransactions(context)
