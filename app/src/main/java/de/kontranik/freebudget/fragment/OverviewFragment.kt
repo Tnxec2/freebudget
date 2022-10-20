@@ -13,20 +13,23 @@ import android.widget.*
 import android.widget.AdapterView.OnItemClickListener
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import androidx.lifecycle.ViewModelProvider
 import de.kontranik.freebudget.R
 import de.kontranik.freebudget.activity.MainActivity
 import de.kontranik.freebudget.activity.TransactionActivity
 import de.kontranik.freebudget.adapter.CategoryAdapter
-import de.kontranik.freebudget.database.DatabaseAdapter
+import de.kontranik.freebudget.database.viewmodel.TransactionViewModel
 import de.kontranik.freebudget.databinding.FragmentOverviewBinding
 import de.kontranik.freebudget.model.Category
+import de.kontranik.freebudget.model.Transaction
 import de.kontranik.freebudget.service.Constant
 import de.kontranik.freebudget.service.OnSwipeTouchListener
 import java.util.*
+import kotlin.math.abs
 
 class OverviewFragment : Fragment(), View.OnClickListener {
     private lateinit var binding: FragmentOverviewBinding
+    private lateinit var mTransactionViewModel: TransactionViewModel
 
     private var main: MainActivity? = null
 
@@ -35,19 +38,19 @@ class OverviewFragment : Fragment(), View.OnClickListener {
     private val categoryList: MutableList<Category> = ArrayList()
     private var categoryAdapter: CategoryAdapter? = null
     private var isMove: Boolean? = null
-    private var amount_planned = 0.0
-    private var amount_fact = 0.0
-    private var receipts_planned = 0.0
-    private var receipts_fact_planned = 0.0
-    private var receipts_fact_unplanned = 0.0
-    private var spending_planned = 0.0
-    private var spending_fact_planned = 0.0
-    private var spending_fact_unplanned = 0.0
-    private var total_planned = 0.0
-    private var total_fact = 0.0
-    private var receipts_planned_rest = 0.0
-    private var spending_planned_rest = 0.0
-    private var total_diff = 0.0
+    private var amountPlanned = 0.0
+    private var amountFact = 0.0
+    private var receiptsPlanned = 0.0
+    private var receiptsFactPlanned = 0.0
+    private var receiptsFactUnplanned = 0.0
+    private var spendingPlanned = 0.0
+    private var spendingFactPlanned = 0.0
+    private var spendingFactUnplanned = 0.0
+    private var totalPlanned = 0.0
+    private var totalFact = 0.0
+    private var receiptsPlannedRest = 0.0
+    private var spendingPlannedRest = 0.0
+    private var totalDiff = 0.0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -62,21 +65,27 @@ class OverviewFragment : Fragment(), View.OnClickListener {
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        mTransactionViewModel = ViewModelProvider(this)[TransactionViewModel::class.java]
+
+
         val wm = requireContext().getSystemService(Context.WINDOW_SERVICE) as WindowManager
         val display = wm.defaultDisplay
         val size = Point()
         display.getSize(size)
         maxWidth = size.x
 
-        val button_AllTransactions = view.findViewById<Button>(R.id.button_AllTransactions)
-        val button_Regular = view.findViewById<Button>(R.id.button_Regular)
+
+
+        val buttonAlltransactions = view.findViewById<Button>(R.id.button_AllTransactions)
+        val buttonRegular = view.findViewById<Button>(R.id.button_Regular)
         months = resources.getStringArray(R.array.months)
-        val date = Calendar.getInstance()
+
         main = activity as MainActivity?
         setMonthTextView()
-        button_AllTransactions.setOnClickListener(this)
-        button_Regular.setOnClickListener(this)
-        binding.btnPrevMonth!!.setOnClickListener(this)
+        buttonAlltransactions.setOnClickListener(this)
+        buttonRegular.setOnClickListener(this)
+        binding.btnPrevMonth.setOnClickListener(this)
         binding.btnNextMonth.setOnClickListener(this)
         val mainLayout = view.findViewById<View>(R.id.linearLayout_overview) as LinearLayout
         mainLayout.setOnTouchListener(object : OnSwipeTouchListener(context) {
@@ -88,9 +97,8 @@ class OverviewFragment : Fragment(), View.OnClickListener {
                 prevMonth()
             }
         })
-        binding.listViewCategoryList.setOnDragListener { v, event ->
-            val action = event.action
-            when (action) {
+        binding.listViewCategoryList.setOnDragListener { _, event ->
+            when (event.action) {
                 DragEvent.ACTION_DRAG_STARTED -> {}
                 DragEvent.ACTION_DRAG_ENTERED -> {}
                 DragEvent.ACTION_DRAG_EXITED -> {}
@@ -103,7 +111,7 @@ class OverviewFragment : Fragment(), View.OnClickListener {
         categoryAdapter =
             CategoryAdapter(view.context, R.layout.list_view_item_categorygraph, categoryList)
         binding.listViewCategoryList.adapter = categoryAdapter
-        binding.listViewCategoryList.setOnTouchListener { view, motionEvent ->
+        binding.listViewCategoryList.setOnTouchListener { _, motionEvent ->
             when (motionEvent.action) {
                 MotionEvent.ACTION_DOWN -> binding.fabAdd.hide()
                 MotionEvent.ACTION_UP -> binding.fabAdd.show()
@@ -112,20 +120,20 @@ class OverviewFragment : Fragment(), View.OnClickListener {
             false
         }
         binding.listViewCategoryList.onItemClickListener =
-            OnItemClickListener { parent, view, position, id -> //If you wanna send any data to nextActicity.class you can use
+            OnItemClickListener { _, _, position, _ -> //If you wanna send any data to nextActicity.class you can use
                 main!!.category = categoryList[position].name
                 main!!.selectItem(MainActivity.INDEX_DRAWER_ALLTRANSACTION)
             }
-        binding.fabAdd.setOnTouchListener { view, motionEvent ->
+        binding.fabAdd.setOnTouchListener { v, motionEvent ->
             isMove = false
             if (motionEvent.action == MotionEvent.ACTION_MOVE) {
                 val data = ClipData.newPlainText("", "")
-                binding.fabAdd.setImageResource(R.drawable.ic_euro_symbol_white_24dp)
-                val shadowBuilder = DragShadowBuilder(view)
+                binding.fabAdd.setImageResource(R.drawable.ic_baseline_euro_symbol_24)
+                val shadowBuilder = DragShadowBuilder(v)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    view.startDragAndDrop(data, shadowBuilder, view, 0)
+                    v.startDragAndDrop(data, shadowBuilder, v, 0)
                 } else {
-                    view.startDrag(data, shadowBuilder, view, 0)
+                    v.startDrag(data, shadowBuilder, v, 0)
                 }
                 binding.fabAddPlus.visibility = View.VISIBLE
                 binding.fabAddMinus.visibility = View.VISIBLE
@@ -146,9 +154,8 @@ class OverviewFragment : Fragment(), View.OnClickListener {
             }
             true
         }
-        binding.fabAddPlus.setOnDragListener { v, event ->
-            val action = event.action
-            when (action) {
+        binding.fabAddPlus.setOnDragListener { _, event ->
+            when (event.action) {
                 DragEvent.ACTION_DRAG_STARTED -> {}
                 DragEvent.ACTION_DRAG_ENTERED -> {}
                 DragEvent.ACTION_DRAG_EXITED -> {}
@@ -158,9 +165,8 @@ class OverviewFragment : Fragment(), View.OnClickListener {
             }
             true
         }
-        binding.fabAddMinus.setOnDragListener { v, event ->
-            val action = event.action
-            when (action) {
+        binding.fabAddMinus.setOnDragListener { _, event ->
+            when (event.action) {
                 DragEvent.ACTION_DRAG_STARTED -> {}
                 DragEvent.ACTION_DRAG_ENTERED -> {}
                 DragEvent.ACTION_DRAG_EXITED -> {}
@@ -170,9 +176,8 @@ class OverviewFragment : Fragment(), View.OnClickListener {
             }
             true
         }
-        binding.fabAddPlusPlanned.setOnDragListener { v, event ->
-            val action = event.action
-            when (action) {
+        binding.fabAddPlusPlanned.setOnDragListener { _, event ->
+            when (event.action) {
                 DragEvent.ACTION_DRAG_STARTED -> {}
                 DragEvent.ACTION_DRAG_ENTERED -> {}
                 DragEvent.ACTION_DRAG_EXITED -> {}
@@ -182,9 +187,8 @@ class OverviewFragment : Fragment(), View.OnClickListener {
             }
             true
         }
-        binding.fabAddMinusPlanned.setOnDragListener { v, event ->
-            val action = event.action
-            when (action) {
+        binding.fabAddMinusPlanned.setOnDragListener { _, event ->
+            when (event.action) {
                 DragEvent.ACTION_DRAG_STARTED -> {}
                 DragEvent.ACTION_DRAG_ENTERED -> {}
                 DragEvent.ACTION_DRAG_EXITED -> {}
@@ -194,12 +198,30 @@ class OverviewFragment : Fragment(), View.OnClickListener {
             }
             true
         }
+
+        mTransactionViewModel.dataByYearAndMonth.observe(viewLifecycleOwner) {
+            categoryList.clear()
+            maxCategoryWeight = 0.0
+
+            // als erstes komplett alle bewegungen für den Monat lesen
+            clearSummen()
+
+            buildSumAndCategoryList(it)
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                categoryList.sortWith(Category.CategoryWeightComparator)
+            }
+            totalDiff = totalFact + receiptsPlannedRest - spendingPlannedRest
+            setSummen()
+            // und den Adapter aktualisieren
+            categoryAdapter!!.notifyDataSetChanged()
+        }
     }
 
     override fun onResume() {
         super.onResume()
         main!!.updatePosition(MainActivity.INDEX_DRAWER_OVERVIEW)
-        transactions
+        mTransactionViewModel.loadTransactions(main!!.year, main!!.month, false)
     }
 
     override fun onClick(view: View) {
@@ -217,91 +239,18 @@ class OverviewFragment : Fragment(), View.OnClickListener {
             else -> {}
         }
     }
-    /*
-         * damit ListAdapter mitkriegt, dass die Liste geändert wurde,
-         * muss diese Liste hier zuerst geputzt werden
-         * und danach neue Liste ge-added werden
-         */
 
-    // als erstes komplett alle bewegungen für den Monat lesen
-    val transactions: Unit
-        // und den Adapter aktualisieren
-        get() {
-            val dbAdapter = DatabaseAdapter(requireContext())
-            dbAdapter.open()
-
-            /*
-                * damit ListAdapter mitkriegt, dass die Liste geändert wurde,
-                * muss diese Liste hier zuerst geputzt werden
-                * und danach neue Liste ge-added werden
-                */categoryList.clear()
-            maxCategoryWeight = 0.0
-
-            // als erstes komplett alle bewegungen für den Monat lesen
-            val dbTransactions =
-                dbAdapter.getTransactions(requireContext(), main!!.year, main!!.month, false)
-            clearSummen()
-            for (transaction in dbTransactions) {
-                amount_planned = transaction.amount_planned
-                if (amount_planned > 0) receipts_planned += amount_planned else spending_planned += Math.abs(
-                    amount_planned
-                )
-                total_planned = total_planned + amount_planned
-                amount_fact = transaction.amount_fact
-                if (amount_fact > 0) {
-                    if (amount_planned > 0) receipts_fact_planned += amount_fact else receipts_fact_unplanned += amount_fact
-                } else if (amount_fact < 0) {
-                    if (amount_planned < 0) spending_fact_planned += Math.abs(amount_fact) else spending_fact_unplanned += Math.abs(
-                        amount_fact
-                    )
-                } else if (amount_fact == 0.0) {
-                    if (amount_planned > 0) receipts_planned_rest += amount_planned
-                    if (amount_planned < 0) spending_planned_rest += Math.abs(amount_planned)
-                }
-                total_fact += amount_fact
-                var categoryName = transaction.category.trim { it <= ' ' }
-                if (categoryName.length == 0) categoryName =
-                    resources.getString(R.string.activity_transaction_not_define)
-                if (amount_fact < 0) {
-                    var ix = false
-                    for (i in categoryList.indices) {
-                        val category = categoryList[i]
-                        if (categoryName == category.name) {
-                            ix = true
-                            category.weight = category.weight + Math.abs(amount_fact)
-                            if (category.weight > maxCategoryWeight) maxCategoryWeight =
-                                category.weight
-                            break
-                        }
-                    }
-                    if (!ix) {
-                        val newCat: Category = Category(0, categoryName, Math.abs(amount_fact))
-                        categoryList.add(newCat)
-                        if (newCat.weight > maxCategoryWeight) maxCategoryWeight = newCat.weight
-                    }
-                }
-            }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                categoryList.sortWith(Category.CategoryWeightComparator)
-            }
-            total_diff = total_fact + receipts_planned_rest - spending_planned_rest
-            setSummen()
-            dbAdapter.close()
-
-            // und den Adapter aktualisieren
-            categoryAdapter!!.notifyDataSetChanged()
-        }
 
     fun prevMonth() {
         main!!.prevMonth()
         setMonthTextView()
-        transactions
+        mTransactionViewModel.loadTransactions(main!!.year, main!!.month, false)
     }
 
     fun nextMonth() {
         main!!.nextMonth()
         setMonthTextView()
-        transactions
+        mTransactionViewModel.loadTransactions(main!!.year, main!!.month, false)
     }
 
     private fun setMonthTextView() {
@@ -319,7 +268,7 @@ class OverviewFragment : Fragment(), View.OnClickListener {
     }
 
     private fun setNormalStat() {
-        binding.fabAdd.setImageResource(R.drawable.ic_add_white_24dp)
+        binding.fabAdd.setImageResource(R.drawable.ic_baseline_add_24)
         binding.fabAdd.visibility = View.VISIBLE
         binding.fabAddPlus.visibility = View.INVISIBLE
         binding.fabAddMinus.visibility = View.INVISIBLE
@@ -327,9 +276,53 @@ class OverviewFragment : Fragment(), View.OnClickListener {
         binding.fabAddMinusPlanned.visibility = View.INVISIBLE
     }
 
+    private fun buildSumAndCategoryList(list: List<Transaction>?) {
+        if (list == null) return
+        for (transaction in list) {
+            amountPlanned = transaction.amountPlanned
+            if (amountPlanned > 0) receiptsPlanned += amountPlanned else spendingPlanned += abs(
+                amountPlanned
+            )
+            totalPlanned += amountPlanned
+            amountFact = transaction.amountFact
+            if (amountFact > 0) {
+                if (amountPlanned > 0) receiptsFactPlanned += amountFact else receiptsFactUnplanned += amountFact
+            } else if (amountFact < 0) {
+                if (amountPlanned < 0) spendingFactPlanned += abs(amountFact) else spendingFactUnplanned += abs(
+                    amountFact
+                )
+            } else if (amountFact == 0.0) {
+                if (amountPlanned > 0) receiptsPlannedRest += amountPlanned
+                if (amountPlanned < 0) spendingPlannedRest += abs(amountPlanned)
+            }
+            totalFact += amountFact
+            var categoryName = transaction.category.trim()
+            if (categoryName.isEmpty()) categoryName =
+                resources.getString(R.string.activity_transaction_not_define)
+            if (amountFact < 0) {
+                var ix = false
+                for (i in categoryList.indices) {
+                    val category = categoryList[i]
+                    if (categoryName == category.name) {
+                        ix = true
+                        category.weight = category.weight + abs(amountFact)
+                        if (category.weight > maxCategoryWeight) maxCategoryWeight =
+                            category.weight
+                        break
+                    }
+                }
+                if (!ix) {
+                    val newCat = Category(0, categoryName, abs(amountFact))
+                    categoryList.add(newCat)
+                    if (newCat.weight > maxCategoryWeight) maxCategoryWeight = newCat.weight
+                }
+            }
+        }
+    }
+
     private fun setSummen() {
         binding.textViewSpendingPlanned.text =
-            String.format(Locale.getDefault(), "%1$,.2f", spending_planned)
+            String.format(Locale.getDefault(), "%1$,.2f", spendingPlanned)
         binding.textViewSpendingPlanned.setTextColor(
             ContextCompat.getColor(
                 requireContext(),
@@ -337,7 +330,7 @@ class OverviewFragment : Fragment(), View.OnClickListener {
             )
         )
         binding.textViewSpendingFactPlanned.text =
-            String.format(Locale.getDefault(), "%1$,.2f", spending_fact_planned)
+            String.format(Locale.getDefault(), "%1$,.2f", spendingFactPlanned)
         binding.textViewSpendingFactPlanned.setTextColor(
             ContextCompat.getColor(
                 requireContext(),
@@ -345,7 +338,7 @@ class OverviewFragment : Fragment(), View.OnClickListener {
             )
         )
         binding.textViewSpendingFactUnplanned.text =
-            String.format(Locale.getDefault(), "%1$,.2f", spending_fact_unplanned)
+            String.format(Locale.getDefault(), "%1$,.2f", spendingFactUnplanned)
         binding.textViewSpendingFactUnplanned.setTextColor(
             ContextCompat.getColor(
                 requireContext(),
@@ -353,7 +346,7 @@ class OverviewFragment : Fragment(), View.OnClickListener {
             )
         )
         binding.textViewReceiptsPlanned.text =
-            String.format(Locale.getDefault(), "%1$,.2f", receipts_planned)
+            String.format(Locale.getDefault(), "%1$,.2f", receiptsPlanned)
         binding.textViewReceiptsPlanned.setTextColor(
             ContextCompat.getColor(
                 requireContext(),
@@ -361,7 +354,7 @@ class OverviewFragment : Fragment(), View.OnClickListener {
             )
         )
         binding.textViewReceiptsFactPlanned.text =
-            String.format(Locale.getDefault(), "%1$,.2f", receipts_fact_planned)
+            String.format(Locale.getDefault(), "%1$,.2f", receiptsFactPlanned)
         binding.textViewReceiptsFactPlanned.setTextColor(
             ContextCompat.getColor(
                 requireContext(),
@@ -369,26 +362,26 @@ class OverviewFragment : Fragment(), View.OnClickListener {
             )
         )
         binding.textViewReceiptsFactUnplanned.text =
-            String.format(Locale.getDefault(), "%1$,.2f", receipts_fact_unplanned)
+            String.format(Locale.getDefault(), "%1$,.2f", receiptsFactUnplanned)
         binding.textViewReceiptsFactUnplanned.setTextColor(
             ContextCompat.getColor(
                 requireContext(),
                 R.color.colorGreen
             )
         )
-        binding.textViewTotalFact.text = String.format(Locale.getDefault(), "%1$,.2f", total_fact)
+        binding.textViewTotalFact.text = String.format(Locale.getDefault(), "%1$,.2f", totalFact)
         binding.textViewTotalPlanned.text =
-            String.format(Locale.getDefault(), "%1$,.2f", total_planned)
+            String.format(Locale.getDefault(), "%1$,.2f", totalPlanned)
         binding.textViewReceiptsPlannedRest.text =
-            String.format(Locale.getDefault(), "%1$,.2f", receipts_planned_rest)
-        binding.textViewReceiptsPlannedRest!!.setTextColor(
+            String.format(Locale.getDefault(), "%1$,.2f", receiptsPlannedRest)
+        binding.textViewReceiptsPlannedRest.setTextColor(
             ContextCompat.getColor(
                 requireContext(),
                 R.color.colorGreen
             )
         )
         binding.textViewSpendingPlannedRest.text =
-            String.format(Locale.getDefault(), "%1$,.2f", spending_planned_rest)
+            String.format(Locale.getDefault(), "%1$,.2f", spendingPlannedRest)
         binding.textViewSpendingPlannedRest.setTextColor(
             ContextCompat.getColor(
                 requireContext(),
@@ -396,8 +389,8 @@ class OverviewFragment : Fragment(), View.OnClickListener {
             )
         )
         binding.textViewTotalDiff.text =
-            String.format(Locale.getDefault(), "%1$,.2f", total_diff)
-        if (total_planned > 0) {
+            String.format(Locale.getDefault(), "%1$,.2f", totalDiff)
+        if (totalPlanned > 0) {
             binding.textViewTotalPlanned.setTextColor(
                 ContextCompat.getColor(
                     requireContext(),
@@ -412,7 +405,7 @@ class OverviewFragment : Fragment(), View.OnClickListener {
                 )
             )
         }
-        if (total_fact > 0) {
+        if (totalFact > 0) {
             binding.textViewTotalFact.setTextColor(
                 ContextCompat.getColor(
                     requireContext(),
@@ -422,7 +415,7 @@ class OverviewFragment : Fragment(), View.OnClickListener {
         } else {
             binding.textViewTotalFact.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorRed))
         }
-        if (total_diff > 0) {
+        if (totalDiff > 0) {
             binding.textViewTotalDiff.setTextColor(
                 ContextCompat.getColor(
                     requireContext(),
@@ -435,19 +428,19 @@ class OverviewFragment : Fragment(), View.OnClickListener {
     }
 
     private fun clearSummen() {
-        amount_planned = 0.0
-        amount_fact = 0.0
-        total_planned = 0.0
-        total_fact = 0.0
-        receipts_fact_planned = 0.0
-        receipts_fact_unplanned = 0.0
-        receipts_planned = 0.0
-        spending_fact_planned = 0.0
-        spending_fact_unplanned = 0.0
-        spending_planned = 0.0
-        receipts_planned_rest = 0.0
-        spending_planned_rest = 0.0
-        total_diff = 0.0
+        amountPlanned = 0.0
+        amountFact = 0.0
+        totalPlanned = 0.0
+        totalFact = 0.0
+        receiptsFactPlanned = 0.0
+        receiptsFactUnplanned = 0.0
+        receiptsPlanned = 0.0
+        spendingFactPlanned = 0.0
+        spendingFactUnplanned = 0.0
+        spendingPlanned = 0.0
+        receiptsPlannedRest = 0.0
+        spendingPlannedRest = 0.0
+        totalDiff = 0.0
     }
 
     companion object {

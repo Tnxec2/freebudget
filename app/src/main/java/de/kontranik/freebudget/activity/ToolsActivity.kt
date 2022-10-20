@@ -3,32 +3,39 @@ package de.kontranik.freebudget.activity
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.DocumentsContract
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import de.kontranik.freebudget.R
+import de.kontranik.freebudget.database.viewmodel.TransactionViewModel
 import de.kontranik.freebudget.databinding.ActivityToolsBinding
 import de.kontranik.freebudget.service.BackupAndRestore.exportDB
 import de.kontranik.freebudget.service.BackupAndRestore.importDB
 import de.kontranik.freebudget.service.FileService.exportFileRegular
-import de.kontranik.freebudget.service.FileService.exportFileTransaction
 import de.kontranik.freebudget.service.FileService.importFileRegular
 import de.kontranik.freebudget.service.FileService.importFileTransaction
 import java.io.IOException
 
 class ToolsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityToolsBinding
+    private lateinit var mTransactionViewModel: TransactionViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityToolsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setTitle(R.string.tools)
+
+        mTransactionViewModel = ViewModelProvider(this)[TransactionViewModel::class.java]
+
         if (Build.VERSION.SDK_INT >= 23) {
             if (!checkPermission()) {
                 requestPermission() // Code for permission
@@ -39,14 +46,29 @@ class ToolsActivity : AppCompatActivity() {
         binding.btnExportRegular.setOnClickListener { exportRegular() }
         binding.btnImportNormal.setOnClickListener { importNormal() }
         binding.btnExportNormal.setOnClickListener { exportNormal() }
-        binding.btnBackup.setOnClickListener { v -> backup() }
-        binding.btnRestore.setOnClickListener { v -> restoreDialog() }
+        binding.btnBackup.setOnClickListener { backup() }
+        binding.btnRestore.setOnClickListener { restoreDialog() }
         binding.btnClose.setOnClickListener { finish() }
     }
 
+
     private fun importRegular() {
-        val openImport = Intent(this, OpenFileActivity::class.java)
-        this.startActivityForResult(openImport, RESULT_OPEN_FILENAME_REGULAR)
+        //val openImport = Intent(this, OpenFileActivity::class.java)
+        //this.startActivityForResult(openImport, RESULT_OPEN_FILENAME_REGULAR)
+        // Request code for selecting a PDF document.
+
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "text/*"
+
+            // Optionally, specify a URI for the file that should appear in the
+            // system file picker when it loads.
+            // putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri)
+            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+        }
+
+        startActivityForResult(intent, RESULT_OPEN_FILENAME_REGULAR)
+
     }
 
     private fun exportRegular() {
@@ -54,37 +76,51 @@ class ToolsActivity : AppCompatActivity() {
             val filename = "export_freebudget_regular_transaction"
             val result = exportFileRegular(filename, this)
             Toast.makeText(
-                this,
+                applicationContext,
                 this.resources.getString(R.string.exportOK_filename, result),
                 Toast.LENGTH_LONG
             ).show()
         } catch (e: IOException) {
             //e.printStackTrace();
             Toast.makeText(
-                this, this.resources.getString(R.string.exportFail, e.localizedMessage),
+                applicationContext,
+                this.resources.getString(R.string.exportFail, e.localizedMessage),
                 Toast.LENGTH_LONG
             ).show()
         }
     }
 
     private fun importNormal() {
-        val openImport = Intent(this, OpenFileActivity::class.java)
-        this.startActivityForResult(openImport, RESULT_OPEN_FILENAME_NORMAL)
+        //val openImport = Intent(this, OpenFileActivity::class.java)
+        //this.startActivityForResult(openImport, RESULT_OPEN_FILENAME_NORMAL)
+
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "text/*"
+
+            // Optionally, specify a URI for the file that should appear in the
+            // system file picker when it loads.
+            // putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri)
+            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+        }
+
+        startActivityForResult(intent, RESULT_OPEN_FILENAME_NORMAL)
     }
 
     private fun exportNormal() {
         try {
             val filename = "export_freebudget_transaction"
-            val result = exportFileTransaction(filename, this)
+            val result = mTransactionViewModel.exportToFile(filename)
             Toast.makeText(
-                this,
+                applicationContext,
                 this.resources.getString(R.string.exportOK_filename, result),
                 Toast.LENGTH_LONG
             ).show()
         } catch (e: IOException) {
             //e.printStackTrace();
             Toast.makeText(
-                this, this.resources.getString(R.string.exportFail, e.localizedMessage),
+                applicationContext,
+                this.resources.getString(R.string.exportFail, e.localizedMessage),
                 Toast.LENGTH_LONG
             ).show()
         }
@@ -142,13 +178,15 @@ class ToolsActivity : AppCompatActivity() {
         try {
             if (importDB(this)) {
                 Toast.makeText(
-                    this, resources.getString(R.string.importOK),
+                    applicationContext,
+                    resources.getString(R.string.importOK),
                     Toast.LENGTH_LONG
                 ).show()
             }
         } catch (e: IOException) {
             Toast.makeText(
-                this, this.resources.getString(R.string.importFail, e.localizedMessage),
+                applicationContext,
+                this.resources.getString(R.string.importFail, e.localizedMessage),
                 Toast.LENGTH_LONG
             ).show()
         }
@@ -158,37 +196,45 @@ class ToolsActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             RESULT_OPEN_FILENAME_REGULAR -> if (resultCode == RESULT_OK) {
-                val fileName = data!!.getStringExtra(OpenFileActivity.Companion.RESULT_FILENAME)
-                try {
-                    importFileRegular(fileName, this)
-                    Toast.makeText(
-                        this,
-                        this.resources.getString(R.string.importOK_filename, fileName),
-                        Toast.LENGTH_LONG
-                    ).show()
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    Toast.makeText(
-                        this, this.resources.getString(R.string.importFail, e.message),
-                        Toast.LENGTH_LONG
-                    ).show()
+
+                data?.data?.also { uri ->
+                    // Perform operations on the document using its URI.
+                    try {
+                        importFileRegular(uri, applicationContext)
+                        Toast.makeText(
+                            applicationContext,
+                            this.resources.getString(R.string.importOK_filename, uri.path),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        Toast.makeText(
+                            applicationContext,
+                            this.resources.getString(R.string.importFail, e.message),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                 }
+
             }
             RESULT_OPEN_FILENAME_NORMAL -> if (resultCode == RESULT_OK) {
-                val fileName = data!!.getStringExtra(OpenFileActivity.Companion.RESULT_FILENAME)
-                try {
-                    importFileTransaction(fileName, this)
-                    Toast.makeText(
-                        this,
-                        this.resources.getString(R.string.importOK_filename, fileName),
-                        Toast.LENGTH_LONG
-                    ).show()
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    Toast.makeText(
-                        this, this.resources.getString(R.string.importFail, e.message),
-                        Toast.LENGTH_LONG
-                    ).show()
+                data?.data?.also { uri ->
+                    // Perform operations on the document using its URI.
+                    try {
+                        importFileTransaction(uri, applicationContext)
+                        Toast.makeText(
+                            applicationContext,
+                            this.resources.getString(R.string.importOK_filename, uri.path),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        Toast.makeText(
+                            applicationContext,
+                            this.resources.getString(R.string.importFail, e.message),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                 }
             }
         }

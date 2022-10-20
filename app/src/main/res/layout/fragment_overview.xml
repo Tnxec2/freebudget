@@ -25,8 +25,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/prev"
-                android:src="@drawable/ic_keyboard_arrow_left_white_24dp"
-                app:srcCompat="@drawable/ic_keyboard_arrow_left_white_24dp" />
+                android:src="@drawable/ic_baseline_keyboard_arrow_left_24"
+                app:srcCompat="@drawable/ic_baseline_keyboard_arrow_left_24" />
 
             <Space
                 android:layout_width="wrap_content"
@@ -37,10 +37,9 @@
                 android:id="@+id/textView_Month"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="@string/month"
-                android:textAlignment="center"
-                android:textSize="30sp" />
+                android:layout_gravity="center_vertical"
+                style="@style/TextAppearance.AppCompat.Title" />
 
             <Space
                 android:layout_width="wrap_content"
@@ -52,8 +51,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/next"
-                android:src="@drawable/ic_keyboard_arrow_right_white_24dp"
-                app:srcCompat="@drawable/ic_keyboard_arrow_right_white_24dp" />
+                android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
+                app:srcCompat="@drawable/ic_baseline_keyboard_arrow_right_24" />
 
         </LinearLayout>
 
@@ -72,8 +71,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=""
-                    android:textAlignment="center"
-                    android:textSize="18sp" />
+                    android:textAlignment="center" />
 
                 <TextView
                     android:id="@+id/textView_title_planned"
@@ -81,7 +79,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/activity_main_planned"
                     android:textAlignment="center"
-                    android:textSize="18sp" />
+                    />
 
                 <TextView
                     android:id="@+id/textView_title_fact"
@@ -89,7 +87,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/activity_main_fact"
                     android:textAlignment="center"
-                    android:textSize="18sp" />
+                    />
             </TableRow>
 
             <TableRow
@@ -100,7 +98,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/activity_main_receipts_planned"
-                    android:textSize="18sp" />
+                    />
 
                 <TextView
                     android:id="@+id/textView_receipts_planned"
@@ -108,7 +106,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/activity_main_receipts_planned"
                     android:textAlignment="center"
-                    android:textSize="18sp" />
+                    />
 
                 <TextView
                     android:id="@+id/textView_receipts_fact_planned"
@@ -116,7 +114,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/activity_main_receipts_planned"
                     android:textAlignment="center"
-                    android:textSize="18sp" />
+                     />
             </TableRow>
 
             <TableRow
@@ -127,7 +125,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/activity_main_receipts_unplanned"
-                    android:textSize="18sp" />
+                     />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -135,7 +133,7 @@
                     android:text=""
                     android:enabled="false"
                     android:textAlignment="center"
-                    android:textSize="18sp" />
+                     />
 
                 <TextView
                     android:id="@+id/textView_receipts_fact_unplanned"
@@ -143,7 +141,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/activity_main_receipts_unplanned"
                     android:textAlignment="center"
-                    android:textSize="18sp" />
+                     />
             </TableRow>
 
             <TableRow
@@ -154,7 +152,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/activity_main_spending_planned"
-                    android:textSize="18sp" />
+                     />
 
                 <TextView
                     android:id="@+id/textView_spending_planned"
@@ -162,7 +160,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/activity_main_spending_planned"
                     android:textAlignment="center"
-                    android:textSize="18sp" />
+                     />
 
                 <TextView
                     android:id="@+id/textView_spending_fact_planned"
@@ -170,7 +168,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/activity_main_spending_planned"
                     android:textAlignment="center"
-                    android:textSize="18sp" />
+                     />
             </TableRow>
 
             <TableRow
@@ -181,7 +179,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/activity_main_spending_unplanned"
-                    android:textSize="18sp" />
+                     />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -189,7 +187,7 @@
                     android:text=""
                     android:enabled="false"
                     android:textAlignment="center"
-                    android:textSize="18sp" />
+                     />
 
                 <TextView
                     android:id="@+id/textView_spending_fact_unplanned"
@@ -197,7 +195,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/activity_main_spending_unplanned"
                     android:textAlignment="center"
-                    android:textSize="18sp" />
+                     />
             </TableRow>
 
             <TableRow
@@ -208,7 +206,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/activity_main_total"
-                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -217,7 +214,6 @@
                     android:layout_height="wrap_content"
                     android:text="@string/activity_main_total"
                     android:textAlignment="center"
-                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -226,7 +222,6 @@
                     android:layout_height="wrap_content"
                     android:text="@string/activity_main_total"
                     android:textAlignment="center"
-                    android:textSize="18sp"
                     android:textStyle="bold" />
             </TableRow>
 
@@ -238,7 +233,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/receipts_planned_rest"
-                    android:textSize="18sp" />
+                     />
 
                 <TextView
                     android:id="@+id/textView_receipts_planned_rest"
@@ -246,7 +241,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/receipts_planned_rest"
                     android:textAlignment="center"
-                    android:textSize="18sp"  />
+                      />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -262,7 +257,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/spending_planned_rest"
-                    android:textSize="18sp" />
+                     />
 
                 <TextView
                     android:id="@+id/textView_spending_planned_rest"
@@ -270,7 +265,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/spending_planned_rest"
                     android:textAlignment="center"
-                    android:textSize="18sp"  />
+                      />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -286,7 +281,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/total_diff"
-                    android:textSize="18sp"
+                    
                     android:textStyle="bold" />
 
                 <TextView
@@ -300,7 +295,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/total_diff"
                     android:textAlignment="center"
-                    android:textSize="18sp"
+                    
                     android:textStyle="bold"  />
 
             </TableRow>
@@ -311,7 +306,6 @@
             android:layout_height="2dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:background="@color/colorBackgroundLight"
             />
     </LinearLayout>
 
@@ -363,7 +357,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:src="@drawable/ic_add_white_24dp"
+        android:src="@drawable/ic_baseline_add_24"
         app:backgroundTint="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -375,7 +369,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         android:layout_marginBottom="32dp"
         android:clickable="true"
         android:focusable="true"
@@ -384,14 +377,13 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/fab_add"
         app:rippleColor="#FFF"
-        app:srcCompat="@drawable/ic_add_white_24dp" />
+        app:srcCompat="@drawable/ic_baseline_add_24" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add_plus_planned"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         android:layout_marginBottom="32dp"
         android:clickable="true"
         android:focusable="true"
@@ -400,14 +392,13 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/fab_add_plus"
         app:rippleColor="#FFF"
-        app:srcCompat="@drawable/ic_add_white_24dp" />
+        app:srcCompat="@drawable/ic_baseline_add_24" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add_minus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginBottom="32dp"
         android:clickable="true"
         android:focusable="true"
@@ -416,14 +407,13 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/fab_add"
         app:rippleColor="#FFF"
-        app:srcCompat="@drawable/ic_remove_white_24dp" />
+        app:srcCompat="@drawable/ic_baseline_remove_24" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add_minus_planned"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginBottom="32dp"
         android:clickable="true"
         android:focusable="true"
@@ -432,6 +422,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/fab_add_minus"
         app:rippleColor="#FFF"
-        app:srcCompat="@drawable/ic_remove_white_24dp" />
+        app:srcCompat="@drawable/ic_baseline_remove_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

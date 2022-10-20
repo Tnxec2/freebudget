@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,21 +9,18 @@
     tools:context=".activity.RegularTransactionActivity">
 
     <LinearLayout
-        android:id="@+id/linearLayout0"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorBackgroundCard"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:orientation="vertical">
+
 
         <EditText
             android:id="@+id/editText_description_regular"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/activity_transaction_description"
-            android:inputType="text" />
+            android:inputType="text"
+            tools:ignore="Autofill" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -40,8 +37,7 @@
             <Button
                 android:id="@+id/btn_selectCat_regular"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="selectCat"
+                android:layout_height="match_parent"
                 android:text="@string/select" />
         </LinearLayout>
 
@@ -50,76 +46,56 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/activity_transaction_amount"
-            android:inputType="numberDecimal" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout_regular"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/colorBackgroundCard"
-        android:orientation="horizontal"
-        android:paddingLeft="@dimen/paddint_small"
-        android:paddingTop="@dimen/paddint_small"
-        android:paddingRight="@dimen/paddint_small"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout0">
-
-        <RadioGroup
-            android:id="@+id/radioTrans_regular"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checkedButton="@+id/radioButton_receipts">
-
-            <RadioButton
-                android:id="@+id/radioButton_receipts_regular"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:text="@string/activity_main_receipts" />
-
-            <RadioButton
-                android:id="@+id/radioButton_spending_regular"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/activity_main_spending" />
-
-        </RadioGroup>
-
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
-
-        <EditText
-            android:id="@+id/editText_day_regular"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="@string/day"
-            android:inputType="number"
-            android:text="1"
+            android:inputType="numberDecimal"
             tools:ignore="Autofill" />
 
-        <Spinner
-            android:id="@+id/spinner_Month_regular"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:entries="@array/months"
-            android:spinnerMode="dropdown" />
+        <LinearLayout
+            android:id="@+id/linearLayout_regular"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-    </LinearLayout>
+            <RadioGroup
+                android:id="@+id/radioTrans_regular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkedButton="@+id/radioButton_receipts">
 
-    <LinearLayout
-        android:id="@+id/linearLayout_extra_settings"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout_regular" >
+                <RadioButton
+                    android:id="@+id/radioButton_receipts_regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="@string/activity_main_receipts" />
+
+                <RadioButton
+                    android:id="@+id/radioButton_spending_regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/activity_main_spending" />
+
+            </RadioGroup>
+
+            <EditText
+                android:id="@+id/editText_day_regular"
+                android:layout_width="69dp"
+                android:layout_height="match_parent"
+                android:ems="10"
+                android:hint="@string/day"
+                android:inputType="number"
+                android:text="1"
+                tools:ignore="Autofill" />
+
+            <Spinner
+                android:id="@+id/spinner_Month_regular"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+
+                android:entries="@array/months"
+                android:spinnerMode="dropdown" />
+
+        </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -135,15 +111,18 @@
                 android:id="@+id/button_start_date"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/start_date"  />
+                android:layout_weight="2"
+                android:text="@string/start_date" />
 
             <ImageButton
                 android:id="@+id/imageButton_clear_start_date"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_clear" />
+                android:layout_height="match_parent"
+                android:contentDescription="@string/clear_date_field"
+                app:srcCompat="@drawable/ic_clear"
+                />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -159,75 +138,84 @@
                 android:id="@+id/button_end_date"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:text="@string/end_date" />
+
             <ImageButton
                 android:id="@+id/imageButton_clear_end_date"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_clear" />
+                android:layout_height="match_parent"
+                app:srcCompat="@drawable/ic_clear"
+                />
         </LinearLayout>
+
+        <EditText
+            android:id="@+id/editText_note_regular"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top|start"
+            android:hint="@string/activity_transaction_note"
+            android:inputType="textMultiLine"
+            android:maxLines="5"
+            android:minLines="3"
+            android:scrollbars="vertical"
+            tools:ignore="Autofill" />
+
+
+        <LinearLayout
+            android:id="@+id/linearLayout2_regular"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button_saveAndClose_regular"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/activity_transaction_saveAclose"
+                tools:ignore="ButtonStyle" />
+
+            <Button
+                android:id="@+id/button_close_regular"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/activity_transaction_close"
+                tools:ignore="ButtonStyle" />
+
+            <Button
+                android:id="@+id/button_delete_regular"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/activity_transaction_delete"
+                tools:ignore="ButtonStyle" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout3_regular"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button_save_regular"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/activity_transaction_save"
+                tools:ignore="ButtonStyle" />
+
+            <Button
+                android:id="@+id/button_copy_regular"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/activity_transaction_copy"
+                tools:ignore="ButtonStyle" />
+        </LinearLayout>
+
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/linearLayout2_regular"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorBackgroundCard"
-        android:orientation="horizontal"
-        android:paddingLeft="@dimen/paddint_small"
-        android:paddingTop="@dimen/paddint_small"
-        android:paddingRight="@dimen/paddint_small"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout_extra_settings">
-
-        <Button
-            android:id="@+id/button_saveAndClose_regular"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:onClick="saveAndClose"
-            android:text="@string/activity_transaction_saveAclose" />
-
-        <Button
-            android:id="@+id/button_delete_regular"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:onClick="delete"
-            android:text="@string/activity_transaction_delete" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout3_regular"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/colorBackgroundCard"
-        android:orientation="horizontal"
-        android:paddingLeft="@dimen/paddint_small"
-        android:paddingRight="@dimen/paddint_small"
-        android:paddingBottom="@dimen/paddint_small"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2_regular">
-
-        <Button
-            android:id="@+id/button_save_regular"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:onClick="save"
-            android:text="@string/activity_transaction_save" />
-
-        <Button
-            android:id="@+id/button_copy_regular"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:onClick="copy"
-            android:text="@string/activity_transaction_copy" />
-    </LinearLayout>
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

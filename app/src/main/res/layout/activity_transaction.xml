@@ -1,32 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:excludeFromRecents="true"
     android:padding="@dimen/paddint_small"
-    tools:context=".activity.TransactionActivity">
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
 
     <EditText
         android:id="@+id/editText_description"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/activity_transaction_description"
         android:inputType="text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="Autofill" />
 
     <LinearLayout
         android:id="@+id/linearLayout0"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_description">
+        >
 
         <AutoCompleteTextView
             android:id="@+id/acTextView_category"
@@ -38,73 +39,73 @@
         <Button
             android:id="@+id/btn_selectCat"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:onClick="selectCat"
             android:text="@string/select" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/textView_amount_fact"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/activity_transaction_amount_fact"
-        app:layout_constraintEnd_toStartOf="@id/textView_amount_planned"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout0" />
-
-    <TextView
-        android:id="@+id/textView_amount_planned"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="@string/activity_transaction_amount_planned"
-        android:text="@string/activity_transaction_amount_planned"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/textView_amount_fact"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout0" />
-
-    <EditText
-        android:id="@+id/editText_amount_fact"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:inputType="numberDecimal"
-        app:layout_constraintEnd_toStartOf="@id/btn_copy_amount"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView_amount_fact"
-        tools:ignore="Autofill" />
-
-    <ImageButton
-        android:id="@+id/btn_copy_amount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/copy_amount"
-        android:onClick="copyAmount"
-        app:srcCompat="@drawable/ic_copy_back"
-        app:layout_constraintEnd_toStartOf="@+id/editText_amount_planned"
-        app:layout_constraintStart_toEndOf="@+id/editText_amount_fact"
-        app:layout_constraintTop_toBottomOf="@+id/textView_amount_fact" />
-
-    <EditText
-        android:id="@+id/editText_amount_planned"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:inputType="numberDecimal"
-        android:textAlignment="viewEnd"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/btn_copy_amount"
-        app:layout_constraintTop_toBottomOf="@+id/textView_amount_planned"
-        tools:ignore="Autofill" />
-
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            >
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/textView_amount_fact"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/activity_transaction_amount_fact"
+                    />
+                <EditText
+                    android:id="@+id/editText_amount_fact"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    app:layout_constraintEnd_toStartOf="@id/btn_copy_amount"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textView_amount_fact"
+                    tools:ignore="Autofill" />
+            </LinearLayout>
+            <ImageButton
+                android:id="@+id/btn_copy_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/copy_amount"
+                app:srcCompat="@drawable/ic_copy_back"
+                />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/textView_amount_planned"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/activity_transaction_amount_planned"
+                    android:layout_gravity="end"/>
+                <EditText
+                    android:id="@+id/editText_amount_planned"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:inputType="numberDecimal"
+                    android:textAlignment="viewEnd"
+                    tools:ignore="Autofill" />
+            </LinearLayout>
+        </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editText_amount_planned">
+        >
 
         <RadioGroup
             android:id="@+id/radioTrans"
@@ -130,54 +131,64 @@
         <Button
             android:id="@+id/button_date"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1" />
 
     </LinearLayout>
+
+    <EditText
+        android:id="@+id/editText_note"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/activity_transaction_note"
+        android:inputType="textMultiLine"
+        android:minLines="3"
+        android:gravity="top|start"
+        android:maxLines="5"
+        android:scrollbars="vertical"
+        tools:ignore="Autofill" />
 
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout1">
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/button_saveAndClose"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:onClick="saveAndClose"
-            android:text="@string/activity_transaction_saveAclose" />
-
+            android:text="@string/activity_transaction_saveAclose"
+            tools:ignore="ButtonStyle" />
+        <Button
+            android:id="@+id/button_close"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/activity_transaction_close"
+            tools:ignore="ButtonStyle"/>
         <Button
             android:id="@+id/button_delete"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:onClick="delete"
-            android:text="@string/activity_transaction_delete" />
+            android:text="@string/activity_transaction_delete"
+            tools:ignore="ButtonStyle" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout3"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/button_save"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:onClick="save"
             android:text="@string/activity_transaction_save" />
 
         <Button
@@ -185,8 +196,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:onClick="copy"
             android:text="@string/activity_transaction_copy" />
     </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</ScrollView>

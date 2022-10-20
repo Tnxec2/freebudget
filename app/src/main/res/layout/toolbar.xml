@@ -6,22 +6,20 @@
     android:layout_height="wrap_content"
     android:minHeight="?attr/actionBarSize"
     android:background="@color/colorBackground"
-    local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-    local:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
+    local:popupTheme="@style/ThemeOverlay.AppCompat.DayNight" >
 
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Title"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+        android:text="@string/title_activity_main"
+        style="@style/TextAppearance.AppCompat.Title" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/switchShowPlannedOnly"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:gravity="right" />
+        android:gravity="end" />
 
 </androidx.appcompat.widget.Toolbar>

@@ -13,10 +13,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/activity_transaction_description"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
             android:textStyle="bold"
-            android:typeface="sans" />
+            android:typeface="sans"
+            style="@style/TextAppearance.AppCompat.Medium"
+            />
 
         <Space
             android:layout_width="0dp"
@@ -28,8 +28,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/activity_transaction_amount"
-            android:textColor="@android:color/black"
-            android:textSize="18sp" />
+            style="@style/TextAppearance.AppCompat.Medium"
+             />
     </LinearLayout>
 
     <TextView
@@ -37,6 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/activity_category"
-        android:textSize="12sp" />
+        style="@style/TextAppearance.AppCompat.Small"
+        />
 
 </LinearLayout>

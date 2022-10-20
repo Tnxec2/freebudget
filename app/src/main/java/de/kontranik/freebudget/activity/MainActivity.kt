@@ -6,14 +6,11 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
-import android.widget.ListView
-import android.widget.Switch
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.appcompat.widget.Toolbar
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import de.kontranik.freebudget.R
@@ -50,7 +47,7 @@ class MainActivity : AppCompatActivity() {
             resources.getStringArray(R.array.navigation_drawer_items_array)
 
         setupToolbar()
-        switchShowOnlyPlanned = findViewById<View>(R.id.switchShowPlannedOnly) as SwitchCompat
+        switchShowOnlyPlanned = binding.toolbar.switchShowPlannedOnly
         setTextSwitch(false)
         switchShowOnlyPlanned.setOnCheckedChangeListener { buttonView, isChecked -> // do something, the isChecked will be
             // true if the switch is in the On position
@@ -64,22 +61,22 @@ class MainActivity : AppCompatActivity() {
         }
         val drawerItem = hashMapOf<Int, DrawerItem>()
         drawerItem[INDEX_DRAWER_OVERVIEW] = DrawerItem(
-            R.drawable.ic_assessment_black_24dp,
+            R.drawable.ic_assessment_24dp,
             mNavigationDrawerItemTitles[INDEX_DRAWER_OVERVIEW]
         )
         drawerItem[INDEX_DRAWER_ALLTRANSACTION] = DrawerItem(
-            R.drawable.ic_view_list_black_24dp,
+            R.drawable.ic_view_list_24dp,
             mNavigationDrawerItemTitles[INDEX_DRAWER_ALLTRANSACTION]
         )
         drawerItem[INDEX_DRAWER_REGULAR] = DrawerItem(
-            R.drawable.ic_repeat_black_24dp,
+            R.drawable.ic_repeat_24dp,
             mNavigationDrawerItemTitles[INDEX_DRAWER_REGULAR]
         )
         drawerItem[3] = DrawerItem(0, "")
-        drawerItem[4] = DrawerItem(R.drawable.ic_folder_black_24dp, mNavigationDrawerItemTitles[3])
+        drawerItem[4] = DrawerItem(R.drawable.ic_folder_24dp, mNavigationDrawerItemTitles[3])
         drawerItem[5] = DrawerItem(R.drawable.ic_menu_manage, mNavigationDrawerItemTitles[4])
         drawerItem[6] =
-            DrawerItem(R.drawable.ic_settings_black_24dp, mNavigationDrawerItemTitles[5])
+            DrawerItem(R.drawable.ic_settings_24dp, mNavigationDrawerItemTitles[5])
         supportActionBar!!.setDisplayHomeAsUpEnabled(false)
         supportActionBar!!.setHomeButtonEnabled(true)
         val adapter =
@@ -121,16 +118,16 @@ class MainActivity : AppCompatActivity() {
             INDEX_DRAWER_REGULAR -> fragment = RegularFragment()
             3 -> {}
             4 -> {
-                val open_category = Intent(this, CategoryListActivity::class.java)
-                this.startActivityForResult(open_category, 0)
+                val openCategory = Intent(this, CategoryListActivity::class.java)
+                this.startActivityForResult(openCategory, 0)
             }
             5 -> {
-                val open_tools = Intent(this, ToolsActivity::class.java)
-                this.startActivityForResult(open_tools, 0)
+                val openTools = Intent(this, ToolsActivity::class.java)
+                this.startActivityForResult(openTools, 0)
             }
             6 -> {
-                val open_settings = Intent(this, SettingsActivity::class.java)
-                this.startActivityForResult(open_settings, 0)
+                val openSettings = Intent(this, SettingsActivity::class.java)
+                this.startActivityForResult(openSettings, 0)
             }
             else -> {}
         }
@@ -169,12 +166,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun setTitle(index: Int) {
-        val textViewTitle = findViewById<View>(R.id.title) as TextView
         var title: String? = mNavigationDrawerItemTitles[index]
         if (index == INDEX_DRAWER_ALLTRANSACTION) {
             title = this.category
         }
-        textViewTitle.text = title
+        binding.toolbar.title.text = title
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {

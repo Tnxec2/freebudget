@@ -30,21 +30,21 @@ class CategoryAdapter(
             viewHolder = view.tag as ViewHolder
         }
         val category = categoryList[position]
-        viewHolder.textView_CategoryName.text = category.name
-        viewHolder.textView_CategoryWeight.text = String.format("%.2f", category.weight)
-        viewHolder.textView_CategoryWeightBackground.text = ""
+        viewHolder.textviewCategoryName.text = category.name
+        viewHolder.textviewCategoryWeight.text = String.format("%.2f", category.weight)
+        viewHolder.textviewCategoryWeightBackground.text = ""
         val layoutParams =
-            viewHolder.textView_CategoryWeightBackground.layoutParams as ConstraintLayout.LayoutParams
+            viewHolder.textviewCategoryWeightBackground.layoutParams as ConstraintLayout.LayoutParams
         layoutParams.width =
             (category.weight * OverviewFragment.maxWidth / OverviewFragment.maxCategoryWeight).toInt()
-        viewHolder.textView_CategoryWeightBackground.layoutParams = layoutParams
+        viewHolder.textviewCategoryWeightBackground.layoutParams = layoutParams
         return view!!
     }
 
     private inner class ViewHolder internal constructor(view: View) {
-        val textView_CategoryName: TextView = view.findViewById(R.id.textView_CategoryName)
-        val textView_CategoryWeight: TextView = view.findViewById(R.id.textView_CategoryWeight)
-        val textView_CategoryWeightBackground: TextView = view.findViewById(R.id.textView_CategoryWeightBackground)
+        val textviewCategoryName: TextView = view.findViewById(R.id.textView_CategoryName)
+        val textviewCategoryWeight: TextView = view.findViewById(R.id.textView_CategoryWeight)
+        val textviewCategoryWeightBackground: TextView = view.findViewById(R.id.textView_CategoryWeightBackground)
     }
 
 }

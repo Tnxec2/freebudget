@@ -4,7 +4,6 @@
     android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/list_activated_background"
     android:padding="@dimen/paddint_medium">
 
     <ImageView
@@ -20,9 +19,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/paddint_big"
-        android:layout_marginLeft="@dimen/paddint_big"
         android:text="@string/item_name"
-        android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+        style="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/imageViewIcon"

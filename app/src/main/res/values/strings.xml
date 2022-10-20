@@ -17,6 +17,7 @@
     <string name="activity_main_transactions">Transactions</string>
 
     <string name="activity_transaction_description">Description</string>
+    <string name="activity_transaction_note">Note</string>
     <string name="activity_transaction_amount_planned">Amount planned</string>
     <string name="activity_transaction_amount_fact">Amount fact</string>
     <string name="activity_transaction_freq">repeat</string>
@@ -89,7 +90,7 @@
     <string name="end_date">end date</string>
     <string name="start">start</string>
     <string name="end">end</string>
-    <string name="not_set">not set</string>
+    <string name="not_setted">not set</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="do_you_want_restore">Do you want to restore the database?!</string>
@@ -97,6 +98,9 @@
     <string name="receipts_planned_rest">Income planned rest</string>
     <string name="spending_planned_rest">Bills planned rest</string>
     <string name="total_diff">difference total</string>
+    <string name="activity_transaction_close">Close</string>
+    <string name="clear_date_field">clear date field</string>
+    <string name="db_backup">backup database</string>
 
     <string-array name="navigation_drawer_items_array">
         <item>Overview</item>

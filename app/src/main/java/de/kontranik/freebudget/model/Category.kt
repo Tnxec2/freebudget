@@ -1,22 +1,30 @@
 package de.kontranik.freebudget.model
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
+import de.kontranik.freebudget.database.DatabaseHelper
+
+@Entity(tableName = DatabaseHelper.TABLE_CATEGORY)
 class Category : Comparable<Category> {
-    var id: Long = 0
-    var name: String
-    var weight = 0.0
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = DatabaseHelper.COLUMN_ID) var id: Long? = null
+    @ColumnInfo(name = DatabaseHelper.COLUMN_CATEGORY_NAME) var name: String
+    @Ignore var weight = 0.0
 
     constructor(id: Long, name: String) {
         this.id = id
         this.name = name
         weight = 0.0
     }
-
+    @Ignore
     constructor(id: Long, name: String, weight: Double) {
         this.id = id
         this.name = name
         this.weight = weight
     }
-
+    @Ignore
     constructor(name: String) {
         this.name = name
     }

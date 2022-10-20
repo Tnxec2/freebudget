@@ -11,11 +11,13 @@ import android.widget.AdapterView.OnItemClickListener
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import de.kontranik.freebudget.R
 import de.kontranik.freebudget.activity.MainActivity
 import de.kontranik.freebudget.activity.RegularTransactionActivity
 import de.kontranik.freebudget.adapter.RegularTransactionAdapter
-import de.kontranik.freebudget.database.DatabaseAdapter
+import de.kontranik.freebudget.database.viewmodel.RegularTransactionViewModel
+
 import de.kontranik.freebudget.databinding.FragmentRegularBinding
 import de.kontranik.freebudget.model.RegularTransaction
 import de.kontranik.freebudget.service.Constant
@@ -24,6 +26,7 @@ import java.util.*
 
 class RegularFragment : Fragment() {
     private lateinit var binding: FragmentRegularBinding
+    private lateinit var mRegularTransactionViewModel: RegularTransactionViewModel
 
     private var month = 0
     private lateinit var months: Array<String>
@@ -44,6 +47,8 @@ class RegularFragment : Fragment() {
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // Setup any handles to view objects here
+        mRegularTransactionViewModel = ViewModelProvider(this)[RegularTransactionViewModel::class.java]
+
         binding.btnPrevMonth.setOnClickListener { prevMonth() }
         binding.btnNextMonth.setOnClickListener { nextMonth() }
         val mainLayout = view.findViewById<View>(R.id.mainlayout_regular) as ConstraintLayout
@@ -64,7 +69,7 @@ class RegularFragment : Fragment() {
                 val entry = transactionAdapter!!.getItem(position)
                 if (entry != null) {
                     val intent = Intent(context, RegularTransactionActivity::class.java)
-                    intent.putExtra("id", entry.id)
+                    intent.putExtra(Constant.TRANS_ID, entry.id)
                     intent.putExtra("click", 25)
                     startActivity(intent)
                 }
@@ -90,7 +95,7 @@ class RegularFragment : Fragment() {
             isMove = false
             if (motionEvent.action == MotionEvent.ACTION_MOVE) {
                 val data = ClipData.newPlainText("", "")
-                binding.fabAddRegular.setImageResource(R.drawable.ic_euro_symbol_white_24dp)
+                binding.fabAddRegular.setImageResource(R.drawable.ic_baseline_euro_symbol_24)
                 val shadowBuilder = DragShadowBuilder(view)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     view.startDragAndDrop(data, shadowBuilder, view, 0)
@@ -152,12 +157,72 @@ class RegularFragment : Fragment() {
             }
             true
         }
+
+        mRegularTransactionViewModel.regularTransactionByMonth.observe(viewLifecycleOwner) {
+            transactionList.clear()
+            transactionAdapter!!.clear()
+            transactionList.addAll(it)
+            val today = Calendar.getInstance().timeInMillis
+            var amount: Double
+            var receipts = 0.0
+            var spending = 0.0
+            var total = 0.0
+            for (transaction in transactionList) {
+                if (transaction.dateStart == 0L && transaction.dateEnd == 0L
+                    ||
+                    transaction.dateStart != null && today >= transaction.dateStart!!
+                    ||
+                    transaction.dateEnd != null && today <= transaction.dateEnd!!
+                ) {
+                    amount = transaction.amount
+                    if (amount > 0) {
+                        receipts += amount
+                    } else {
+                        spending += Math.abs(amount)
+                    }
+                    total += amount
+                }
+            }
+            binding.textViewSpendingRegular.text =
+                String.format(Locale.getDefault(), "%1$,.2f", spending)
+            binding.textViewSpendingRegular.setTextColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.colorRed
+                )
+            )
+            binding.textViewReceiptsRegular.text =
+                String.format(Locale.getDefault(), "%1$,.2f", receipts)
+            binding.textViewReceiptsRegular.setTextColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.colorGreen
+                )
+            )
+            binding.textViewTotalRegular.text = String.format(Locale.getDefault(), "%1$,.2f", total)
+            if (total > 0) {
+                binding.textViewTotalRegular.setTextColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.colorGreen
+                    )
+                )
+            } else {
+                binding.textViewTotalRegular.setTextColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.colorRed
+                    )
+                )
+            }
+            transactionAdapter!!.notifyDataSetChanged()
+        }
     }
 
     override fun onResume() {
         super.onResume()
         (activity as MainActivity?)!!.updatePosition(MainActivity.INDEX_DRAWER_REGULAR)
-        transactions
+        mRegularTransactionViewModel.loadRegularTransactionsByMonth(month)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -180,7 +245,7 @@ class RegularFragment : Fragment() {
             month - 1
         }
         binding.textViewMonthRegular.text = months[month]
-        transactions
+        mRegularTransactionViewModel.loadRegularTransactionsByMonth(month)
     }
 
     fun nextMonth() {
@@ -190,50 +255,10 @@ class RegularFragment : Fragment() {
             month + 1
         }
         binding.textViewMonthRegular.text = months[month]
-        transactions
+        mRegularTransactionViewModel.loadRegularTransactionsByMonth(month)
     }
 
-    val transactions: Unit
-        get() {
-            val databaseAdapter = DatabaseAdapter(requireContext())
-            databaseAdapter.open()
-            transactionList.clear()
-            transactionAdapter!!.clear()
-            transactionList.addAll(databaseAdapter.getRegular(month))
-            val today = Calendar.getInstance().timeInMillis
-            var amount: Double
-            var receipts = 0.0
-            var spending = 0.0
-            var total = 0.0
-            for (transaction in transactionList) {
-                if (transaction.date_start == 0L && transaction.date_end == 0L
-                    ||
-                    transaction.date_start > 0 && today >= transaction.date_start
-                    ||
-                    transaction.date_end > 0 && today <= transaction.date_end
-                ) {
-                    amount = transaction.amount
-                    if (amount > 0) {
-                        receipts += amount
-                    } else {
-                        spending += Math.abs(amount)
-                    }
-                    total += amount
-                }
-            }
-            binding.textViewSpendingRegular.text = String.format(Locale.getDefault(), "%1$,.2f", spending)
-            binding.textViewSpendingRegular.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorRed))
-            binding.textViewReceiptsRegular.text = String.format(Locale.getDefault(), "%1$,.2f", receipts)
-            binding.textViewReceiptsRegular.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorGreen))
-            binding.textViewTotalRegular.text = String.format(Locale.getDefault(), "%1$,.2f", total)
-            if (total > 0) {
-                binding.textViewTotalRegular.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorGreen))
-            } else {
-                binding.textViewTotalRegular.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorRed))
-            }
-            databaseAdapter.close()
-            transactionAdapter!!.notifyDataSetChanged()
-        }
+
 
     fun add() {
         setNormalStat()
@@ -244,7 +269,7 @@ class RegularFragment : Fragment() {
     }
 
     private fun setNormalStat() {
-        binding.fabAddRegular.setImageResource(R.drawable.ic_add_white_24dp)
+        binding.fabAddRegular.setImageResource(R.drawable.ic_baseline_add_24)
         binding.fabAddRegular.visibility = View.VISIBLE
         binding.fabAddPlusRegular.visibility = View.INVISIBLE
         binding.fabAddMinusRegular.visibility = View.INVISIBLE

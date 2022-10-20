@@ -4,6 +4,7 @@ import de.kontranik.freebudget.database.DatabaseHelper
 
 object Config {
     // Einige Konstante für Einstellungen
+    const val DATE_MILLIS = "dd-MM-yyyy_HH-mm-ss.SSS"
     const val DATE_LONG = "dd-MM-yyyy_HH-mm-ss"
     const val DATE_SHORT = "dd-MM-yyyy"
     const val CSV_DELIMITER = ";"

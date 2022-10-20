@@ -2,7 +2,6 @@ package de.kontranik.freebudget.fragment
 
 import de.kontranik.freebudget.service.PlanRegular.setRegularToPlanned
 import de.kontranik.freebudget.activity.MainActivity
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.kontranik.freebudget.adapter.TransactionAdapter
 import android.os.Bundle
 import de.kontranik.freebudget.R
@@ -15,12 +14,12 @@ import android.view.View.DragShadowBuilder
 import android.os.Build
 import android.view.ContextMenu.ContextMenuInfo
 import android.widget.AdapterView.AdapterContextMenuInfo
-import de.kontranik.freebudget.database.DatabaseAdapter
 import android.content.Intent
 import android.view.*
 import de.kontranik.freebudget.activity.TransactionActivity
-import android.widget.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import de.kontranik.freebudget.database.viewmodel.TransactionViewModel
 import de.kontranik.freebudget.databinding.FragmentAlltransactionBinding
 import de.kontranik.freebudget.model.Transaction
 import de.kontranik.freebudget.service.Constant
@@ -28,8 +27,9 @@ import java.util.*
 
 class AllTransactionFragment : Fragment() {
     private lateinit var binding: FragmentAlltransactionBinding
+    private lateinit var mTransactionViewModel: TransactionViewModel
 
-    var main: MainActivity? = null
+    private var main: MainActivity? = null
 
     private val transactions: MutableList<Transaction> = ArrayList()
     private var transactionAdapter: TransactionAdapter? = null
@@ -38,10 +38,11 @@ class AllTransactionFragment : Fragment() {
 
     private var isMove = false
     private var showOnlyPlanned = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentAlltransactionBinding.inflate(inflater, container, false)
         setHasOptionsMenu(true)
@@ -52,11 +53,13 @@ class AllTransactionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // Setup any handles to view objects here
 
+        mTransactionViewModel = ViewModelProvider(this)[TransactionViewModel::class.java]
+
         binding.btnPlanRegular.setOnClickListener { planRegular() }
         binding.btnPrevMonth.setOnClickListener { prevMonth() }
         binding.btnNextMonth.setOnClickListener { nextMonth() }
         binding.listViewTransactions.onItemClickListener =
-            OnItemClickListener { parent, view, position, id ->
+            OnItemClickListener { _, _, position, _ ->
                 val entry = transactionAdapter!!.getItem(position)
                 editTransaction(entry, Constant.TRANS_TYP_FACT)
             }
@@ -69,11 +72,11 @@ class AllTransactionFragment : Fragment() {
         // Register the ListView  for Context menu
         registerForContextMenu(binding.listViewTransactions)
         months = resources.getStringArray(R.array.months)
-        val date = Calendar.getInstance()
+
         main = activity as MainActivity?
         setMonthTextView()
-        val mainLayout = view.findViewById<View>(R.id.mainlayout_alltransaction) as ConstraintLayout
-        mainLayout.setOnTouchListener(object : OnSwipeTouchListener(context) {
+
+        binding.mainlayoutAlltransaction.setOnTouchListener(object : OnSwipeTouchListener(context) {
             override fun onSwipeLeft() {
                 nextMonth()
             }
@@ -93,7 +96,7 @@ class AllTransactionFragment : Fragment() {
             }
             true
         }
-        binding.listViewTransactions.setOnTouchListener { view, motionEvent ->
+        binding.listViewTransactions.setOnTouchListener { _, motionEvent ->
             when (motionEvent.action) {
                 MotionEvent.ACTION_DOWN -> binding.fabAdd.hide()
                 MotionEvent.ACTION_UP -> binding.fabAdd.show()
@@ -101,16 +104,16 @@ class AllTransactionFragment : Fragment() {
             }
             false
         }
-        binding.fabAdd.setOnTouchListener { view, motionEvent ->
+        binding.fabAdd.setOnTouchListener { v, motionEvent ->
             isMove = false
             if (motionEvent.action == MotionEvent.ACTION_MOVE) {
                 val data = ClipData.newPlainText("", "")
-                binding.fabAdd.setImageResource(R.drawable.ic_euro_symbol_white_24dp)
-                val shadowBuilder = DragShadowBuilder(view)
+                binding.fabAdd.setImageResource(R.drawable.ic_baseline_euro_symbol_24)
+                val shadowBuilder = DragShadowBuilder(v)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    view.startDragAndDrop(data, shadowBuilder, view, 0)
+                    v.startDragAndDrop(data, shadowBuilder, v, 0)
                 } else {
-                    view.startDrag(data, shadowBuilder, view, 0)
+                    v.startDrag(data, shadowBuilder, v, 0)
                 }
                 binding.fabAddPlus.visibility = View.VISIBLE
                 binding.fabAddMinus.visibility = View.VISIBLE
@@ -131,7 +134,7 @@ class AllTransactionFragment : Fragment() {
             }
             true
         }
-        binding.fabAddPlus.setOnDragListener { v, event ->
+        binding.fabAddPlus.setOnDragListener { _, event ->
             val action = event.action
             when (action) {
                 DragEvent.ACTION_DRAG_STARTED -> {}
@@ -179,6 +182,31 @@ class AllTransactionFragment : Fragment() {
             }
             true
         }
+        mTransactionViewModel.dataByYearAndMonth.observe(viewLifecycleOwner) {
+            transactions.clear()
+            lastEditedId = 0
+            var lastEditDate: Long = 0
+            if (it != null) {
+                for (transaction in it) {
+                    if (!showOnlyPlanned || transaction.amountFact == 0.0) {
+                        if (main!!.category == null || main!!.category != null && main!!.category == transaction.category) {
+                            transactions.add(transaction)
+                            if (transaction.amountFact != 0.0 && transaction.dateEdit > lastEditDate) {
+                                lastEditDate = transaction.dateEdit
+                                lastEditedId = transaction.id
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (transactions.size == 0 && !showOnlyPlanned) {
+                binding.btnPlanRegular.visibility = View.VISIBLE
+            } else {
+                binding.btnPlanRegular.visibility = View.GONE
+            }
+            transactionAdapter!!.notifyDataSetChanged()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -187,8 +215,7 @@ class AllTransactionFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        when (id) {
+        when (item.itemId) {
             R.id.menuitem_load_regular -> planRegular()
             else -> {}
         }
@@ -236,35 +263,7 @@ class AllTransactionFragment : Fragment() {
     }
 
     private fun getTransactions() {
-        val databaseAdapter = DatabaseAdapter(requireContext())
-        databaseAdapter.open()
-        transactions.clear()
-        //transactions.addAll(databaseAdapter.getTransactions(getContext(), this.year, this.month, showOnlyPlanned));
-        lastEditedId = 0
-        lastEditedId = 0
-        var lastEditDate: Long = 0
-        val dbTransactions =
-            databaseAdapter.getTransactions(requireContext(), main!!.year, main!!.month, false)
-        for (transaction in dbTransactions) {
-            if (!showOnlyPlanned || transaction.amount_fact == 0.0) {
-                if (main!!.category == null || main!!.category != null && main!!.category == transaction.category) {
-                    transactions.add(transaction)
-                    if (transaction.amount_fact != 0.0 && transaction.date_edit > lastEditDate) {
-                        lastEditDate = transaction.date_edit
-                        lastEditedId = transaction.id
-                    }
-                }
-            }
-        }
-
-        //
-        if (transactions.size == 0 && !showOnlyPlanned) {
-            binding.btnPlanRegular.visibility = View.VISIBLE
-        } else {
-            binding.btnPlanRegular.visibility = View.GONE
-        }
-        transactionAdapter!!.notifyDataSetChanged()
-        databaseAdapter.close()
+        mTransactionViewModel.loadTransactions(main!!.year, main!!.month, false)
     }
 
     fun prevMonth() {
@@ -294,7 +293,7 @@ class AllTransactionFragment : Fragment() {
     }
 
     private fun setNormalStat() {
-        binding.fabAdd.setImageResource(R.drawable.ic_add_white_24dp)
+        binding.fabAdd.setImageResource(R.drawable.ic_baseline_add_24)
         binding.fabAdd.visibility = View.VISIBLE
         binding.fabAddPlus.visibility = View.INVISIBLE
         binding.fabAddMinus.visibility = View.INVISIBLE
@@ -318,10 +317,7 @@ class AllTransactionFragment : Fragment() {
     }
 
     private fun deleteTransaction(entry: Transaction) {
-        val databaseAdapter = DatabaseAdapter(requireContext())
-        databaseAdapter.open()
-        databaseAdapter.deleteTransaction(entry.id)
-        databaseAdapter.close()
+        entry.id?.let { mTransactionViewModel.delete(it) }
         getTransactions()
     }
 
@@ -333,6 +329,6 @@ class AllTransactionFragment : Fragment() {
     companion object {
         private const val PREFS_KEY_LISTPOSITION = "LISTPOS"
         @JvmField
-        var lastEditedId: Long = 0
+        var lastEditedId: Long? = null
     }
 }

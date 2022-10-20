@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorBackgroundLight">#6C8B9B</color>
+    <color name="colorBackground">#344955</color>
+    <color name="colorBackgroundDark">#232F34</color>
+    <color name="colorBackgroundAccent">#8575A2</color>
+    <color name="colorAccent">#F0A202</color>
+    <color name="colorGreen">#4caf50</color>
+    <color name="colorRed">#f44336</color>
+    <color name="colorGreenGray">#3a9e7b</color>
+    <color name="colorRedGray">#d64f73</color>
+
+    <color name="colorBackgroundListItem">@color/colorBlack</color>
+    <color name="colorTextListItem">@color/colorWhite</color>
+
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#000000</color>
+</resources>

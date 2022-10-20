@@ -1,50 +1,57 @@
 package de.kontranik.freebudget.service
 
 import android.content.Context
-import de.kontranik.freebudget.database.DatabaseAdapter
+import de.kontranik.freebudget.database.FreeBudgetRoomDatabase
+import de.kontranik.freebudget.database.repository.RegularTransactionRepository
+import de.kontranik.freebudget.database.repository.TransactionRepository
 import de.kontranik.freebudget.model.Transaction
 import java.util.*
 
 object PlanRegular {
     @JvmStatic
     fun setRegularToPlanned(context: Context, year: Int, month: Int) {
-        val dbAdapter = DatabaseAdapter(context)
-        dbAdapter.open()
+        val transactionRepository = TransactionRepository(context)
+        val regularTransactionRepository = RegularTransactionRepository(context)
 
         /*
          *     aktuellen Monat und allgemeine (Monat == 0)
          */
-        val regularTransactionList = dbAdapter.getRegular(month)
-        regularTransactionList.addAll(dbAdapter.getRegular(0))
-        for (rt in regularTransactionList) {
-            if (!dbAdapter.checkTransactions(year, month, rt.id!!)) {
-                /*
-                 * prüfen, wenn Tag grösser als aktueller monat zulässt,
-                 * dann auf letzen tag des monats setzen
-                 */
-                var cal: Calendar = GregorianCalendar(year, month - 1, 1, 0, 0, 1)
-                val i = cal.getActualMaximum(Calendar.DAY_OF_MONTH)
-                if (rt.day > i) rt.day = i
-                cal = GregorianCalendar(year, month - 1, rt.day, 0, 0, 1)
 
-                /*
-                 * inserten nur wenn Datum im Rahmen von START-END oder START-END nicht eingegeben sind
-                 */if (rt.date_start > 0 && cal.getTimeInMillis() >= rt.date_start
-                    ||
-                    rt.date_end > 0 && cal.getTimeInMillis() <= rt.date_end
-                    ||
-                    rt.date_start == 0L && rt.date_end == 0L
-                ) {
-                    val transaction = Transaction(
-                        0,
-                        rt.id!!,
-                        rt.description!!,
-                        rt.category!!,
-                        cal.getTimeInMillis(),
-                        rt.amount,
-                        0.0
-                    )
-                    dbAdapter.insert(transaction)
+        FreeBudgetRoomDatabase.databaseWriteExecutor.execute {
+            val regularTransactionList = regularTransactionRepository.getTransactionsByMonthNoLiveData(month).toMutableList()
+            regularTransactionList.addAll(regularTransactionRepository.getTransactionsByMonthNoLiveData(0))
+            for (rt in regularTransactionList) {
+                val transaction = transactionRepository.getTransactionByRegularCreateDate(year, month, rt.dateCreate)
+                if ( transaction == null) {
+                    /*
+                     * prüfen, wenn Tag grösser als aktueller monat zulässt,
+                     * dann auf letzen tag des monats setzen
+                     */
+                    var cal: Calendar = GregorianCalendar(year, month - 1, 1, 0, 0, 1)
+                    val i = cal.getActualMaximum(Calendar.DAY_OF_MONTH)
+                    if (rt.day > i) rt.day = i
+                    cal = GregorianCalendar(year, month - 1, rt.day, 0, 0, 1)
+
+                    /*
+                     * inserten nur wenn Datum im Rahmen von START-END oder START-END nicht eingegeben sind
+                     */if (rt.dateStart != null && cal.getTimeInMillis() >= rt.dateStart!!
+                        ||
+                        rt.dateEnd != null && cal.getTimeInMillis() <= rt.dateEnd!!
+                        ||
+                        rt.dateStart == 0L && rt.dateEnd == 0L
+                    ) {
+                        val newTransaction = Transaction(
+                            id = null,
+                            regularCreateTime = rt.dateCreate,
+                            description =  rt.description,
+                            category = rt.category,
+                            date = cal.timeInMillis,
+                            amountPlanned = rt.amount,
+                            amountFact = 0.0,
+                            note = rt.note
+                        )
+                        transactionRepository.insert(newTransaction)
+                    }
                 }
             }
         }
