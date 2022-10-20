@@ -6,8 +6,9 @@ import android.view.View
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import de.kontranik.freebudget.R
-import de.kontranik.freebudget.database.DatabaseAdapter
+import de.kontranik.freebudget.database.viewmodel.CategoryViewModel
 import de.kontranik.freebudget.databinding.ActivityCategoryListBinding
 import de.kontranik.freebudget.model.Category
 
@@ -15,9 +16,10 @@ class CategoryListActivity : AppCompatActivity() {
     private var category: Category? = null
     private lateinit var binding: ActivityCategoryListBinding
 
-    private var dbAdapter: DatabaseAdapter? = null
     private var categoryList: MutableList<Category> = mutableListOf()
     private lateinit var categoryArrayAdapter: ArrayAdapter<Category>
+
+    private lateinit var categoryViewModel: CategoryViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,10 +28,12 @@ class CategoryListActivity : AppCompatActivity() {
 
         setTitle(R.string.activity_category)
 
-        binding.btnCategorySave.setOnClickListener { v -> onSave(v) }
-        binding.btnCategoryClose.setOnClickListener { v -> onClose(v) }
-        binding.btnCategoryDelete.setOnClickListener { v -> onDelete(v) }
-        dbAdapter = DatabaseAdapter(this)
+        categoryViewModel = ViewModelProvider(this)[CategoryViewModel::class.java]
+
+        binding.btnCategorySave.setOnClickListener { onSave() }
+        binding.btnCategoryClose.setOnClickListener { v -> onClose() }
+        binding.btnCategoryDelete.setOnClickListener { v -> onDelete() }
+
         categoryArrayAdapter = ArrayAdapter<Category>(
             this,
             android.R.layout.simple_list_item_1,
@@ -42,54 +46,42 @@ class CategoryListActivity : AppCompatActivity() {
                 val selectedItem = categoryList[position].name
                 // установка текста элемента TextView
                 binding.editTextCategoryName.setText(selectedItem)
-                dbAdapter!!.open()
-                category = dbAdapter!!.getCategory(selectedItem)
-                dbAdapter!!.close()
+                categoryViewModel.loadCategoryByName(selectedItem)
             }
+        categoryViewModel.categoryByName.observe(this, androidx.lifecycle.Observer {
+            category = it
+        })
+        categoryViewModel.mAllCategorys.observe(this) {
+            categoryList.clear()
+            categoryList.addAll(it)
+            categoryArrayAdapter.notifyDataSetChanged()
+        }
     }
 
-    override fun onResume() {
-        super.onResume()
-        getCategory()
-    }
 
-    private fun getCategory() {
-        dbAdapter!!.open()
-        categoryList.clear()
-        categoryList.addAll(dbAdapter!!.allCategory)
-        dbAdapter!!.close()
-        categoryArrayAdapter.notifyDataSetChanged()
-    }
-
-    private fun onSave(view: View?) {
-        dbAdapter!!.open()
+    private fun onSave() {
         if (category == null) {
             category = Category(0, binding.editTextCategoryName.text.toString())
         } else {
             category!!.name = binding.editTextCategoryName.text.toString()
         }
-        if (category!!.id > 0) dbAdapter!!.update(category!!) else dbAdapter!!.insert(category!!)
-        dbAdapter!!.close()
+        if (category!!.id != null)
+            categoryViewModel.update(category!!)
+        else
+            categoryViewModel.insert(category!!)
         category = null
         binding.editTextCategoryName.setText("")
-        getCategory()
     }
 
-    private fun onDelete(view: View?) {
-        if (category != null) {
-            dbAdapter!!.open()
-            if (dbAdapter!!.deleteCategory(category!!.id) > 0) {
-                binding.editTextCategoryName.setText("")
-                category = null
-            }
-            dbAdapter!!.close()
-            getCategory()
-        } else {
-            binding.editTextCategoryName.setText("")
+    private fun onDelete() {
+        if (category?.id != null) {
+            category?.id?.let { categoryViewModel.delete(it) }
+            category = null
         }
+        binding.editTextCategoryName.setText("")
     }
 
-    private fun onClose(view: View?) {
+    private fun onClose() {
         val returnIntent = Intent()
         if (category != null) {
             returnIntent.putExtra(RESULT_CATEGORY, category!!.name)

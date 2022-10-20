@@ -9,7 +9,6 @@
     <color name="colorRed">#f44336</color>
     <color name="colorGreenGray">#3a9e7b</color>
     <color name="colorRedGray">#d64f73</color>
-    <color name="colorBackgroundCard">@color/colorWhite</color>
 
     <color name="colorBackgroundListItem">@color/colorWhite</color>
     <color name="colorTextListItem">@color/colorBlack</color>

@@ -1,102 +1,73 @@
 package de.kontranik.freebudget.model
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
+import de.kontranik.freebudget.database.DatabaseHelper
 import java.util.*
 
+@Entity(tableName = DatabaseHelper.TABLE_TRANSACTION)
 class Transaction {
-    var id: Long
-    var regular_id: Long
-    var year = 0
-    var month = 0
-    var day = 0
-    var description: String
-    var category: String
-    var date: Long
-    var amount_planned: Double
-    var amount_fact: Double
-    var date_create: Long
-    var date_edit: Long
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = DatabaseHelper.COLUMN_ID) var id: Long? = null
+    @ColumnInfo(name = DatabaseHelper.COLUMN_REGULAR_CREATE_DATE) var regularCreateTime: Long? = null
+    @ColumnInfo(name = DatabaseHelper.COLUMN_DESCRIPTION) var description: String = ""
+    @ColumnInfo(name = DatabaseHelper.COLUMN_NOTE) var note: String? = null
+    @ColumnInfo(name = DatabaseHelper.COLUMN_CATEGORY_NAME) var category: String = ""
+    @ColumnInfo(name = DatabaseHelper.COLUMN_DATE) var date: Long = Date().time
+    @ColumnInfo(name = DatabaseHelper.COLUMN_AMOUNT_PLANNED) var amountPlanned: Double = 0.0
+    @ColumnInfo(name = DatabaseHelper.COLUMN_AMOUNT_FACT) var amountFact: Double = 0.0
+    @ColumnInfo(name = DatabaseHelper.COLUMN_DATE_CREATE) var dateCreate: Long = Date().time
+    @ColumnInfo(name = DatabaseHelper.COLUMN_DATE_EDIT) var dateEdit: Long = Date().time
+
+    constructor() {}
 
     constructor(
-        id: Long,
-        regular_id: Long,
+        id: Long?,
+        regularCreateTime: Long?,
         description: String,
         category: String,
         date: Long,
-        amount_planned: Double,
-        amount_fact: Double,
-        date_create: Long,
-        date_edit: Long
+        amountPlanned: Double,
+        amountFact: Double,
+        dateCreate: Long,
+        dateEdit: Long,
+        note: String?
     ) {
         this.id = id
-        this.regular_id = regular_id
+        this.regularCreateTime = regularCreateTime
         this.description = description
         this.category = category
         this.date = date
-        this.amount_planned = amount_planned
-        this.amount_fact = amount_fact
-        this.date_create = date_create
-        this.date_edit = date_edit
-        if (date > 0) {
-            val cal = Calendar.getInstance()
-            cal.timeInMillis = date
-            year = cal[Calendar.YEAR]
-            month = cal[Calendar.MONTH] + 1
-            day = cal[Calendar.DAY_OF_MONTH]
-        }
+        this.amountPlanned = amountPlanned
+        this.amountFact = amountFact
+        this.dateCreate = dateCreate
+        this.dateEdit = dateEdit
+        this.note = note
     }
 
+    @Ignore
     constructor(
-        id: Long,
-        regular_id: Long,
+        id: Long?,
+        regularCreateTime: Long?,
         description: String,
         category: String,
         date: Long,
-        amount_planned: Double,
-        amount_fact: Double,
-        date_create: Long
+        amountPlanned: Double,
+        amountFact: Double,
+        note: String?
     ) {
         this.id = id
-        this.regular_id = regular_id
+        this.regularCreateTime = regularCreateTime
         this.description = description
         this.category = category
         this.date = date
-        this.amount_planned = amount_planned
-        this.amount_fact = amount_fact
-        this.date_create = date_create
-        if (date > 0) {
-            val cal = Calendar.getInstance()
-            cal.timeInMillis = date
-            year = cal[Calendar.YEAR]
-            month = cal[Calendar.MONTH] + 1
-            day = cal[Calendar.DAY_OF_MONTH]
-        }
-        date_edit = Date().time
+        this.amountPlanned = amountPlanned
+        this.amountFact = amountFact
+        this.dateCreate = Date().time
+        this.dateEdit = Date().time
+        this.note = note
     }
 
-    constructor(
-        id: Long,
-        regular_id: Long,
-        description: String,
-        category: String,
-        date: Long,
-        amount_planned: Double,
-        amount_fact: Double
-    ) {
-        this.id = id
-        this.regular_id = regular_id
-        this.description = description
-        this.category = category
-        this.date = date
-        this.amount_planned = amount_planned
-        this.amount_fact = amount_fact
-        date_create = Date().time
-        date_edit = Date().time
-        if (date > 0) {
-            val cal = Calendar.getInstance()
-            cal.timeInMillis = date
-            year = cal[Calendar.YEAR]
-            month = cal[Calendar.MONTH] + 1
-            day = cal[Calendar.DAY_OF_MONTH]
-        }
-    }
 }

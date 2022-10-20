@@ -2,7 +2,6 @@ package de.kontranik.freebudget.activity
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import de.kontranik.freebudget.R
 import de.kontranik.freebudget.config.Config
@@ -23,12 +22,12 @@ class SettingsActivity : AppCompatActivity() {
         setTitle(R.string.app_settings)
 
         binding.btnClose.setOnClickListener { finish() }
-        binding.buttonSave.setOnClickListener { v -> saveConfig(v) }
+        binding.buttonSave.setOnClickListener { saveConfig() }
 
-        when (settings.getString(Config.PREF_ORDER_BY, Config.PREF_ORDER_BY_NOT_SORT)!!) {
+        val sortOrder = settings.getString(Config.PREF_ORDER_BY, Config.PREF_ORDER_BY_NOT_SORT)
+        when (sortOrder) {
             Config.PREF_ORDER_BY_DESCRIPTION -> binding.radioButtonSortDescription.isChecked = true
-            Config.PREF_ORDER_BY_CATEGORY_NAME -> binding.radioButtonSortCategoryname.isChecked =
-                true
+            Config.PREF_ORDER_BY_CATEGORY_NAME -> binding.radioButtonSortCategoryname.isChecked = true
             Config.PREF_ORDER_BY_AMOUNT -> binding.radioButtonSortAmount.isChecked = true
             Config.PREF_ORDER_BY_ABS_AMOUNT -> binding.radioButtonSortAbsamount.isChecked = true
             Config.PREF_ORDER_BY_DATE -> binding.radioButtonSortDate.isChecked = true
@@ -41,33 +40,33 @@ class SettingsActivity : AppCompatActivity() {
             settings.getBoolean(Config.PREF_MARK_LAST_EDITED, false)
     }
 
-    fun saveConfig(view: View?) {
-        var order_by = Config.PREF_ORDER_BY_NOT_SORT
+    private fun saveConfig() {
+        var orderBy = Config.PREF_ORDER_BY_NOT_SORT
 
         if (binding.radioButtonSortDescription.isChecked) {
-            order_by = Config.PREF_ORDER_BY_DESCRIPTION
+            orderBy = Config.PREF_ORDER_BY_DESCRIPTION
         }
         if (binding.radioButtonSortCategoryname.isChecked) {
-            order_by = Config.PREF_ORDER_BY_CATEGORY_NAME
+            orderBy = Config.PREF_ORDER_BY_CATEGORY_NAME
         }
         if (binding.radioButtonSortAmount.isChecked) {
-            order_by = Config.PREF_ORDER_BY_AMOUNT
+            orderBy = Config.PREF_ORDER_BY_AMOUNT
         }
         if (binding.radioButtonSortAbsamount.isChecked) {
-            order_by = Config.PREF_ORDER_BY_ABS_AMOUNT
+            orderBy = Config.PREF_ORDER_BY_ABS_AMOUNT
         }
         if (binding.radioButtonSortDate.isChecked) {
-            order_by = Config.PREF_ORDER_BY_DATE
+            orderBy = Config.PREF_ORDER_BY_DATE
         }
         if (binding.radioButtonSortEditDate.isChecked) {
-            order_by = Config.PREF_ORDER_BY_EDIT_DATE
+            orderBy = Config.PREF_ORDER_BY_EDIT_DATE
         }
         if (binding.radioButtonSortNotsort.isChecked) {
-            order_by = Config.PREF_ORDER_BY_NOT_SORT
+            orderBy = Config.PREF_ORDER_BY_NOT_SORT
         }
 
         val prefEditor: SharedPreferences.Editor = settings.edit()
-        prefEditor.putString(Config.PREF_ORDER_BY, order_by)
+        prefEditor.putString(Config.PREF_ORDER_BY, orderBy)
         prefEditor.putBoolean(Config.PREF_SORT_DESC, binding.checkBoxSortDesc.isChecked)
         prefEditor.putBoolean(Config.PREF_MARK_LAST_EDITED, binding.checkBoxMarkLastEdited.isChecked)
         prefEditor.apply()

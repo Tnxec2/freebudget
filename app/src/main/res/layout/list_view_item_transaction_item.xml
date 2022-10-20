@@ -13,12 +13,12 @@
             android:id="@+id/textView_description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/activity_transaction_description"
-            android:textColor="@android:color/black"
             android:layout_weight=".60"
-            android:textSize="18sp"
+            android:text="@string/activity_transaction_description"
             android:textStyle="bold"
-            android:typeface="sans" />
+            android:typeface="sans"
+            style="@style/TextAppearance.AppCompat.Medium"
+        />
 
         <TextView
             android:id="@+id/textView_amount_planned"
@@ -27,8 +27,7 @@
             android:layout_weight=".20"
             android:gravity="center"
             android:text="@string/activity_transaction_amount"
-            android:textColor="@android:color/black"
-            android:textSize="18sp" />
+            style="@style/TextAppearance.AppCompat.Medium" />
 
         <TextView
             android:id="@+id/textView_amount_fact"
@@ -37,8 +36,7 @@
             android:layout_weight=".20"
             android:gravity="center"
             android:text="@string/activity_transaction_amount"
-            android:textColor="@android:color/black"
-            android:textSize="18sp" />
+            style="@style/TextAppearance.AppCompat.Medium" />
 
     </LinearLayout>
 
@@ -47,6 +45,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/activity_category"
-        android:textSize="12sp" />
+        style="@style/TextAppearance.AppCompat.Small" />
 
 </LinearLayout>

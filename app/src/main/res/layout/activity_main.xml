@@ -34,7 +34,8 @@
         android:layout_width="240dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/colorBackgroundCard"
-        android:choiceMode="singleChoice" />
+        android:choiceMode="singleChoice"
+        android:background="@color/colorBackground"
+        />
 
 </androidx.drawerlayout.widget.DrawerLayout>

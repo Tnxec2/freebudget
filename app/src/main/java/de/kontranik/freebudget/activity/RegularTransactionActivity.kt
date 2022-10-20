@@ -3,29 +3,33 @@ package de.kontranik.freebudget.activity
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import android.widget.AdapterView.OnItemClickListener
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import de.kontranik.freebudget.R
-import de.kontranik.freebudget.activity.CategoryListActivity
-import de.kontranik.freebudget.database.DatabaseAdapter
+import de.kontranik.freebudget.database.viewmodel.CategoryViewModel
+import de.kontranik.freebudget.database.viewmodel.RegularTransactionViewModel
 import de.kontranik.freebudget.databinding.ActivityRegularTransactionBinding
+import de.kontranik.freebudget.model.Category
 import de.kontranik.freebudget.model.RegularTransaction
 import de.kontranik.freebudget.service.Constant
 import de.kontranik.freebudget.service.SoftKeyboard.hideKeyboard
-import de.kontranik.freebudget.service.SoftKeyboard.showKeyboard
 import java.text.DateFormat
 import java.util.*
 import kotlin.math.abs
 
 class RegularTransactionActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegularTransactionBinding
+    private lateinit var mRegularTransactionViewModel: RegularTransactionViewModel
+    private lateinit var mCategoryViewModel: CategoryViewModel
 
-    private var dbAdapter: DatabaseAdapter? = null
-    private var transactionID: Long = 0
-    private var date_start: Long = 0
-    private var date_end: Long = 0
+    private var transactionID: Long? = null
+    private var dateStart: Long? = null
+    private var dateEnd: Long? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -34,17 +38,25 @@ class RegularTransactionActivity : AppCompatActivity() {
 
         setTitle(R.string.new_regular_transaction)
         binding.editTextDescriptionRegular.requestFocus()
-        showKeyboard(this)
+        //showKeyboard(this)
 
-        dbAdapter = DatabaseAdapter(this)
+        mRegularTransactionViewModel = ViewModelProvider(this)[RegularTransactionViewModel::class.java]
+        mCategoryViewModel = ViewModelProvider(this)[CategoryViewModel::class.java]
+
+        binding.buttonSaveAndCloseRegular.setOnClickListener { saveAndClose() }
+        binding.buttonCloseRegular.setOnClickListener { close() }
+        binding.buttonSaveRegular.setOnClickListener { save() }
+        binding.buttonDeleteRegular.setOnClickListener { delete() }
+        binding.buttonCopyRegular.setOnClickListener { copy() }
+        binding.btnSelectCatRegular.setOnClickListener { selectCat() }
 
         // perform click event on edit text
         binding.buttonStartDate.setOnClickListener { // calender class's instance and get current date , month and year from calender
             val newCalendar = Calendar.getInstance()
-            if (date_start == 0L) {
-                date_start = newCalendar.timeInMillis
+            if (dateStart == null) {
+                dateStart = newCalendar.timeInMillis
             } else {
-                newCalendar.timeInMillis = date_start
+                newCalendar.timeInMillis = dateStart!!
             }
             val datePickerDialog = DatePickerDialog(
                 this@RegularTransactionActivity,
@@ -53,8 +65,8 @@ class RegularTransactionActivity : AppCompatActivity() {
                     datePickerDate.clear()
                     datePickerDate[year, monthOfYear, dayOfMonth, 0, 0] = 1
                     datePickerDate[Calendar.MILLISECOND] = 0
-                    date_start = datePickerDate.timeInMillis
-                    setDateText(binding.buttonStartDate, date_start)
+                    dateStart = datePickerDate.timeInMillis
+                    setDateText(binding.buttonStartDate, dateStart!!)
                 },
                 newCalendar[Calendar.YEAR],
                 newCalendar[Calendar.MONTH],
@@ -66,10 +78,10 @@ class RegularTransactionActivity : AppCompatActivity() {
         // perform click event on edit text
         binding.buttonEndDate.setOnClickListener { // calender class's instance and get current date , month and year from calender
             val newCalendar = Calendar.getInstance()
-            if (date_end == 0L) {
-                date_end = newCalendar.timeInMillis
+            if (dateEnd == null) {
+                dateEnd = newCalendar.timeInMillis
             } else {
-                newCalendar.timeInMillis = date_end
+                newCalendar.timeInMillis = dateEnd!!
             }
             val datePickerDialog = DatePickerDialog(
                 this@RegularTransactionActivity,
@@ -77,8 +89,8 @@ class RegularTransactionActivity : AppCompatActivity() {
                     val datePickerDate = Calendar.getInstance()
                     datePickerDate[year, monthOfYear, dayOfMonth, 23, 59] = 59
                     datePickerDate[Calendar.MILLISECOND] = 999
-                    date_end = datePickerDate.timeInMillis
-                    setDateText(binding.buttonEndDate, date_end)
+                    dateEnd = datePickerDate.timeInMillis
+                    setDateText(binding.buttonEndDate, dateEnd!!)
                 },
                 newCalendar[Calendar.YEAR],
                 newCalendar[Calendar.MONTH],
@@ -87,15 +99,15 @@ class RegularTransactionActivity : AppCompatActivity() {
             datePickerDialog.show()
         }
         binding.imageButtonClearStartDate.setOnClickListener {
-            date_start = 0
-            binding.buttonStartDate.setText(R.string.not_set)
+            dateStart = 0
+            binding.buttonStartDate.setText(R.string.not_setted)
         }
         binding.imageButtonClearEndDate.setOnClickListener {
-            date_end = 0
-            binding.buttonEndDate.setText(R.string.not_set)
+            dateEnd = 0
+            binding.buttonEndDate.setText(R.string.not_setted)
         }
-        dbAdapter!!.open()
-        val categoryArrayList = dbAdapter!!.allCategory
+
+        val categoryArrayList: MutableList<Category> = mutableListOf()
         val adapter = ArrayAdapter(
             this, android.R.layout.simple_dropdown_item_1line, categoryArrayList
         )
@@ -111,33 +123,46 @@ class RegularTransactionActivity : AppCompatActivity() {
 
         // get ID from Buffer
         val extras = intent.extras
-        if (extras != null) {
-            transactionID = extras.getLong(Constant.TRANS_ID)
+        transactionID = if (extras != null && extras.containsKey(Constant.TRANS_ID)) {
+            extras.getLong(Constant.TRANS_ID)
+        } else {
+            null
         }
-        // if ID = 0, then create new transaction; else update
-        binding.spinnerMonthRegular.setSelection(0)
-        if (transactionID > 0) {
-            // получаем элемент по id из бд
-            dbAdapter!!.open()
-            val transaction = dbAdapter!!.getRegularById(transactionID)
-            if (transaction != null) {
-                binding.editTextDescriptionRegular.setText(transaction.description)
-                binding.acTextViewCategoryRegular.setText(transaction.category)
-                binding.editTextDayRegular.setText(java.lang.String.valueOf(transaction.day))
-                if (transaction.amount != 0.0) {
-                    binding.editTextAmountRegular.setText(abs(transaction.amount).toString())
+        Log.d("NIK", "${if (transactionID!=null) transactionID else "NULL"}")
+        mCategoryViewModel.mAllCategorys.observe(this) {
+            categoryArrayList.clear()
+            categoryArrayList.addAll(it)
+            adapter.notifyDataSetChanged()
+        }
+
+        mRegularTransactionViewModel.regularTransactionById.observe(this){
+            if (it != null) {
+                binding.editTextDescriptionRegular.setText(it.description)
+                binding.acTextViewCategoryRegular.setText(it.category)
+                binding.editTextDayRegular.setText(java.lang.String.valueOf(it.day))
+                if (it.amount != 0.0) {
+                    binding.editTextAmountRegular.setText(abs(it.amount).toString())
                 }
-                if (transaction.amount > 0) {
+                if (it.amount > 0) {
                     binding.radioButtonReceiptsRegular.isChecked = true
-                } else if (transaction.amount < 0) {
+                } else if (it.amount < 0) {
                     binding.radioButtonSpendingRegular.isChecked = true
                 }
-                binding.spinnerMonthRegular.setSelection(transaction.month)
-                date_start = transaction.date_start
-                date_end = transaction.date_end
+                binding.spinnerMonthRegular.setSelection(it.month)
+                dateStart = it.dateStart
+                dateEnd = it.dateEnd
+                setDateText(binding.buttonStartDate, dateStart)
+                setDateText(binding.buttonEndDate, dateEnd)
+                binding.editTextNoteRegular.setText(it.note)
             }
-            dbAdapter!!.close()
+        }
+
+        // if ID = 0, then create new transaction; else update
+        binding.spinnerMonthRegular.setSelection(0)
+        if (transactionID != null) {
+            mRegularTransactionViewModel.loadRegularTransactionsById(transactionID!!)
         } else {
+            mRegularTransactionViewModel.clearRegularTransactionsById()
             var transStat: String? = null
             if (extras != null) {
                 if (extras.containsKey(Constant.TRANS_STAT)) transStat = extras.getString(Constant.TRANS_STAT )
@@ -153,29 +178,36 @@ class RegularTransactionActivity : AppCompatActivity() {
 
             // hide delete button
             binding.buttonDeleteRegular.visibility = View.GONE
-            date_start = 0
-            date_end = 0
+            dateStart = null
+            dateEnd = null
+            setDateText(binding.buttonStartDate, dateStart)
+            setDateText(binding.buttonEndDate, dateEnd)
         }
-        setDateText(binding.buttonStartDate, date_start)
-        setDateText(binding.buttonEndDate, date_end)
+
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putLong(REGULAR_DATE_START, date_start)
-        outState.putLong(REGULAR_DATE_END, date_end)
+        if (dateStart != null) outState.putLong(REGULAR_DATE_START, dateStart!!)
+        else outState.remove(REGULAR_DATE_START)
+        if (dateEnd != null) outState.putLong(REGULAR_DATE_END, dateEnd!!)
+        else outState.remove(REGULAR_DATE_END)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        if (savedInstanceState.containsKey(REGULAR_DATE_START)) {
-            date_start = savedInstanceState.getLong(REGULAR_DATE_START)
-            setDateText(binding.buttonStartDate, date_start)
+        dateStart = if (savedInstanceState.containsKey(REGULAR_DATE_START)) {
+            savedInstanceState.getLong(REGULAR_DATE_START)
+        } else {
+            null
         }
-        if (savedInstanceState.containsKey(REGULAR_DATE_END)) {
-            date_end = savedInstanceState.getLong(REGULAR_DATE_END)
-            setDateText(binding.buttonEndDate, date_end)
+        setDateText(binding.buttonStartDate, dateStart)
+        dateEnd = if (savedInstanceState.containsKey(REGULAR_DATE_END)) {
+            savedInstanceState.getLong(REGULAR_DATE_END)
+        } else {
+            null
         }
+        setDateText(binding.buttonEndDate, dateEnd)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -189,14 +221,18 @@ class RegularTransactionActivity : AppCompatActivity() {
         }
     }
 
-    fun saveAndClose(view: View?) {
-        save(view)
+    private fun saveAndClose() {
+        save()
+        close()
+    }
+
+    private fun close() {
         hideKeyboard(this)
         finish()
         //goHome();
     }
 
-    fun save(view: View?) {
+    private fun save() {
         val description = binding.editTextDescriptionRegular.text.toString()
         val categoryName = binding.acTextViewCategoryRegular.text.toString()
         var amount: Double
@@ -212,42 +248,40 @@ class RegularTransactionActivity : AppCompatActivity() {
         }
         val month = binding.spinnerMonthRegular.selectedItemPosition
         val day = binding.editTextDayRegular.text.toString().toInt()
-        dbAdapter!!.open()
+        val note = binding.editTextNoteRegular.text.toString()
+
         val regularTransaction =
-            RegularTransaction(transactionID, month, day, description, categoryName, amount)
-        regularTransaction.date_start = date_start
-        regularTransaction.date_end = date_end
-        if (transactionID > 0) {
-            dbAdapter!!.update(regularTransaction)
+            RegularTransaction(transactionID, month, day, description, categoryName, amount, note)
+        regularTransaction.dateStart = dateStart
+        regularTransaction.dateEnd = dateEnd
+        if (transactionID != null) {
+            mRegularTransactionViewModel.update(regularTransaction)
         } else {
-            dbAdapter!!.insert(regularTransaction)
+            mRegularTransactionViewModel.insert(regularTransaction)
         }
-        dbAdapter!!.close()
     }
 
-    fun copy(view: View?) {
-        transactionID = 0
+    private fun copy() {
+        transactionID = null
         binding.buttonDeleteRegular.visibility = View.GONE
         binding.buttonCopyRegular.visibility = View.GONE
     }
 
-    fun delete(view: View?) {
-        dbAdapter!!.open()
-        dbAdapter!!.deleteRegularTransaction(transactionID)
-        dbAdapter!!.close()
+    private fun delete() {
+        transactionID?.let { mRegularTransactionViewModel.delete(it) }
         hideKeyboard(this)
         finish()
     }
 
-    fun selectCat(view: View?) {
+    private fun selectCat() {
         val intent = Intent(this, CategoryListActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
         startActivityForResult(intent, PICK_CATEGORY_REQUEST)
     }
 
-    private fun setDateText(button: Button?, date: Long) {
-        if (date == 0L) {
-            button!!.setText(R.string.not_set)
+    private fun setDateText(button: Button?, date: Long?) {
+        if (date == null) {
+            button!!.setText(R.string.not_setted)
         } else {
             val dateFormatter = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault())
             button!!.text = dateFormatter.format(date)
