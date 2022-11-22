@@ -13,7 +13,7 @@ class Helper {
             if (orderBy != Config.PREF_ORDER_BY_NOT_SORT) {
                 sortOrder = orderBy
                 if (sortDesc) {
-                    sortOrder = "$sortOrder DESC "
+                    sortOrder = "$sortOrder DESC"
                 }
             }
             return sortOrder

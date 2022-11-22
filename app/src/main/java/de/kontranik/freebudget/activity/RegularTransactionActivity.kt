@@ -210,6 +210,7 @@ class RegularTransactionActivity : AppCompatActivity() {
         setDateText(binding.buttonEndDate, dateEnd)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         // Check which request we're responding to

@@ -36,16 +36,6 @@ internal class RegularTransactionRepository(var context: Context) {
         }
     }
 
-    fun getAllLiveData(): LiveData<List<RegularTransaction>> {
-        val sortOrder = Helper.getSortFromSettings(context)
-        return if (sortOrder==null) mRegularTransactionDao.getAllLiveData() else mRegularTransactionDao.getAllLiveData(sortOrder)
-    }
-
-    fun getAll(): List<RegularTransaction> {
-        val sortOrder = Helper.getSortFromSettings(context)
-        return if (sortOrder==null) mRegularTransactionDao.getAll() else mRegularTransactionDao.getAll(sortOrder)
-    }
-
     fun getTransactionsByMonth(month: Int): LiveData<List<RegularTransaction>> {
         return mRegularTransactionDao.getByMonth(month)
     }
@@ -71,10 +61,11 @@ internal class RegularTransactionRepository(var context: Context) {
     }
 
     private fun updateCategory(categoryName: String) {
-        if (categoryName.trim().isNotEmpty()) {
-            val dbCat = mCategoryDao.getByName(categoryName)
+        val trimmedName = categoryName.trim()
+        if (trimmedName.isNotEmpty()) {
+            val dbCat = mCategoryDao.getByName(trimmedName)
             if (dbCat == null) {
-                mCategoryDao.insert(Category(name = categoryName))
+                mCategoryDao.insert(Category(name = trimmedName))
             }
         }
     }

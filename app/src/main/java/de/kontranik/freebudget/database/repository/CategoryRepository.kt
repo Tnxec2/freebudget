@@ -24,7 +24,8 @@ internal class CategoryRepository(context: Context) {
 
     fun insert(category: Category) {
         FreeBudgetRoomDatabase.databaseWriteExecutor.execute {
-            if (category.name.trim().isNotEmpty()) {
+            category.name = category.name.trim()
+            if (category.name.isNotEmpty()) {
                 val categoryInDB = mCategoryDao.getByName(category.name)
                 if ( categoryInDB == null)
                     mCategoryDao.insert(category)
@@ -57,7 +58,8 @@ internal class CategoryRepository(context: Context) {
 
     fun update(category: Category) {
         FreeBudgetRoomDatabase.databaseWriteExecutor.execute {
-            if (category.name.trim().isNotEmpty()) {
+            category.name = category.name.trim()
+            if (category.name.isNotEmpty()) {
                 if ( category.id != null) {
                     val categoryInDB = mCategoryDao.getById(category.id!!)
                     if (categoryInDB != null) {

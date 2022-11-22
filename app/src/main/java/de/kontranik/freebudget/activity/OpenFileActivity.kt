@@ -75,6 +75,7 @@ class OpenFileActivity : AppCompatActivity(), View.OnClickListener, OnItemClickL
         binding.LvList.adapter = adapter
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (currentPath != null && currentPath != Environment.getExternalStorageDirectory().absolutePath + "/") {
             if (File(currentPath!!).parent != null) setCurrentPath(File(currentPath!!).parent!! + "/")

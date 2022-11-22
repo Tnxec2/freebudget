@@ -3,6 +3,7 @@ package de.kontranik.freebudget.database.repository
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Environment
+import android.util.Log
 import androidx.lifecycle.LiveData
 import de.kontranik.freebudget.config.Config
 import de.kontranik.freebudget.database.DatabaseHelper
@@ -44,6 +45,7 @@ internal class TransactionRepository(val context: Context) {
         val timeStringStart = cal.timeInMillis.toString()
         cal.add(Calendar.MONTH, 1)
         val timeStringEnd = cal.timeInMillis.toString()
+        sortOrder?.let { Log.d("getTransactions", it) }
         return if (showOnlyPlanned)
             if (sortOrder == null)
                 mTransactionDao.getPlannedTransactionsByDate(timeStringStart, timeStringEnd)
@@ -127,10 +129,11 @@ internal class TransactionRepository(val context: Context) {
     }
 
     private fun updateCategory(categoryName: String) {
-        if (categoryName.trim().isNotEmpty()) {
-            val dbCat = mCategoryDao.getByName(categoryName)
+        val trimmedName = categoryName.trim()
+        if (trimmedName.isNotEmpty()) {
+            val dbCat = mCategoryDao.getByName(trimmedName)
             if (dbCat == null) {
-                mCategoryDao.insert(Category(name = categoryName))
+                mCategoryDao.insert(Category(name = trimmedName))
             }
         }
     }

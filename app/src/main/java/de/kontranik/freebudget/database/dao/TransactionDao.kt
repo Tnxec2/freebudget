@@ -20,17 +20,54 @@ interface TransactionDao {
     @get:Query("SELECT * FROM ${DatabaseHelper.TABLE_TRANSACTION}")
     val getAll: LiveData<List<Transaction>>
 
-    @Query("SELECT * FROM ${DatabaseHelper.TABLE_TRANSACTION} where ${DatabaseHelper.COLUMN_DATE} >= :timeStart and ${DatabaseHelper.COLUMN_DATE} < :timeEnd and ${DatabaseHelper.COLUMN_AMOUNT_FACT} = 0")
+    @Query("SELECT * FROM ${DatabaseHelper.TABLE_TRANSACTION} " +
+            "where ${DatabaseHelper.COLUMN_DATE} >= :timeStart " +
+            "and ${DatabaseHelper.COLUMN_DATE} < :timeEnd " +
+            "and ${DatabaseHelper.COLUMN_AMOUNT_FACT} = 0")
     fun getPlannedTransactionsByDate(timeStart: String, timeEnd: String): LiveData<List<Transaction>>
 
-    @Query("SELECT * FROM ${DatabaseHelper.TABLE_TRANSACTION} where ${DatabaseHelper.COLUMN_DATE} >= :timeStart and ${DatabaseHelper.COLUMN_DATE} < :timeEnd and ${DatabaseHelper.COLUMN_AMOUNT_FACT} = 0  ORDER BY :sortOrder")
-    fun getPlannedTransactionsByDate(timeStart: String, timeEnd: String, sortOrder: String): LiveData<List<Transaction>>
+    @Query("SELECT * FROM ${DatabaseHelper.TABLE_TRANSACTION} " +
+            "where ${DatabaseHelper.COLUMN_DATE} >= :timeStart " +
+            "and ${DatabaseHelper.COLUMN_DATE} < :timeEnd " +
+            "and ${DatabaseHelper.COLUMN_AMOUNT_FACT} = 0 " +
+            "ORDER BY " +
+            "CASE WHEN :sort_by = '${DatabaseHelper.COLUMN_DESCRIPTION}' THEN ${DatabaseHelper.COLUMN_DESCRIPTION} END ASC, " +
+            "CASE WHEN :sort_by = '${DatabaseHelper.COLUMN_DESCRIPTION} DESC' THEN ${DatabaseHelper.COLUMN_DESCRIPTION} END DESC, " +
+            "CASE WHEN :sort_by = '${DatabaseHelper.COLUMN_CATEGORY_NAME}' THEN ${DatabaseHelper.COLUMN_CATEGORY_NAME} END ASC, " +
+            "CASE WHEN :sort_by = '${DatabaseHelper.COLUMN_CATEGORY_NAME} DESC' THEN ${DatabaseHelper.COLUMN_CATEGORY_NAME} END DESC, " +
+            "CASE WHEN :sort_by = '${DatabaseHelper.COLUMN_AMOUNT_PLANNED} DESC' THEN ${DatabaseHelper.COLUMN_AMOUNT_PLANNED} END DESC, " +
+            "CASE WHEN :sort_by = '${DatabaseHelper.COLUMN_AMOUNT_PLANNED}' THEN ${DatabaseHelper.COLUMN_AMOUNT_PLANNED} END ASC, " +
+            "CASE WHEN :sort_by = 'ABS(${DatabaseHelper.COLUMN_AMOUNT_PLANNED}) DESC' THEN ABS(${DatabaseHelper.COLUMN_AMOUNT_PLANNED}) END DESC, " +
+            "CASE WHEN :sort_by = 'ABS(${DatabaseHelper.COLUMN_AMOUNT_PLANNED})' THEN ABS(${DatabaseHelper.COLUMN_AMOUNT_PLANNED}) END ASC, " +
+            "CASE WHEN :sort_by = '${DatabaseHelper.COLUMN_DATE} DESC' THEN ABS(${DatabaseHelper.COLUMN_DATE}) END DESC, " +
+            "CASE WHEN :sort_by = '${DatabaseHelper.COLUMN_DATE}' THEN ABS(${DatabaseHelper.COLUMN_DATE}) END ASC, " +
+            "CASE WHEN :sort_by = '${DatabaseHelper.COLUMN_DATE_EDIT} DESC' THEN ABS(${DatabaseHelper.COLUMN_DATE_EDIT}) END DESC, " +
+            "CASE WHEN :sort_by = '${DatabaseHelper.COLUMN_DATE_EDIT}' THEN ABS(${DatabaseHelper.COLUMN_DATE_EDIT}) END ASC"
+    )
+    fun getPlannedTransactionsByDate(timeStart: String, timeEnd: String, sort_by: String): LiveData<List<Transaction>>
 
     @Query("SELECT * FROM ${DatabaseHelper.TABLE_TRANSACTION} where ${DatabaseHelper.COLUMN_DATE} >= :timeStart and ${DatabaseHelper.COLUMN_DATE} < :timeEnd")
     fun getAllTransactionsByDate(timeStart: String, timeEnd: String): LiveData<List<Transaction>>
 
-    @Query("SELECT * FROM ${DatabaseHelper.TABLE_TRANSACTION} where ${DatabaseHelper.COLUMN_DATE} >= :timeStart and ${DatabaseHelper.COLUMN_DATE} < :timeEnd ORDER BY :sortOrder")
-    fun getAllTransactionsByDate(timeStart: String, timeEnd: String, sortOrder: String): LiveData<List<Transaction>>
+    @Query("SELECT * " +
+            "FROM ${DatabaseHelper.TABLE_TRANSACTION} " +
+            "where ${DatabaseHelper.COLUMN_DATE} >= :timeStart " +
+            "and ${DatabaseHelper.COLUMN_DATE} < :timeEnd " +
+            "ORDER BY " +
+            "CASE WHEN :sort_by = '${DatabaseHelper.COLUMN_DESCRIPTION}' THEN ${DatabaseHelper.COLUMN_DESCRIPTION} END ASC, " +
+            "CASE WHEN :sort_by = '${DatabaseHelper.COLUMN_DESCRIPTION} DESC' THEN ${DatabaseHelper.COLUMN_DESCRIPTION} END DESC, " +
+            "CASE WHEN :sort_by = '${DatabaseHelper.COLUMN_CATEGORY_NAME}' THEN ${DatabaseHelper.COLUMN_CATEGORY_NAME} END ASC, " +
+            "CASE WHEN :sort_by = '${DatabaseHelper.COLUMN_CATEGORY_NAME} DESC' THEN ${DatabaseHelper.COLUMN_CATEGORY_NAME} END DESC, " +
+            "CASE WHEN :sort_by = '${DatabaseHelper.COLUMN_AMOUNT_FACT} DESC' THEN ${DatabaseHelper.COLUMN_AMOUNT_FACT} END DESC, " +
+            "CASE WHEN :sort_by = '${DatabaseHelper.COLUMN_AMOUNT_FACT}' THEN ${DatabaseHelper.COLUMN_AMOUNT_FACT} END ASC, " +
+            "CASE WHEN :sort_by = 'ABS(${DatabaseHelper.COLUMN_AMOUNT_FACT}) DESC' THEN ABS(${DatabaseHelper.COLUMN_AMOUNT_FACT}) END DESC, " +
+            "CASE WHEN :sort_by = 'ABS(${DatabaseHelper.COLUMN_AMOUNT_FACT})' THEN ABS(${DatabaseHelper.COLUMN_AMOUNT_FACT}) END ASC, " +
+            "CASE WHEN :sort_by = '${DatabaseHelper.COLUMN_DATE} DESC' THEN ABS(${DatabaseHelper.COLUMN_DATE}) END DESC, " +
+            "CASE WHEN :sort_by = '${DatabaseHelper.COLUMN_DATE}' THEN ABS(${DatabaseHelper.COLUMN_DATE}) END ASC, " +
+            "CASE WHEN :sort_by = '${DatabaseHelper.COLUMN_DATE_EDIT} DESC' THEN ABS(${DatabaseHelper.COLUMN_DATE_EDIT}) END DESC, " +
+            "CASE WHEN :sort_by = '${DatabaseHelper.COLUMN_DATE_EDIT}' THEN ABS(${DatabaseHelper.COLUMN_DATE_EDIT}) END ASC"
+    )
+    fun getAllTransactionsByDate(timeStart: String, timeEnd: String, sort_by: String): LiveData<List<Transaction>>
 
     @Query("SELECT * FROM ${DatabaseHelper.TABLE_TRANSACTION} where ${DatabaseHelper.COLUMN_DATE} >= :timeStart and ${DatabaseHelper.COLUMN_DATE} < :timeEnd and ${DatabaseHelper.COLUMN_REGULAR_CREATE_DATE} = :regularCreateDate LIMIT 1")
     fun getTransactionsByDateAndRegularCreateDate(timeStart: String, timeEnd: String, regularCreateDate: Long): Transaction?

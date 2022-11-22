@@ -192,6 +192,7 @@ class ToolsActivity : AppCompatActivity() {
         }
     }
 
+    @Deprecated("Deprecated in Java")
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {

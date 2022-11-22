@@ -4,10 +4,8 @@ import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
-import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import de.kontranik.freebudget.R
@@ -30,11 +28,11 @@ class TransactionActivity : AppCompatActivity() {
     private var transactionID: Long? = null
     private var regularCreateTime: Long? = null
 
-    var year = 0
+    private var year = 0
     var month = 0
     var day = 0
-    var planned = false
-    var dbentryAmountPlanned: Double = 0.0
+    private var planned = false
+    private var dbentryAmountPlanned: Double = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,7 +62,7 @@ class TransactionActivity : AppCompatActivity() {
         )
         binding.acTextViewCategory.setAdapter(adapter)
         binding.acTextViewCategory.onItemClickListener =
-            OnItemClickListener { arg0, arg1, arg2, arg3 -> // Category selected = (Category) arg0.getAdapter().getItem(arg2);
+            OnItemClickListener { _, _, _, _ -> // Category selected = (Category) arg0.getAdapter().getItem(arg2);
                 /*
                     Toast.makeText(RegularTransactionActivity.this,
                             "Clicked " + arg2 + " name: " + selected.getName(),
@@ -82,7 +80,7 @@ class TransactionActivity : AppCompatActivity() {
             }
             // date picker dialog
             val datePickerDialog = DatePickerDialog(this@TransactionActivity,
-                { view, year, monthOfYear, dayOfMonth -> // set day of month , month and year value in the edit text
+                { _, year, monthOfYear, dayOfMonth -> // set day of month , month and year value in the edit text
                     setDateBox(year, monthOfYear + 1, dayOfMonth)
                 }, year, month - 1, day
             )
@@ -94,7 +92,17 @@ class TransactionActivity : AppCompatActivity() {
             if (extras.containsKey(Constant.TRANS_TYP)) planned =
                 extras.getString(Constant.TRANS_TYP) == Constant.TRANS_TYP_PLANNED
         }
-        //
+
+        mCategoryViewModel.mAllCategorys.observe(this) {
+            categoryArrayList.clear()
+            categoryArrayList.addAll(it)
+            adapter.notifyDataSetChanged()
+        }
+
+        mTransactionViewModel.transactionById.observe(this) {
+            regularCreateTime = it?.regularCreateTime
+            refreshView(it)
+        }
 
         if (transactionID != null) {
             // get entry from db
@@ -124,16 +132,7 @@ class TransactionActivity : AppCompatActivity() {
         binding.editTextAmountFact.isEnabled = !planned
         binding.btnCopyAmount.isEnabled = !planned
 
-        mCategoryViewModel.mAllCategorys.observe(this) {
-            categoryArrayList.clear()
-            categoryArrayList.addAll(it)
-            adapter.notifyDataSetChanged()
-        }
 
-        mTransactionViewModel.transactionById.observe(this) {
-            regularCreateTime = it?.regularCreateTime
-            refreshView(it)
-        }
     }
 
     private fun refreshView(transaction: Transaction?) {
@@ -150,10 +149,9 @@ class TransactionActivity : AppCompatActivity() {
             binding.editTextAmountPlanned.setText(abs(transaction.amountPlanned).toString())
         }
 
-        binding.radioButtonReceipts.isChecked = transaction.amountFact > 0
-        binding.radioButtonSpending.isChecked = transaction.amountFact < 0
-        binding.radioButtonReceipts.isChecked = transaction.amountPlanned > 0
-        binding.radioButtonSpending.isChecked = transaction.amountPlanned < 0
+        binding.radioButtonReceipts.isChecked = ( transaction.amountFact > 0 || (transaction.amountFact == 0.0 && transaction.amountPlanned >= 0))
+        binding.radioButtonSpending.isChecked = ( transaction.amountFact < 0 || (transaction.amountFact == 0.0 && transaction.amountPlanned < 0))
+
 
         val displayDate = if (transaction.date > 0) transaction.date else Date().time
         if (displayDate > 0) {
@@ -166,13 +164,14 @@ class TransactionActivity : AppCompatActivity() {
         setDateBox(year, month, day)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         // Check which request we're responding to
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == PICK_CATEGORY_REQUEST) {
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
-                binding.acTextViewCategory.setText(data!!.getStringExtra(CategoryListActivity.Companion.RESULT_CATEGORY))
+                binding.acTextViewCategory.setText(data!!.getStringExtra(CategoryListActivity.RESULT_CATEGORY))
             }
         }
     }
@@ -185,18 +184,6 @@ class TransactionActivity : AppCompatActivity() {
         cal[year, month - 1] = day
         val df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault())
         binding.buttonDate.text = df.format(cal.timeInMillis)
-    }
-
-    // find Index of Spinner by Value
-    private fun getIndex(spinner: Spinner, myString: String): Int {
-        var index = 0
-        for (i in 0 until spinner.count) {
-            if (spinner.getItemAtPosition(i).toString().equals(myString, ignoreCase = true)) {
-                index = i
-                break
-            }
-        }
-        return index
     }
 
     private fun saveAndClose() {
@@ -260,7 +247,7 @@ class TransactionActivity : AppCompatActivity() {
     }
 
     private fun copy() {
-        transactionID = 0
+        transactionID = null
         binding.buttonDelete.visibility = View.GONE
         binding.buttonCopy.visibility = View.GONE
     }
