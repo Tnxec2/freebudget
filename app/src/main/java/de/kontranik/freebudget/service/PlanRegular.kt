@@ -28,17 +28,19 @@ object PlanRegular {
                      * dann auf letzen tag des monats setzen
                      */
                     var cal: Calendar = GregorianCalendar(year, month - 1, 1, 0, 0, 1)
-                    val i = cal.getActualMaximum(Calendar.DAY_OF_MONTH)
-                    if (rt.day > i) rt.day = i
+                    val actualMaximum = cal.getActualMaximum(Calendar.DAY_OF_MONTH)
+                    if (rt.day > actualMaximum) rt.day = actualMaximum
                     cal = GregorianCalendar(year, month - 1, rt.day, 0, 0, 1)
 
                     /*
                      * inserten nur wenn Datum im Rahmen von START-END oder START-END nicht eingegeben sind
-                     */if (rt.dateStart != null && cal.getTimeInMillis() >= rt.dateStart!!
+                     */
+                    if (
+                        noDate(rt.dateStart, rt.dateEnd)
                         ||
-                        rt.dateEnd != null && cal.getTimeInMillis() <= rt.dateEnd!!
+                        startDateMatch(cal, rt.dateStart)
                         ||
-                        rt.dateStart == 0L && rt.dateEnd == 0L
+                        endDateMatch(cal, rt.dateEnd)
                     ) {
                         val newTransaction = Transaction(
                             id = null,
@@ -55,5 +57,17 @@ object PlanRegular {
                 }
             }
         }
+    }
+
+    private fun noDate(dateStart: Long?, dateEnd: Long?) : Boolean {
+        return ( dateStart == null || dateStart == 0L) && ( dateEnd == null || dateEnd == 0L)
+    }
+
+    private fun startDateMatch(cal: GregorianCalendar, dateStart: Long?) : Boolean {
+        return dateStart != null && dateStart != 0L && cal.timeInMillis >= dateStart
+    }
+
+    private fun endDateMatch(cal: GregorianCalendar, dateEnd: Long?) : Boolean {
+        return dateEnd != null && dateEnd != 0L && cal.timeInMillis <= dateEnd
     }
 }
