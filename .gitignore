@@ -8,3 +8,9 @@
 /build
 /captures
 .externalNativeBuild
+/.tmp/
+/caches/
+/daemon/
+/wrapper
+/native/
+/kotlin-profile/
