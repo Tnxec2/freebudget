@@ -168,12 +168,7 @@ class RegularFragment : Fragment() {
             var spending = 0.0
             var total = 0.0
             for (transaction in transactionList) {
-                if (transaction.dateStart == 0L && transaction.dateEnd == 0L
-                    ||
-                    transaction.dateStart != null && today >= transaction.dateStart!!
-                    ||
-                    transaction.dateEnd != null && today <= transaction.dateEnd!!
-                ) {
+                if (transaction.isDateInScope(today)) {
                     amount = transaction.amount
                     if (amount > 0) {
                         receipts += amount

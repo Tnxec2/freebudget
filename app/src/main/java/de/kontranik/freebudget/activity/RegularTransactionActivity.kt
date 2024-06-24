@@ -99,11 +99,11 @@ class RegularTransactionActivity : AppCompatActivity() {
             datePickerDialog.show()
         }
         binding.imageButtonClearStartDate.setOnClickListener {
-            dateStart = 0
+            dateStart = null
             binding.buttonStartDate.setText(R.string.not_setted)
         }
         binding.imageButtonClearEndDate.setOnClickListener {
-            dateEnd = 0
+            dateEnd = null
             binding.buttonEndDate.setText(R.string.not_setted)
         }
 
@@ -281,7 +281,7 @@ class RegularTransactionActivity : AppCompatActivity() {
     }
 
     private fun setDateText(button: Button?, date: Long?) {
-        if (date == null) {
+        if (date == null || date == 0L) {
             button!!.setText(R.string.not_setted)
         } else {
             val dateFormatter = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault())

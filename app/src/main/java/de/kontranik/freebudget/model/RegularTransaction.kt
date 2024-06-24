@@ -5,10 +5,10 @@ import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import de.kontranik.freebudget.database.DatabaseHelper
-import java.util.*
 
 @Entity(tableName = DatabaseHelper.TABLE_REGULAR)
 class RegularTransaction {
+
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = DatabaseHelper.COLUMN_ID) var id: Long? = null
     @ColumnInfo(name = DatabaseHelper.COLUMN_MONTH) var month = 0
@@ -95,5 +95,13 @@ class RegularTransaction {
         dateStart = null
         dateEnd = null
         this.note = note
+    }
+
+    fun isDateNull(date: Long?): Boolean {
+        return (date == null || date == 0L)
+    }
+
+    fun isDateInScope(date: Long): Boolean {
+        return ( (isDateNull(dateStart) || date >= dateStart!!) && ( isDateNull(dateEnd) || date <= dateEnd!!))
     }
 }

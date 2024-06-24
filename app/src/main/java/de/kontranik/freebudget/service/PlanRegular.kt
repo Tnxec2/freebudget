@@ -35,13 +35,7 @@ object PlanRegular {
                     /*
                      * inserten nur wenn Datum im Rahmen von START-END oder START-END nicht eingegeben sind
                      */
-                    if (
-                        noDate(rt.dateStart, rt.dateEnd)
-                        ||
-                        startDateMatch(cal, rt.dateStart)
-                        ||
-                        endDateMatch(cal, rt.dateEnd)
-                    ) {
+                    if ( rt.isDateInScope(cal.timeInMillis) ) {
                         val newTransaction = Transaction(
                             id = null,
                             regularCreateTime = rt.dateCreate,
@@ -59,15 +53,5 @@ object PlanRegular {
         }
     }
 
-    private fun noDate(dateStart: Long?, dateEnd: Long?) : Boolean {
-        return ( dateStart == null || dateStart == 0L) && ( dateEnd == null || dateEnd == 0L)
-    }
 
-    private fun startDateMatch(cal: GregorianCalendar, dateStart: Long?) : Boolean {
-        return dateStart != null && dateStart != 0L && cal.timeInMillis >= dateStart
-    }
-
-    private fun endDateMatch(cal: GregorianCalendar, dateEnd: Long?) : Boolean {
-        return dateEnd != null && dateEnd != 0L && cal.timeInMillis <= dateEnd
-    }
 }

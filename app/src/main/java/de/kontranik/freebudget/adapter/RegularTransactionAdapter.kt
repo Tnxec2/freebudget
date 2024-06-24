@@ -58,10 +58,10 @@ class RegularTransactionAdapter(
         )
         val df = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault())
         //SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy H:mm:ss S");
-        if (regularTransaction.dateStart != null) text += ", " + context.getString(R.string.start) + ": " + df.format(
+        if (!regularTransaction.isDateNull(regularTransaction.dateStart)) text += ", " + context.getString(R.string.start) + ": " + df.format(
             regularTransaction.dateStart
         )
-        if (regularTransaction.dateEnd != null) text += ", " + context.getString(R.string.end) + ": " + df.format(
+        if (!regularTransaction.isDateNull(regularTransaction.dateEnd)) text += ", " + context.getString(R.string.end) + ": " + df.format(
             regularTransaction.dateEnd
         )
         viewHolder.categoryView.text = text
