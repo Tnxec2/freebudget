@@ -11,9 +11,9 @@
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 7,
-      "versionName": "1.2.2",
-      "outputFile": "FreeBudget-1.2.2-release.apk"
+      "versionCode": 8,
+      "versionName": "1.2.3",
+      "outputFile": "com.kontranik.freebudget-v8(1.2.3)-release.apk"
     }
   ],
   "elementType": "File"
