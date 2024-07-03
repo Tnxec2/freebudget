@@ -17,6 +17,7 @@ import de.kontranik.freebudget.R
 import de.kontranik.freebudget.adapter.DrawerItemCustomAdapter
 import de.kontranik.freebudget.databinding.ActivityMainBinding
 import de.kontranik.freebudget.fragment.AllTransactionFragment
+import de.kontranik.freebudget.fragment.AllTransactionSeparatedFragment
 import de.kontranik.freebudget.fragment.OverviewFragment
 import de.kontranik.freebudget.fragment.RegularFragment
 import de.kontranik.freebudget.model.DrawerItem
@@ -68,15 +69,23 @@ class MainActivity : AppCompatActivity() {
             R.drawable.ic_view_list_24dp,
             mNavigationDrawerItemTitles[INDEX_DRAWER_ALLTRANSACTION]
         )
+        drawerItem[INDEX_DRAWER_ALLTRANSACTION_SEPARATED] = DrawerItem(
+            R.drawable.ic_view_list_24dp,
+            mNavigationDrawerItemTitles[INDEX_DRAWER_ALLTRANSACTION_SEPARATED]
+        )
+        drawerItem[INDEX_DRAWER_ALLTRANSACTION] = DrawerItem(
+            R.drawable.ic_view_list_24dp,
+            mNavigationDrawerItemTitles[INDEX_DRAWER_ALLTRANSACTION]
+        )
         drawerItem[INDEX_DRAWER_REGULAR] = DrawerItem(
             R.drawable.ic_repeat_24dp,
             mNavigationDrawerItemTitles[INDEX_DRAWER_REGULAR]
         )
-        drawerItem[3] = DrawerItem(0, "")
-        drawerItem[4] = DrawerItem(R.drawable.ic_folder_24dp, mNavigationDrawerItemTitles[3])
-        drawerItem[5] = DrawerItem(R.drawable.ic_menu_manage, mNavigationDrawerItemTitles[4])
-        drawerItem[6] =
-            DrawerItem(R.drawable.ic_settings_24dp, mNavigationDrawerItemTitles[5])
+        drawerItem[INDEX_DRAWER_SEP1] = DrawerItem(0, "")
+        drawerItem[INDEX_DRAWER_CATEGORY] = DrawerItem(R.drawable.ic_folder_24dp, mNavigationDrawerItemTitles[INDEX_DRAWER_CATEGORY])
+        drawerItem[INDEX_DRAWER_TOOLS] = DrawerItem(R.drawable.ic_menu_manage, mNavigationDrawerItemTitles[INDEX_DRAWER_TOOLS])
+        drawerItem[INDEX_DRAWER_SETTINGS] =
+            DrawerItem(R.drawable.ic_settings_24dp, mNavigationDrawerItemTitles[INDEX_DRAWER_SETTINGS])
         supportActionBar!!.setDisplayHomeAsUpEnabled(false)
         supportActionBar!!.setHomeButtonEnabled(true)
         val adapter =
@@ -115,17 +124,18 @@ class MainActivity : AppCompatActivity() {
         when (position) {
             INDEX_DRAWER_OVERVIEW -> fragment = OverviewFragment()
             INDEX_DRAWER_ALLTRANSACTION -> fragment = AllTransactionFragment()
+            INDEX_DRAWER_ALLTRANSACTION_SEPARATED -> fragment = AllTransactionSeparatedFragment()
             INDEX_DRAWER_REGULAR -> fragment = RegularFragment()
-            3 -> {}
-            4 -> {
+            INDEX_DRAWER_SEP1 -> {}
+            INDEX_DRAWER_CATEGORY -> {
                 val openCategory = Intent(this, CategoryListActivity::class.java)
                 this.startActivityForResult(openCategory, 0)
             }
-            5 -> {
+            INDEX_DRAWER_TOOLS -> {
                 val openTools = Intent(this, ToolsActivity::class.java)
                 this.startActivityForResult(openTools, 0)
             }
-            6 -> {
+            INDEX_DRAWER_SETTINGS -> {
                 val openSettings = Intent(this, SettingsActivity::class.java)
                 this.startActivityForResult(openSettings, 0)
             }
@@ -250,6 +260,11 @@ class MainActivity : AppCompatActivity() {
         const val FRAGMENT_POSITION_KEY = "FRAGMENT_POSITION_KEY"
         const val INDEX_DRAWER_OVERVIEW = 0
         const val INDEX_DRAWER_ALLTRANSACTION = 1
-        const val INDEX_DRAWER_REGULAR = 2
+        const val INDEX_DRAWER_ALLTRANSACTION_SEPARATED = 2
+        const val INDEX_DRAWER_REGULAR = 3
+        const val INDEX_DRAWER_SEP1 = 4
+        const val INDEX_DRAWER_CATEGORY = 5
+        const val INDEX_DRAWER_TOOLS = 6
+        const val INDEX_DRAWER_SETTINGS = 7
     }
 }

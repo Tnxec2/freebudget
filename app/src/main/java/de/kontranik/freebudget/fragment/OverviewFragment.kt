@@ -78,12 +78,14 @@ class OverviewFragment : Fragment(), View.OnClickListener {
 
 
         val buttonAlltransactions = view.findViewById<Button>(R.id.button_AllTransactions)
+        val buttonAlltransactionsSeparated = view.findViewById<Button>(R.id.button_AllTransactions_Separated)
         val buttonRegular = view.findViewById<Button>(R.id.button_Regular)
         months = resources.getStringArray(R.array.months)
 
         main = activity as MainActivity?
         setMonthTextView()
         buttonAlltransactions.setOnClickListener(this)
+        buttonAlltransactionsSeparated.setOnClickListener(this)
         buttonRegular.setOnClickListener(this)
         binding.btnPrevMonth.setOnClickListener(this)
         binding.btnNextMonth.setOnClickListener(this)
@@ -231,6 +233,10 @@ class OverviewFragment : Fragment(), View.OnClickListener {
             R.id.button_AllTransactions -> {
                 main!!.category = null
                 main!!.selectItem(MainActivity.INDEX_DRAWER_ALLTRANSACTION)
+            }
+            R.id.button_AllTransactions_Separated -> {
+                main!!.category = null
+                main!!.selectItem(MainActivity.INDEX_DRAWER_ALLTRANSACTION_SEPARATED)
             }
             R.id.button_Regular -> {
                 main!!.category = null

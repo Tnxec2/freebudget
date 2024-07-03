@@ -314,7 +314,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@id/linearLayout_footer"
+        app:layout_constraintBottom_toTopOf="@id/linearLayout_buttons_2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/linearLayout_overview">
@@ -327,21 +327,40 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout_footer"
+        android:id="@+id/linearLayout_buttons_2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/linearLayout_footer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/linearLayout_categorygraph">
+        >
+
+        <Button
+            android:id="@+id/button_AllTransactions_Separated"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/all_transactions_separated" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout_footer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <Button
             android:id="@+id/button_AllTransactions"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:baselineAligned="false"
             android:text="@string/all_transactions" />
 
         <Button
@@ -352,14 +371,16 @@
             android:text="@string/regular" />
     </LinearLayout>
 
+
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
         android:src="@drawable/ic_baseline_add_24"
         app:backgroundTint="@color/colorAccent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="@id/linearLayout_buttons_2"
+        app:layout_constraintBottom_toBottomOf="@id/linearLayout_footer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:rippleColor="#FFF" />
@@ -369,12 +390,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="32dp"
         android:clickable="true"
         android:focusable="true"
         android:visibility="invisible"
         app:backgroundTint="@color/colorGreen"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/fab_add"
         app:layout_constraintEnd_toStartOf="@+id/fab_add"
         app:rippleColor="#FFF"
         app:srcCompat="@drawable/ic_baseline_add_24" />
@@ -384,12 +404,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="32dp"
         android:clickable="true"
         android:focusable="true"
         android:visibility="invisible"
         app:backgroundTint="@color/colorGreenGray"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/fab_add"
         app:layout_constraintEnd_toStartOf="@+id/fab_add_plus"
         app:rippleColor="#FFF"
         app:srcCompat="@drawable/ic_baseline_add_24" />
@@ -399,12 +418,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginBottom="32dp"
         android:clickable="true"
         android:focusable="true"
         android:visibility="invisible"
         app:backgroundTint="@color/colorRed"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/fab_add"
         app:layout_constraintStart_toEndOf="@+id/fab_add"
         app:rippleColor="#FFF"
         app:srcCompat="@drawable/ic_baseline_remove_24" />
@@ -414,12 +432,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginBottom="32dp"
         android:clickable="true"
         android:focusable="true"
         android:visibility="invisible"
         app:backgroundTint="@color/colorRedGray"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/fab_add"
         app:layout_constraintStart_toEndOf="@+id/fab_add_minus"
         app:rippleColor="#FFF"
         app:srcCompat="@drawable/ic_baseline_remove_24" />

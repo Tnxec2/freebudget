@@ -326,7 +326,12 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="@string/all_transactions" />
-
+        <Button
+            android:id="@+id/button_AllTransactions_Separated"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/all_transactions_separated" />
         <Button
             android:id="@+id/button_Regular"
             android:layout_width="0dp"

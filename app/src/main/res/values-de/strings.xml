@@ -82,7 +82,9 @@
     <string-array name="navigation_drawer_items_array">
         <item>Übersicht</item>
         <item>Alle Bewegungen</item>
+        <item>Alle aufgeteilt</item>
         <item>Reguläre</item>
+        <item></item>
         <item>Kategorie</item>
         <item>Extras</item>
         <item>Einstellungen</item>
@@ -91,6 +93,7 @@
     <string name="overview_list">Übersichtsliste</string>
     <string name="close">Schließen</string>
     <string name="all_transactions">Alle Bewegungen</string>
+    <string name="all_transactions_separated">Alle Bewegungen aufgeteilt</string>
     <string name="regular">Reguläre</string>
     <string name="start_date">Startdatum</string>
     <string name="end_date">Enddatum</string>
@@ -110,5 +113,10 @@
     <string name="activity_transaction_close">Schließen</string>
     <string name="clear_date_field">Datum löschen</string>
     <string name="db_backup">Backup Datenbank</string>
+    <string name="add_transaction_general">Bewegung</string>
+    <string name="add_transaction_income">Einkommen</string>
+    <string name="add_planned_income">eingeplannte Einkommen</string>
+    <string name="add_outgoings">Ausgaben</string>
+    <string name="add_outgoings_planned">eingeplannte Ausgaben</string>
 
 </resources>
