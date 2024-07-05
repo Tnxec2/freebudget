@@ -23,6 +23,7 @@ class Transaction {
 
     constructor() {}
 
+    @Ignore
     constructor(
         id: Long?,
         regularCreateTime: Long?,

@@ -39,6 +39,7 @@ internal class TransactionRepository(val context: Context) {
 
     fun getTransactions(e_year: Int,
                         e_month: Int,
+                        categoryName: String?,
                         showOnlyPlanned: Boolean): LiveData<List<Transaction>> {
         val sortOrder = Helper.getSortFromSettings(context)
         val cal: Calendar = GregorianCalendar(e_year, e_month - 1, 1)
@@ -48,14 +49,14 @@ internal class TransactionRepository(val context: Context) {
         sortOrder?.let { Log.d("getTransactions", it) }
         return if (showOnlyPlanned)
             if (sortOrder == null)
-                mTransactionDao.getPlannedTransactionsByDate(timeStringStart, timeStringEnd)
+                mTransactionDao.getPlannedTransactionsByDate(timeStringStart, timeStringEnd, categoryName)
             else
-                mTransactionDao.getPlannedTransactionsByDate(timeStringStart, timeStringEnd, sortOrder)
+                mTransactionDao.getPlannedTransactionsByDate(timeStringStart, timeStringEnd, categoryName, sortOrder)
         else
             if (sortOrder == null)
-                mTransactionDao.getAllTransactionsByDate(timeStringStart, timeStringEnd)
+                mTransactionDao.getAllTransactionsByDate(timeStringStart, timeStringEnd, categoryName)
             else
-                mTransactionDao.getAllTransactionsByDate(timeStringStart, timeStringEnd, sortOrder)
+                mTransactionDao.getAllTransactionsByDate(timeStringStart, timeStringEnd, categoryName, sortOrder)
     }
 
     fun getTransactionByRegularCreateDate(e_year: Int, e_month: Int, regularCreateDate: Long): Transaction? {

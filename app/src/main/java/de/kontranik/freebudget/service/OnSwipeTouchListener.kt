@@ -7,6 +7,7 @@ import android.view.GestureDetector.SimpleOnGestureListener
 import android.content.Context
 import android.view.View
 import java.lang.Exception
+import kotlin.math.abs
 
 open class OnSwipeTouchListener(ctx: Context?) : OnTouchListener {
     private val gestureDetector: GestureDetector
@@ -20,27 +21,28 @@ open class OnSwipeTouchListener(ctx: Context?) : OnTouchListener {
         }
 
         override fun onFling(
-            e1: MotionEvent,
+            e1: MotionEvent?,
             e2: MotionEvent,
             velocityX: Float,
             velocityY: Float
         ): Boolean {
             var result = false
             try {
-                val diffY = e2.y - e1.y
-                val diffX = e2.x - e1.x
-                if (Math.abs(diffX) > Math.abs(diffY)) {
-                    if (Math.abs(diffX) > Companion.SWIPE_THRESHOLD && Math.abs(velocityX) > Companion.SWIPE_VELOCITY_THRESHOLD) {
-                        if (diffX > 0) {
-                            onSwipeRight()
-                        } else {
-                            onSwipeLeft()
+                if (e1 != null) {
+                    val diffY = e2.y - e1.y
+                    val diffX = e2.x - e1.x
+                    if (abs(diffX) > abs(diffY)) {
+                        if (abs(diffX) > Companion.SWIPE_THRESHOLD && abs(velocityX) > Companion.SWIPE_VELOCITY_THRESHOLD) {
+                            if (diffX > 0) {
+                                onSwipeRight()
+                            } else {
+                                onSwipeLeft()
+                            }
+                            result = true
                         }
-                        result = true
-                    }
-                } else if (Math.abs(diffY) > Companion.SWIPE_THRESHOLD && Math.abs(velocityY) > Companion.SWIPE_VELOCITY_THRESHOLD) {
-                    super.onFling(e1, e2, velocityX, velocityY)
-                    /*
+                    } else if (abs(diffY) > Companion.SWIPE_THRESHOLD && abs(velocityY) > Companion.SWIPE_VELOCITY_THRESHOLD) {
+                        super.onFling(e1, e2, velocityX, velocityY)
+                        /*
                     if (diffY > 0) {
                         onSwipeBottom();
                     } else {
@@ -48,6 +50,7 @@ open class OnSwipeTouchListener(ctx: Context?) : OnTouchListener {
                     }
                     result = true;
                     */result = false
+                    }
                 }
             } catch (exception: Exception) {
                 exception.printStackTrace()

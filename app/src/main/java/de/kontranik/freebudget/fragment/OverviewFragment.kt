@@ -223,7 +223,7 @@ class OverviewFragment : Fragment(), View.OnClickListener {
     override fun onResume() {
         super.onResume()
         main!!.updatePosition(MainActivity.INDEX_DRAWER_OVERVIEW)
-        mTransactionViewModel.loadTransactions(main!!.year, main!!.month, false)
+        mTransactionViewModel.loadTransactions(main!!.year, main!!.month, null, false)
     }
 
     override fun onClick(view: View) {
@@ -250,13 +250,13 @@ class OverviewFragment : Fragment(), View.OnClickListener {
     fun prevMonth() {
         main!!.prevMonth()
         setMonthTextView()
-        mTransactionViewModel.loadTransactions(main!!.year, main!!.month, false)
+        mTransactionViewModel.loadTransactions(main!!.year, main!!.month, null, false)
     }
 
     fun nextMonth() {
         main!!.nextMonth()
         setMonthTextView()
-        mTransactionViewModel.loadTransactions(main!!.year, main!!.month, false)
+        mTransactionViewModel.loadTransactions(main!!.year, main!!.month, null, false)
     }
 
     private fun setMonthTextView() {

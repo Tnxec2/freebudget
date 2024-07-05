@@ -5,34 +5,30 @@ import android.content.ClipData
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.view.*
+import android.view.DragEvent
+import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
 import android.view.View.DragShadowBuilder
-import android.widget.AdapterView.OnItemClickListener
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
+import android.view.ViewGroup
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import de.kontranik.freebudget.R
 import de.kontranik.freebudget.activity.MainActivity
 import de.kontranik.freebudget.activity.RegularTransactionActivity
-import de.kontranik.freebudget.adapter.RegularTransactionAdapter
 import de.kontranik.freebudget.database.viewmodel.RegularTransactionViewModel
-
 import de.kontranik.freebudget.databinding.FragmentRegularBinding
-import de.kontranik.freebudget.model.RegularTransaction
 import de.kontranik.freebudget.service.Constant
 import de.kontranik.freebudget.service.OnSwipeTouchListener
-import java.util.*
+import de.kontranik.freebudget.ui.components.RegularTransactionScreen
 
 class RegularFragment : Fragment() {
     private lateinit var binding: FragmentRegularBinding
     private lateinit var mRegularTransactionViewModel: RegularTransactionViewModel
 
-    private var month = 0
-    private lateinit var months: Array<String>
-    var isMove: Boolean? = null
-    var transactionList: MutableList<RegularTransaction> = ArrayList()
-    var transactionAdapter: RegularTransactionAdapter? = null
+    private var isMove: Boolean? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -49,41 +45,33 @@ class RegularFragment : Fragment() {
         // Setup any handles to view objects here
         mRegularTransactionViewModel = ViewModelProvider(this)[RegularTransactionViewModel::class.java]
 
-        binding.btnPrevMonth.setOnClickListener { prevMonth() }
-        binding.btnNextMonth.setOnClickListener { nextMonth() }
-        val mainLayout = view.findViewById<View>(R.id.mainlayout_regular) as ConstraintLayout
-        mainLayout.setOnTouchListener(object : OnSwipeTouchListener(context) {
+        binding.composeRegularTransactionScreen.setOnTouchListener(object : OnSwipeTouchListener(context) {
             override fun onSwipeLeft() {
-                nextMonth()
+                mRegularTransactionViewModel.nextMonth()
             }
 
             override fun onSwipeRight() {
-                prevMonth()
+                mRegularTransactionViewModel.prevMonth()
             }
         })
-        months = resources.getStringArray(R.array.months)
-        month = 0
-        binding.textViewMonthRegular.text = months[month]
-        binding.listViewRegularTransactions.onItemClickListener =
-            OnItemClickListener { parent, view, position, id ->
-                val entry = transactionAdapter!!.getItem(position)
-                if (entry != null) {
+
+        binding.composeRegularTransactionScreen.setContent {
+            RegularTransactionScreen(
+                month = mRegularTransactionViewModel.getMonth().observeAsState(),
+                transactions = mRegularTransactionViewModel.regularTransactionByMonth.observeAsState(listOf()),
+                onClickTransaction = { pos, entry ->
                     val intent = Intent(context, RegularTransactionActivity::class.java)
                     intent.putExtra(Constant.TRANS_ID, entry.id)
                     intent.putExtra("click", 25)
                     startActivity(intent)
-                }
-            }
+                },
+                onPrevMonth = { mRegularTransactionViewModel.prevMonth() },
+                onNextMonth = { mRegularTransactionViewModel.nextMonth() },
+                onAdd = { add() }
+            )
+        }
 
-        // set list adapter
-        transactionAdapter = RegularTransactionAdapter(
-            context,
-            R.layout.list_view_item_regular_transaction_item,
-            transactionList
-        )
-        // set adapter
-        binding.listViewRegularTransactions.adapter = transactionAdapter
-        binding.listViewRegularTransactions.setOnTouchListener { view, motionEvent ->
+        binding.composeRegularTransactionScreen.setOnTouchListener { view, motionEvent ->
             when (motionEvent.action) {
                 MotionEvent.ACTION_DOWN -> binding.fabAddRegular.hide()
                 MotionEvent.ACTION_UP -> binding.fabAddRegular.show()
@@ -118,7 +106,7 @@ class RegularFragment : Fragment() {
             }
             true
         }
-        binding.listViewRegularTransactions.setOnDragListener { v, event ->
+        binding.composeRegularTransactionScreen.setOnDragListener { v, event ->
             when (event.action) {
                 DragEvent.ACTION_DRAG_STARTED -> {}
                 DragEvent.ACTION_DRAG_ENTERED -> {}
@@ -157,109 +145,20 @@ class RegularFragment : Fragment() {
             }
             true
         }
-
-        mRegularTransactionViewModel.regularTransactionByMonth.observe(viewLifecycleOwner) {
-            transactionList.clear()
-            transactionAdapter!!.clear()
-            transactionList.addAll(it)
-            val today = Calendar.getInstance().timeInMillis
-            var amount: Double
-            var receipts = 0.0
-            var spending = 0.0
-            var total = 0.0
-            for (transaction in transactionList) {
-                if (transaction.isDateInScope(today)) {
-                    amount = transaction.amount
-                    if (amount > 0) {
-                        receipts += amount
-                    } else {
-                        spending += Math.abs(amount)
-                    }
-                    total += amount
-                }
-            }
-            binding.textViewSpendingRegular.text =
-                String.format(Locale.getDefault(), "%1$,.2f", spending)
-            binding.textViewSpendingRegular.setTextColor(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.colorRed
-                )
-            )
-            binding.textViewReceiptsRegular.text =
-                String.format(Locale.getDefault(), "%1$,.2f", receipts)
-            binding.textViewReceiptsRegular.setTextColor(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.colorGreen
-                )
-            )
-            binding.textViewTotalRegular.text = String.format(Locale.getDefault(), "%1$,.2f", total)
-            if (total > 0) {
-                binding.textViewTotalRegular.setTextColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.colorGreen
-                    )
-                )
-            } else {
-                binding.textViewTotalRegular.setTextColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.colorRed
-                    )
-                )
-            }
-            transactionAdapter!!.notifyDataSetChanged()
-        }
+        mRegularTransactionViewModel.loadRegularTransactionsByMonth(0)
     }
 
     override fun onResume() {
         super.onResume()
         (activity as MainActivity?)!!.updatePosition(MainActivity.INDEX_DRAWER_REGULAR)
-        mRegularTransactionViewModel.loadRegularTransactionsByMonth(month)
+
     }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putInt(PREFS_KEY_LISTPOSITION, binding.listViewRegularTransactions.firstVisiblePosition)
-    }
-
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-        if (savedInstanceState != null) {
-            val listpos = savedInstanceState.getInt(PREFS_KEY_LISTPOSITION)
-            binding.listViewRegularTransactions.setSelection(listpos)
-        }
-    }
-
-    fun prevMonth() {
-        month = if (month == 0) {
-            12
-        } else {
-            month - 1
-        }
-        binding.textViewMonthRegular.text = months[month]
-        mRegularTransactionViewModel.loadRegularTransactionsByMonth(month)
-    }
-
-    fun nextMonth() {
-        month = if (month == 12) {
-            0
-        } else {
-            month + 1
-        }
-        binding.textViewMonthRegular.text = months[month]
-        mRegularTransactionViewModel.loadRegularTransactionsByMonth(month)
-    }
-
-
 
     fun add() {
         setNormalStat()
         val intent = Intent(context, RegularTransactionActivity::class.java)
         intent.putExtra(Constant.TRANS_STAT, transStat)
-        intent.putExtra(RegularTransactionActivity.MONTH, month)
+        intent.putExtra(RegularTransactionActivity.MONTH, mRegularTransactionViewModel.getMonth().value)
         startActivity(intent)
     }
 

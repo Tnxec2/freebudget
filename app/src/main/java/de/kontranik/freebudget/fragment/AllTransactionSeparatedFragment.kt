@@ -292,7 +292,7 @@ class AllTransactionSeparatedFragment : Fragment() {
     }
 
     private fun getTransactions() {
-        mTransactionViewModel.loadTransactions(main!!.year, main!!.month, false)
+        mTransactionViewModel.loadTransactions(main!!.year, main!!.month, null,false)
     }
 
     fun prevMonth() {
