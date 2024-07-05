@@ -22,6 +22,7 @@ import de.kontranik.freebudget.databinding.FragmentRegularBinding
 import de.kontranik.freebudget.service.Constant
 import de.kontranik.freebudget.service.OnSwipeTouchListener
 import de.kontranik.freebudget.ui.components.RegularTransactionScreen
+import de.kontranik.freebudget.ui.theme.AppTheme
 
 class RegularFragment : Fragment() {
     private lateinit var binding: FragmentRegularBinding
@@ -56,19 +57,21 @@ class RegularFragment : Fragment() {
         })
 
         binding.composeRegularTransactionScreen.setContent {
-            RegularTransactionScreen(
-                month = mRegularTransactionViewModel.getMonth().observeAsState(),
-                transactions = mRegularTransactionViewModel.regularTransactionByMonth.observeAsState(listOf()),
-                onClickTransaction = { pos, entry ->
-                    val intent = Intent(context, RegularTransactionActivity::class.java)
-                    intent.putExtra(Constant.TRANS_ID, entry.id)
-                    intent.putExtra("click", 25)
-                    startActivity(intent)
-                },
-                onPrevMonth = { mRegularTransactionViewModel.prevMonth() },
-                onNextMonth = { mRegularTransactionViewModel.nextMonth() },
-                onAdd = { add() }
-            )
+            AppTheme {
+                RegularTransactionScreen(
+                    month = mRegularTransactionViewModel.getMonth().observeAsState(),
+                    transactions = mRegularTransactionViewModel.regularTransactionByMonth.observeAsState(listOf()),
+                    onClickTransaction = { pos, entry ->
+                        val intent = Intent(context, RegularTransactionActivity::class.java)
+                        intent.putExtra(Constant.TRANS_ID, entry.id)
+                        intent.putExtra("click", 25)
+                        startActivity(intent)
+                    },
+                    onPrevMonth = { mRegularTransactionViewModel.prevMonth() },
+                    onNextMonth = { mRegularTransactionViewModel.nextMonth() },
+                    onAdd = { add() }
+                )
+            }
         }
 
         binding.composeRegularTransactionScreen.setOnTouchListener { view, motionEvent ->

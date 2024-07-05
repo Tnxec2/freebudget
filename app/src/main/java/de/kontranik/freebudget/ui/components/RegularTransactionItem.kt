@@ -37,12 +37,12 @@ fun RegularTransactionItem(
         R.string.end) + ": " + df.format(regularTransaction.dateEnd)
 
     Column(
-        modifier
+        Modifier
             .clickable { onClick() }
-            .padding(bottom = paddingSmall)
+            .padding(horizontal = paddingSmall)
     ) {
         Row(
-            modifier.fillMaxWidth()
+            Modifier.fillMaxWidth()
         ) {
             Text(
                 text = regularTransaction.description,

@@ -24,8 +24,8 @@ import de.kontranik.freebudget.database.viewmodel.TransactionViewModel
 import de.kontranik.freebudget.databinding.FragmentAlltransactionBinding
 import de.kontranik.freebudget.model.Transaction
 import de.kontranik.freebudget.service.Constant
-import de.kontranik.freebudget.ui.components.AllTransactionList
 import de.kontranik.freebudget.ui.components.AllTransactionScreen
+import de.kontranik.freebudget.ui.theme.AppTheme
 import java.util.*
 
 class AllTransactionFragment : Fragment() {
@@ -63,17 +63,19 @@ class AllTransactionFragment : Fragment() {
         val markLastEdited = settings.getBoolean(Config.PREF_MARK_LAST_EDITED, false)
 
         binding.composeTransactionScreen.setContent {
-            AllTransactionScreen(
-                mainActivity = requireActivity() as MainActivity,
-                transactions = mTransactionViewModel.dataByYearAndMonth.observeAsState(listOf()),
-                markLastEdited = markLastEdited,
-                lastEditedId = lastEditedId.observeAsState(),
-                onClickTransaction = { pos, entry -> editTransaction(entry, Constant.TRANS_TYP_FACT)},
-                onPlanRegularClick = { planRegular() },
-                onPrevMonth = { prevMonth() },
-                onNextMonth = { nextMonth() },
-                onAdd = { add(Constant.TRANS_STAT_MINUS, Constant.TRANS_TYP_FACT) }
-            )
+            AppTheme {
+                AllTransactionScreen(
+                    mainActivity = requireActivity() as MainActivity,
+                    transactions = mTransactionViewModel.dataByYearAndMonth.observeAsState(listOf()),
+                    markLastEdited = markLastEdited,
+                    lastEditedId = lastEditedId.observeAsState(),
+                    onClickTransaction = { pos, entry -> editTransaction(entry, Constant.TRANS_TYP_FACT)},
+                    onPlanRegularClick = { planRegular() },
+                    onPrevMonth = { prevMonth() },
+                    onNextMonth = { nextMonth() },
+                    onAdd = { add(Constant.TRANS_STAT_MINUS, Constant.TRANS_TYP_FACT) }
+                )
+            }
         }
 
         // Register the ListView  for Context menu

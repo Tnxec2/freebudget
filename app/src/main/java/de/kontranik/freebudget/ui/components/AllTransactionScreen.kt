@@ -63,7 +63,6 @@ fun AllTransactionScreen(
             if (transactions.value.isEmpty()) {
                 Button(
                     onClick = onPlanRegularClick,
-                    colors = ButtonDefaults.buttonColors(containerColor  = colorResource(id = R.color.colorBackground)),
                     modifier = modifier
                         .fillMaxWidth()
                         .padding(paddingSmall)

@@ -1,15 +1,18 @@
 package de.kontranik.freebudget.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
 import de.kontranik.freebudget.model.RegularTransaction
 import de.kontranik.freebudget.ui.theme.paddingMedium
+import de.kontranik.freebudget.ui.theme.paddingSmall
 import java.util.Calendar
 
 @Composable
@@ -35,7 +38,7 @@ fun RegularTransactionScreen(
         }
     }
     Scaffold(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize().background(color = MaterialTheme.colorScheme.background),
 //        floatingActionButton = {
 //            FloatingActionButton(
 //                onClick = onAdd,
@@ -47,8 +50,7 @@ fun RegularTransactionScreen(
     ) { padding ->
         Column(
             modifier = modifier
-                .fillMaxSize()
-                .padding(padding),
+                .fillMaxSize(),
         ) {
             month.value?.let {
                 MonthSelector(
@@ -62,7 +64,7 @@ fun RegularTransactionScreen(
                 income = income,
                 bills = bills,
                 modifier)
-            Box(modifier = Modifier.padding(bottom = paddingMedium))
+            Box(modifier = Modifier.padding(bottom = paddingSmall))
             RegularTransactionList(
                 transactions = transactions,
                 onClick = onClickTransaction,

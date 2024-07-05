@@ -6,7 +6,7 @@
     android:id="@+id/mainlayout_regular"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/paddint_small">
+    >
 
 <!--    <LinearLayout
         android:id="@+id/ll_summary"

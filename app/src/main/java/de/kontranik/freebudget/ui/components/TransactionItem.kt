@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -33,10 +34,10 @@ fun TransactionItem(
     val dateString = if (transaction.date > 0) df.format(transaction.date) else stringResource(R.string.not_setted)
 
     Column(
-        modifier
-            .background(color = if (marked) colorResource(R.color.colorBackgroundAccent) else Color.Transparent)
+        Modifier
+            .background(color = if (marked) MaterialTheme.colorScheme.inversePrimary else Color.Transparent)
             .clickable { onClick() }
-            .padding(vertical = paddingSmall)
+            .padding(horizontal = paddingSmall)
     ) {
         Row(
             modifier.fillMaxWidth()

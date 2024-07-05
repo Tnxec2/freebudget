@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
@@ -21,7 +22,6 @@ fun AllTransactionList(
     modifier: Modifier = Modifier) {
 
     LazyColumn(Modifier.fillMaxSize()) {
-
         itemsIndexed(transactions.value) { index, transaction ->
             TransactionItem(
                 transaction,
@@ -29,7 +29,7 @@ fun AllTransactionList(
                 marked = markLastEdited && transaction.id == lastEditedId.value,
                 modifier)
             if (index < transactions.value.lastIndex)
-                HorizontalDivider(color = colorResource(id = R.color.colorBackground), thickness = 0.5.dp)
+                HorizontalDivider(color = MaterialTheme.colorScheme.primary, thickness = 0.5.dp)
         }
     }
 }
