@@ -5,14 +5,15 @@ import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import de.kontranik.freebudget.database.DatabaseHelper
+import java.io.Serializable
 
 @Entity(tableName = DatabaseHelper.TABLE_REGULAR)
-class RegularTransaction {
+class RegularTransaction : Serializable {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = DatabaseHelper.COLUMN_ID) var id: Long? = null
     @ColumnInfo(name = DatabaseHelper.COLUMN_MONTH) var month = 0
-    @ColumnInfo(name = DatabaseHelper.COLUMN_DAY) var day = 0
+    @ColumnInfo(name = DatabaseHelper.COLUMN_DAY) var day = 1
     @ColumnInfo(name = DatabaseHelper.COLUMN_DESCRIPTION) var description: String = ""
     @ColumnInfo(name = DatabaseHelper.COLUMN_NOTE) var note: String? = null
     @ColumnInfo(name = DatabaseHelper.COLUMN_CATEGORY_NAME) var category: String = ""
@@ -62,7 +63,7 @@ class RegularTransaction {
     }
     @Ignore
     constructor(
-        id: Long, month: Int, day: Int, description: String, category: String, amount: Double,
+        id: Long?, month: Int, day: Int, description: String, category: String, amount: Double,
         date_start: Long?, date_end: Long?, date_create: Long, note: String?
     ) {
         this.id = id

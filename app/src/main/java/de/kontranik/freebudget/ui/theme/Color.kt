@@ -2,6 +2,12 @@ package de.kontranik.freebudget.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
+val color_accent = Color(0xFFF0A202)
+val color_green = Color(0xFF4caf50)
+val color_red = Color(0xFFf44336)
+val color_green2 = Color(0xFF3a9e7b)
+val color_red2 = Color(0xFFd64f73)
+
 val md_theme_light_primary = Color(0xFF825500)
 val md_theme_light_onPrimary = Color(0xFFFFFFFF)
 val md_theme_light_primaryContainer = Color(0xFFFFDDB3)

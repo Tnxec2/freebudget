@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Environment
 import android.util.Log
-import androidx.lifecycle.LiveData
+import androidx.sqlite.db.SimpleSQLiteQuery
 import de.kontranik.freebudget.config.Config
 import de.kontranik.freebudget.database.DatabaseHelper
 import de.kontranik.freebudget.database.FreeBudgetRoomDatabase
@@ -13,6 +13,7 @@ import de.kontranik.freebudget.database.dao.CategoryDao
 import de.kontranik.freebudget.database.dao.TransactionDao
 import de.kontranik.freebudget.model.Category
 import de.kontranik.freebudget.model.Transaction
+import kotlinx.coroutines.flow.Flow
 import java.io.File
 import java.io.FileWriter
 import java.text.DateFormat
@@ -20,15 +21,17 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-internal class TransactionRepository(val context: Context) {
-    private val mTransactionDao: TransactionDao
-    private val mCategoryDao: CategoryDao
-    private val db: FreeBudgetRoomDatabase = FreeBudgetRoomDatabase.getDatabase(context)
+class TransactionRepository(
+    private val mTransactionDao: TransactionDao,
+    private val mCategoryDao: CategoryDao,
+    private val context: Context
+    ) {
 
-    init {
-        mTransactionDao = db.transactionDao()
-        mCategoryDao = db.categoryDao()
+    fun checkPoint() {
+        // to ensure all of the pending transactions are applied
+        mTransactionDao.checkpoint((SimpleSQLiteQuery("pragma wal_checkpoint(full)")))
     }
+
 
     fun insert(transaction: Transaction) {
         FreeBudgetRoomDatabase.databaseWriteExecutor.execute {
@@ -37,26 +40,18 @@ internal class TransactionRepository(val context: Context) {
         }
     }
 
-    fun getTransactions(e_year: Int,
-                        e_month: Int,
-                        categoryName: String?,
-                        showOnlyPlanned: Boolean): LiveData<List<Transaction>> {
+    fun getTransactions(eYear: Int,
+                        eMonth: Int): Flow<List<Transaction>> {
         val sortOrder = Helper.getSortFromSettings(context)
-        val cal: Calendar = GregorianCalendar(e_year, e_month - 1, 1)
+        val cal: Calendar = GregorianCalendar(eYear, eMonth - 1, 1)
         val timeStringStart = cal.timeInMillis.toString()
         cal.add(Calendar.MONTH, 1)
         val timeStringEnd = cal.timeInMillis.toString()
         sortOrder?.let { Log.d("getTransactions", it) }
-        return if (showOnlyPlanned)
-            if (sortOrder == null)
-                mTransactionDao.getPlannedTransactionsByDate(timeStringStart, timeStringEnd, categoryName)
+        return if (sortOrder == null)
+                mTransactionDao.getAllTransactionsByDate(timeStringStart, timeStringEnd)
             else
-                mTransactionDao.getPlannedTransactionsByDate(timeStringStart, timeStringEnd, categoryName, sortOrder)
-        else
-            if (sortOrder == null)
-                mTransactionDao.getAllTransactionsByDate(timeStringStart, timeStringEnd, categoryName)
-            else
-                mTransactionDao.getAllTransactionsByDate(timeStringStart, timeStringEnd, categoryName, sortOrder)
+                mTransactionDao.getAllTransactionsByDate(timeStringStart, timeStringEnd, sortOrder)
     }
 
     fun getTransactionByRegularCreateDate(e_year: Int, e_month: Int, regularCreateDate: Long): Transaction? {
@@ -67,7 +62,7 @@ internal class TransactionRepository(val context: Context) {
         return mTransactionDao.getTransactionsByDateAndRegularCreateDate(timeStringStart, timeStringEnd, regularCreateDate)
     }
 
-    fun getTransactionByID(id: Long): LiveData<Transaction> {
+    fun getTransactionByID(id: Long): Flow<Transaction> {
         return mTransactionDao.getByID(id)
     }
 
@@ -110,14 +105,14 @@ internal class TransactionRepository(val context: Context) {
                         val regularCreateDate = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_REGULAR_CREATE_DATE))
                         out.append(
                             id.toString() + Config.CSV_DELIMITER +
-                                    description + Config.CSV_DELIMITER +
-                                    (category ?: "") + Config.CSV_DELIMITER +
+                                    clearStringForCSV(description) + Config.CSV_DELIMITER +
+                                    clearStringForCSV(category ?: "") + Config.CSV_DELIMITER +
                                     dfShort.format(date) + Config.CSV_DELIMITER +
                                     amountPlanned.toString() + Config.CSV_DELIMITER +
                                     amountFact.toString() + Config.CSV_DELIMITER +
                                     dfLong.format(dateCreate) + Config.CSV_DELIMITER +
                                     dfLong.format(dateEdit) + Config.CSV_DELIMITER +
-                                    (note ?: "") + Config.CSV_DELIMITER +
+                                    clearStringForCSV(note ?: "") + Config.CSV_DELIMITER +
                                     (if (regularCreateDate == 0L) "" else regularCreateDate.toString()) + Config.CSV_DELIMITER
                                     + Config.CSV_NEW_LINE
                         )
@@ -138,4 +133,14 @@ internal class TransactionRepository(val context: Context) {
             }
         }
     }
+
+    fun insertAll(transactionList: MutableList<Transaction>) {
+        for (transaction in transactionList) {
+            insert(transaction)
+        }
+    }
+}
+
+fun clearStringForCSV(s: String): String {
+    return s.replace(Config.CSV_DELIMITER, Config.CSV_DELIMITER_REPLACER)
 }

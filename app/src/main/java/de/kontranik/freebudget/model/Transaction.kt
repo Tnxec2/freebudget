@@ -5,10 +5,11 @@ import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import de.kontranik.freebudget.database.DatabaseHelper
+import java.io.Serializable
 import java.util.*
 
 @Entity(tableName = DatabaseHelper.TABLE_TRANSACTION)
-class Transaction {
+class Transaction : Serializable {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = DatabaseHelper.COLUMN_ID) var id: Long? = null
     @ColumnInfo(name = DatabaseHelper.COLUMN_REGULAR_CREATE_DATE) var regularCreateTime: Long? = null

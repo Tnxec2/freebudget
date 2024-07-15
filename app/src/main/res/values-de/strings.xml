@@ -1,9 +1,14 @@
 <resources>
     <string name="app_name">Mein freies Budget</string>
     <string name="title_activity_main">Übersicht</string>
-    <string name="title_activity_transaction">Neue Bewegung</string>
-    <string name="title_activity_all_transactions">Geplante Bewegungen</string>
 
+    <string name="title_activity_new_transaction">Neue Bewegung</string>
+    <string name="title_activity_transaction">Bewegung</string>
+    <string name="title_activity_all_transactions">Alle Bewegungen</string>
+    <string name="title_activity_all_transactions_planned">Geplannte Bewegungen</string>
+    <string name="title_activity_all_transactions_category">%1$s, alle</string>
+    <string name="title_activity_all_transactions_category_planned">%1$s, geplannte</string>
+    <string name="confirm_category_delete">Löschen der Kategorie bestätigen</string>
     <string name="activity_main_header">Monatsübersicht</string>
     <string name="activity_main_receipts">Einnahmen</string>
     <string name="activity_main_receipts_planned">Einnahmen geplant</string>
@@ -78,17 +83,6 @@
     <string name="item_name">Item Name</string>
     <string name="activity_transaction_edit_planned">Geplante bearbeiten</string>
     <string name="request_write_permission">Write External Storage permission allows us to do store images. Please allow this permission in App Settings.</string>
-
-    <string-array name="navigation_drawer_items_array">
-        <item>Übersicht</item>
-        <item>Alle Bewegungen</item>
-        <item>Alle aufgeteilt</item>
-        <item>Reguläre</item>
-        <item></item>
-        <item>Kategorie</item>
-        <item>Extras</item>
-        <item>Einstellungen</item>
-    </string-array>
     <string name="mark_last_edited">Zuletzt geänderten Eintrag hervorheben</string>
     <string name="overview_list">Übersichtsliste</string>
     <string name="close">Schließen</string>
@@ -118,5 +112,20 @@
     <string name="add_planned_income">eingeplannte Einkommen</string>
     <string name="add_outgoings">Ausgaben</string>
     <string name="add_outgoings_planned">eingeplannte Ausgaben</string>
+    <string name="ic_arrow_back">arrow back</string>
+    <string name="drawer_menu_description">Menu navigation button</string>
+    <string name="confirm">Bestätigen</string>
+    <string name="dismiss">Abbrechen</string>
+    <string name="confirm_restor_db_text">Sind Sie sicher, dass Sie die aktuelle Datenbank mit der Sicherung überschreiben möchten?</string>
 
+    <string-array name="navigation_drawer_items_array">
+        <item>Übersicht</item>
+        <item>Alle Bewegungen</item>
+        <item>Alle aufgeteilt</item>
+        <item>Reguläre</item>
+        <item></item>
+        <item>Kategorie</item>
+        <item>Extras</item>
+        <item>Einstellungen</item>
+    </string-array>
 </resources>

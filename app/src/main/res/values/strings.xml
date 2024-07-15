@@ -1,8 +1,12 @@
 <resources>
     <string name="app_name">My free budget</string>
     <string name="title_activity_main">Monthly overview</string>
-    <string name="title_activity_transaction">New transaction</string>
-    <string name="title_activity_all_transactions">Planned transactions</string>
+    <string name="title_activity_new_transaction">New transaction</string>
+    <string name="title_activity_transaction">transaction</string>
+    <string name="title_activity_all_transactions">All transactions</string>
+    <string name="title_activity_all_transactions_planned">Planned transactions</string>
+    <string name="title_activity_all_transactions_category">%1$s, all</string>
+    <string name="title_activity_all_transactions_category_planned">%1$s, planned</string>
 
     <string name="activity_main_header">Monthly overview</string>
     <string name="activity_main_receipts">Income</string>
@@ -43,10 +47,10 @@
     <string name="menu_import_csv">Import csv</string>
     <string name="menu_export_csv">Export csv</string>
     <string name="title_activity_open_file">Open file</string>
-    <string name="manage_regular">Manage regulare transactions</string>
+    <string name="manage_regular">Manage regular transactions</string>
     <string name="new_regular_transaction">New regular transaction</string>
     <string name="day">day</string>
-    <string name="activity_category">category</string>
+    <string name="activity_category">Category</string>
     <string name="subTitleTransaction">Due on %1$s. %2$s</string>
     <string name="wrongMonthInTheLine">Wrong month in the line: %1$s</string>
     <string name="wrongDayInTheLine">Wrong day in the line: %1$s</string>
@@ -68,6 +72,7 @@
     <string name="save">Save</string>
     <string name="category_name">category name</string>
     <string name="no_category">category not set</string>
+    <string name="confirm_category_delete">confirm category delete</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="select">Select</string>
@@ -107,6 +112,11 @@
     <string name="add_planned_income">add planned income</string>
     <string name="add_outgoings">add outgoings</string>
     <string name="add_outgoings_planned">add outgoings planned</string>
+    <string name="ic_arrow_back">arrow back</string>
+    <string name="drawer_menu_description">Menu navigation button</string>
+    <string name="confirm">Confirm</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="confirm_restor_db_text">Are you sure you want to overwrite the current database with the backup?</string>
 
     <string-array name="navigation_drawer_items_array">
         <item>Overview</item>

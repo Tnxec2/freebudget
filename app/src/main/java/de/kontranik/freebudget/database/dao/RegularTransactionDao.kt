@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 import de.kontranik.freebudget.database.DatabaseHelper
 import de.kontranik.freebudget.model.RegularTransaction
+import kotlinx.coroutines.flow.Flow
 
 
 @Dao
@@ -19,7 +20,7 @@ interface RegularTransactionDao {
     fun delete(id: Long)
 
     @Query("SELECT * FROM ${DatabaseHelper.TABLE_REGULAR} where ${DatabaseHelper.COLUMN_ID} = :id LIMIT 1")
-    fun getById(id: Long): LiveData<RegularTransaction>
+    fun getById(id: Long): Flow<RegularTransaction>
 
     @Query("UPDATE ${DatabaseHelper.TABLE_REGULAR} " +
             "SET ${DatabaseHelper.COLUMN_CATEGORY_NAME} = :newName " +
@@ -29,7 +30,7 @@ interface RegularTransactionDao {
     @Query("SELECT * FROM ${DatabaseHelper.TABLE_REGULAR} " +
             "where ${DatabaseHelper.COLUMN_MONTH} = :month" +
             " order by ${DatabaseHelper.COLUMN_DAY}")
-    fun getByMonth(month: Int): LiveData<List<RegularTransaction>>
+    fun getByMonth(month: Int): Flow<List<RegularTransaction>>
 
     @Query("SELECT * FROM ${DatabaseHelper.TABLE_REGULAR} " +
             "where ${DatabaseHelper.COLUMN_MONTH} = :month " +

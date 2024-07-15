@@ -5,9 +5,9 @@
     android:id="@+id/mainlayout_overview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/paddint_small">
+    >
 
-    <LinearLayout
+<!--    <LinearLayout
         android:id="@+id/linearLayout_overview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -369,9 +369,13 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/regular" />
-    </LinearLayout>
+    </LinearLayout>-->
 
-
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/compose_overview_screen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add"
@@ -379,8 +383,8 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_baseline_add_24"
         app:backgroundTint="@color/colorAccent"
-        app:layout_constraintTop_toTopOf="@id/linearLayout_buttons_2"
-        app:layout_constraintBottom_toBottomOf="@id/linearLayout_footer"
+        android:layout_marginBottom="@dimen/paddint_medium"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:rippleColor="#FFF" />

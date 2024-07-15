@@ -40,6 +40,15 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+
+        val args = arrayListOf<String>()
+        args.addAll(freeCompilerArgs)
+        args.add(
+            "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi"
+        )
+
+        freeCompilerArgs = args.toList()
+
     }
     buildFeatures {
         viewBinding = true
@@ -83,7 +92,20 @@ dependencies {
     implementation(libs.androidx.compose.foundation.layout)
     implementation(libs.androidx.compose.runtime.livedata)
     implementation(libs.androidx.compose.ui.tooling)
-    implementation( libs.compose.theme.adapter)
+    implementation(libs.compose.theme.adapter)
+    implementation(libs.androidx.activity.compose)
+
+    // Navigation
+    // Kotlin
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
+    // Feature module Support
+    implementation(libs.androidx.navigation.dynamic.features.fragment)
+    // Testing Navigation
+    androidTestImplementation(libs.androidx.navigation.testing)
+    // Jetpack Compose Integration
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     testImplementation( libs.junit)
     androidTestImplementation( libs.androidx.junit.v114)

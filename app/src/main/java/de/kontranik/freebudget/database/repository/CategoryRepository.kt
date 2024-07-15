@@ -10,17 +10,11 @@ import de.kontranik.freebudget.database.dao.TransactionDao
 import de.kontranik.freebudget.model.Category
 
 
-internal class CategoryRepository(context: Context) {
-    private val mCategoryDao: CategoryDao
-    private val mRegularTransactionDao: RegularTransactionDao
-    private val mTransactionDao: TransactionDao
-
-    init {
-        val db: FreeBudgetRoomDatabase = FreeBudgetRoomDatabase.getDatabase(context)
-        mCategoryDao = db.categoryDao()
-        mRegularTransactionDao = db.regularTransactionDao()
-        mTransactionDao = db.transactionDao()
-    }
+class CategoryRepository(
+    private val mCategoryDao: CategoryDao,
+    private val mRegularTransactionDao: RegularTransactionDao,
+    private val mTransactionDao: TransactionDao,
+) {
 
     fun insert(category: Category) {
         FreeBudgetRoomDatabase.databaseWriteExecutor.execute {

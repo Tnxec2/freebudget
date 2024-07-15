@@ -1,50 +1,48 @@
 package de.kontranik.freebudget.database.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.switchMap
 import de.kontranik.freebudget.database.repository.RegularTransactionRepository
 import de.kontranik.freebudget.model.RegularTransaction
-
-class RegularTransactionViewModel(application: Application) : AndroidViewModel(application) {
-    private val mRepository: RegularTransactionRepository = RegularTransactionRepository(application)
+import kotlinx.coroutines.flow.map
 
 
+class RegularTransactionViewModel(
+    savedStateHandle: SavedStateHandle,
+    private val regularTransactionRepository: RegularTransactionRepository
+) : ViewModel() {
 
     fun delete(id: Long) {
-        mRepository.delete(id)
+        regularTransactionRepository.delete(id)
     }
 
-    private val id = MutableLiveData<Long?>()
-    val regularTransactionById: LiveData<RegularTransaction> = id.switchMap{
-        getLiveDataRegularTransactionById(it)}
-    private fun getLiveDataRegularTransactionById(id: Long?) = if (id != null) mRepository.getById(id) else null
-    fun loadRegularTransactionsById(id: Long) = apply { this.id.value = id }
-    fun clearRegularTransactionsById() = apply { this.id.value = null }
-
     private val month = MutableLiveData(0)
-    val regularTransactionByMonth: LiveData<List<RegularTransaction>> = month.switchMap{
-        getLiveDataRegularTransactionByMonth(it) }
-    private fun getLiveDataRegularTransactionByMonth(month: Int) = mRepository.getTransactionsByMonth(month)
-    fun loadRegularTransactionsByMonth(month: Int) = apply { this.month.value = month }
+
+    val regularTRansactionsUiState = month.switchMap { month ->
+        regularTransactionRepository.getTransactionsByMonth(month)
+            .map { list -> RegularTransactionsUiState(list) }.asLiveData()
+    }
+
     fun getMonth(): MutableLiveData<Int> {
         return month
     }
+
     fun insert(regularTransaction: RegularTransaction) {
-        mRepository.insertRegularTransaction(regularTransaction)
+        regularTransactionRepository.insertRegularTransaction(regularTransaction)
     }
 
     fun update(regularTransaction: RegularTransaction) {
-        mRepository.update(regularTransaction)
+        regularTransactionRepository.update(regularTransaction)
     }
 
     fun prevMonth() {
         month.value = if (month.value == 0) {
             12
         } else {
-            month.value?.minus(1)
+            month.value!!.minus(1)
         }
     }
 
@@ -52,7 +50,31 @@ class RegularTransactionViewModel(application: Application) : AndroidViewModel(a
         month.value = if (month.value == 12) {
             0
         } else {
-            month.value?.plus(1)
+            month.value!!.plus(1)
         }
     }
+
+    fun save(rt: RegularTransaction) {
+        if (rt.id == null)
+            insert(rt)
+        else
+            update(rt)
+    }
+
+    fun insertAll(regularTransactionList: MutableList<RegularTransaction>) {
+        for (rt in regularTransactionList) {
+            regularTransactionRepository.insertRegularTransaction(rt)
+        }
+    }
+
+    fun exportToCSV(baseFileName: String): String {
+        return regularTransactionRepository.exportToCSV(baseFileName)
+    }
+
+    companion object {
+        private const val TIMEOUT_MILLIS = 5_000L
+    }
 }
+
+
+data class RegularTransactionsUiState(val itemList: List<RegularTransaction> = listOf())

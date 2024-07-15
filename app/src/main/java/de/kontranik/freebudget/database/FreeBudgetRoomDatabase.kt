@@ -42,6 +42,7 @@ abstract class FreeBudgetRoomDatabase : RoomDatabase() {
                             FreeBudgetRoomDatabase::class.java,
                             DATABASE_NAME
                         )
+                            .setJournalMode(JournalMode.TRUNCATE)
                             .addMigrations()
                             .build()
                     }

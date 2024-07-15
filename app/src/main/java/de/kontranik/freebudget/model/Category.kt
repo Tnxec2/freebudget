@@ -13,13 +13,13 @@ class Category : Comparable<Category> {
     @ColumnInfo(name = DatabaseHelper.COLUMN_CATEGORY_NAME) var name: String
     @Ignore var weight = 0.0
 
-    constructor(id: Long, name: String) {
+    constructor(id: Long?, name: String) {
         this.id = id
         this.name = name
         weight = 0.0
     }
     @Ignore
-    constructor(id: Long, name: String, weight: Double) {
+    constructor(id: Long?, name: String, weight: Double) {
         this.id = id
         this.name = name
         this.weight = weight

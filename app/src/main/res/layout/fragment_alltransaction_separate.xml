@@ -5,9 +5,14 @@
     android:id="@+id/mainlayout_alltransaction"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/paddint_small">
+    >
 
-
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/compose_transaction_separated_screen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+<!--
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
@@ -148,6 +153,8 @@
             android:textStyle="bold"
             android:textColor="@color/colorRed"/>
     </LinearLayout>
+
+-->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add"
         android:layout_width="wrap_content"
@@ -156,7 +163,7 @@
         android:layout_marginBottom="16dp"
         android:src="@drawable/ic_baseline_add_24"
         app:backgroundTint="@color/colorAccent"
-        app:layout_constraintBottom_toTopOf="@id/linearLayout_summen"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:rippleColor="#FFF"
         android:contentDescription="@string/add_transaction_general"
