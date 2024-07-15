@@ -1,5 +1,6 @@
 package de.kontranik.freebudget.ui.components.settings
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -94,7 +95,15 @@ fun SettingsScreen(
             }
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()) {
+                modifier = Modifier
+                    .clickable(
+                        onClick = {
+                            coroutineScope.launch {
+                                settingsViewModel.changeDescOrderState(settingsViewModel.descOrderState.value.not())
+                            }
+                        }
+                    )
+                    .fillMaxWidth()) {
                 Checkbox(
                     checked = settingsViewModel.descOrderState.value,
                     onCheckedChange = {
@@ -113,7 +122,15 @@ fun SettingsScreen(
                 modifier = Modifier.fillMaxWidth()
             )
             Row(verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()) {
+                modifier = Modifier
+                    .clickable(
+                        onClick = {
+                            coroutineScope.launch {
+                                settingsViewModel.changeMarkLastEditedState(settingsViewModel.markLastEditedState.value.not())
+                            }
+                        }
+                    )
+                    .fillMaxWidth()) {
                 Checkbox(
                     checked = settingsViewModel.markLastEditedState.value,
                     onCheckedChange = {
