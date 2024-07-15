@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -20,11 +22,16 @@ import de.kontranik.freebudget.ui.components.shared.Amount
 fun AllTransactionSeparatedList(
     transactions: List<Transaction>,
     onClick: (position: Int, item: Transaction) -> Unit,
-    modifier: Modifier = Modifier) {
+    modifier: Modifier = Modifier,
+    stateLeft: LazyListState = rememberLazyListState(),
+    stateRight: LazyListState = rememberLazyListState(),
+    ) {
 
     Row(Modifier.fillMaxSize()) {
         Column(Modifier.weight(1f)) {
-            LazyColumn(Modifier.weight(1f)) {
+            LazyColumn(
+                state = stateLeft,
+                modifier = Modifier.weight(1f)) {
                 itemsIndexed(transactions.filter {
                     (if (it.amountFact != 0.0) it.amountFact else it.amountPlanned) > 0
                 }) { index, transaction ->
@@ -44,7 +51,9 @@ fun AllTransactionSeparatedList(
             )
         }
         Column(Modifier.weight(1f)) {
-            LazyColumn(Modifier.weight(1f)) {
+            LazyColumn(
+                state = stateRight,
+                modifier = Modifier.weight(1f)) {
                 itemsIndexed(transactions.filter {
                     (if (it.amountFact != 0.0) it.amountFact else it.amountPlanned) < 0
                 }) { index, transaction ->

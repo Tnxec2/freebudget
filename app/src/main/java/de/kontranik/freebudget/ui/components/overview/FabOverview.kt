@@ -3,7 +3,6 @@ package de.kontranik.freebudget.ui.components.overview
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -23,7 +22,6 @@ import de.kontranik.freebudget.ui.theme.color_green
 import de.kontranik.freebudget.ui.theme.color_green2
 import de.kontranik.freebudget.ui.theme.color_red
 import de.kontranik.freebudget.ui.theme.color_red2
-import de.kontranik.freebudget.ui.theme.paddingMedium
 import de.kontranik.freebudget.ui.theme.paddingSmall
 
 @Composable

@@ -4,6 +4,7 @@ import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
@@ -53,13 +54,15 @@ fun OverviewScreen(
         mutableStateOf(true)
     }
 
+    val categoryListState = rememberLazyListState()
+
     Scaffold(
         topBar = { AppBar(
             title = R.string.overview_list,
             drawerState = drawerState)
         },
         floatingActionButton = {
-            if (showFab) FabOverview(onAdd = { type ->
+            if (showFab && !categoryListState.isScrollInProgress) FabOverview(onAdd = { type ->
                 navigateToNewTransaction(type)
             })
         },
@@ -94,23 +97,14 @@ fun OverviewScreen(
                 }
             )
             OverviewCategorySummary(
+                state = categoryListState,
                 transactions = uiState.value.itemList,
                 onSelect = { name ->
                     coroutineScope.launch {
                         navToAllTransactions(name)
                     }
                 },
-                Modifier.weight(1f)
-                    .pointerInput(Unit) {
-                    detectDragGestures(
-                        onDragStart = {
-                            showFab = false
-                        },
-                        onDrag = { pi, offset -> },
-                        onDragEnd = { showFab = true },
-                        onDragCancel = { showFab = true }
-                    )
-                }
+                modifier = Modifier.weight(1f),
             )
             OverviewButtonBox(
                 onClickAllTransactionsSeparated = navToAllTransactionsSeparated,

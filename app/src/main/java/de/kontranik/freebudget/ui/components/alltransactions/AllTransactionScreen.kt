@@ -1,13 +1,20 @@
 package de.kontranik.freebudget.ui.components.alltransactions
 
-import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Button
 import androidx.compose.material3.DrawerState
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FabPosition
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -16,10 +23,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -34,6 +41,7 @@ import de.kontranik.freebudget.ui.components.shared.MonthSelector
 import de.kontranik.freebudget.ui.components.shared.TransactionType
 import de.kontranik.freebudget.ui.navigation.NavigationDestination
 import de.kontranik.freebudget.ui.theme.paddingSmall
+import kotlinx.coroutines.launch
 
 
 object AllTransactionsScreenDestination : NavigationDestination {
@@ -53,6 +61,7 @@ fun AllTransactionScreen(
     allTransactionsScreenViewModel: AllTransactionsScreenViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
     val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
 
     val queryState by transactionViewModel.query.observeAsState(
         TransactionQuery()
@@ -62,13 +71,15 @@ fun AllTransactionScreen(
         TransactionsUiState()
     )
 
-    var showFab by remember {
-        mutableStateOf(true)
-    }
-
     var showOnlyPlanned by rememberSaveable {
         mutableStateOf(false)
     }
+
+    var menuExpanded by remember {
+        mutableStateOf(false)
+    }
+
+    val listState = rememberLazyListState()
 
     Scaffold(
         topBar = {
@@ -79,13 +90,34 @@ fun AllTransactionScreen(
                     Switch(
                         checked = showOnlyPlanned,
                         onCheckedChange = { showOnlyPlanned = it })
+                },
+                appBarActions = listOf {
+                    IconButton(onClick = { menuExpanded = !menuExpanded }) {
+                        Icon(
+                            imageVector = Icons.Filled.MoreVert,
+                            contentDescription = "More",
+                        )
+                    }
+                    DropdownMenu(
+                        expanded = menuExpanded,
+                        onDismissRequest = { menuExpanded = false },
+                    ) {
+                        DropdownMenuItem(
+                            text = {
+                                Text(stringResource(id = R.string.put_regular))
+                            },
+                            onClick = { coroutineScope.launch {
+                                transactionViewModel.planRegular()
+                                menuExpanded = false
+                            } },
+                        )
+                    }
                 }
             )
-
         },
         modifier = modifier.fillMaxSize(),
         floatingActionButton = {
-            if (showFab) FabNormalList(onAdd = { type ->
+            if (!listState.isScrollInProgress) FabNormalList(onAdd = { type ->
                 navigateToEdit(type, null)
             })
         },
@@ -107,7 +139,10 @@ fun AllTransactionScreen(
             }
             if (uiState.value.itemList.isEmpty()) {
                 Button(
-                    onClick = { transactionViewModel.planRegular() },
+                    onClick = {
+                        coroutineScope.launch {
+                            transactionViewModel.planRegular()
+                        } },
                     modifier = modifier
                         .fillMaxWidth()
                         .padding(paddingSmall)
@@ -126,16 +161,8 @@ fun AllTransactionScreen(
                 onClick = { _, item ->
                     navigateToEdit(null, item.id)
                 },
-                modifier = Modifier.pointerInput(Unit) {
-                    detectDragGestures(
-                        onDragStart = {
-                            showFab = false
-                        },
-                        onDrag = { pi, offset -> },
-                        onDragEnd = { showFab = true },
-                        onDragCancel = { showFab = true }
-                    )
-                }
+                state = listState,
+                modifier = Modifier
             )
         }
     }

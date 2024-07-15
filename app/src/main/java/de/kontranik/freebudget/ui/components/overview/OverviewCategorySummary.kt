@@ -9,14 +9,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,7 +33,8 @@ import kotlin.math.abs
 fun OverviewCategorySummary(
     transactions: List<Transaction>,
     onSelect: (categoryName: String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    state: LazyListState = rememberLazyListState(),
     ) {
 
     val categoryList = mutableMapOf<String, Category>()
@@ -56,7 +57,8 @@ fun OverviewCategorySummary(
     }
 
     LazyColumn(
-        modifier
+        state = state,
+        modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = paddingSmall)) {
         itemsIndexed(categoryList.values.sortedByDescending { it.weight }.toList()) { index, category ->

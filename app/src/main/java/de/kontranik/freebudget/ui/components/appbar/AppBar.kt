@@ -30,7 +30,7 @@ fun AppBar(
     navigationIcon: (@Composable () -> Unit)? = null,
     @StringRes title: Int? = null,
     titleString: String? = null,
-    appBarActions: List<AppBarAction>? = null,
+    appBarActions: List<@Composable RowScope.() -> Unit>? = null,
     customActions: List<@Composable RowScope.() -> Unit>? = null
 ) {
     TopAppBar(
@@ -52,10 +52,8 @@ fun AppBar(
             customActions?.map {
                 it()
             }
-            appBarActions?.let {
-                for (appBarAction in it) {
-                    AppBarAction(appBarAction)
-                }
+            appBarActions?.map {
+                it()
             }
         },
         navigationIcon = {

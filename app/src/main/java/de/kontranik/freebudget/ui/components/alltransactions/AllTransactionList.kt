@@ -2,7 +2,9 @@ package de.kontranik.freebudget.ui.components.alltransactions
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -15,7 +17,9 @@ fun AllTransactionList(
     transactions: List<Transaction>,
     markLastEdited: Boolean,
     onClick: (position: Int, item: Transaction) -> Unit,
-    modifier: Modifier = Modifier) {
+    modifier: Modifier = Modifier,
+    state: LazyListState = rememberLazyListState(),
+    ) {
 
     var lastEditedId: Long? = null
 
@@ -25,7 +29,9 @@ fun AllTransactionList(
         transactions.forEach { item -> if (item.dateEdit > lastEditedDate) lastEditedId = item.id}
     }
 
-    LazyColumn(Modifier.fillMaxSize()) {
+    LazyColumn(
+        state = state,
+        modifier = Modifier.fillMaxSize()) {
         itemsIndexed(transactions) { index, transaction ->
             TransactionItem(
                 transaction,

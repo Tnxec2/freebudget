@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
@@ -41,10 +42,6 @@ fun RegularTransactionScreen(
         RegularTransactionsUiState()
     )
 
-    var showFab by remember {
-        mutableStateOf(true)
-    }
-
     var income = 0.0
     var bills = 0.0
 
@@ -58,13 +55,15 @@ fun RegularTransactionScreen(
         }
     }
 
+    val listState = rememberLazyListState()
+
     Scaffold(
         topBar = { AppBar(
             title = R.string.regular,
             drawerState = drawerState) },
         modifier = modifier.fillMaxSize(),
         floatingActionButton = {
-            if (showFab) FabRegularList(onAdd = { type ->
+            if (!listState.isScrollInProgress) FabRegularList(onAdd = { type ->
                 navigateToEdit(type, null)
             })
         },
@@ -91,21 +90,12 @@ fun RegularTransactionScreen(
                 modifier = modifier)
             Box(modifier = Modifier.padding(bottom = paddingSmall))
             RegularTransactionList(
+                state = listState,
                 transactions = uiState.value.itemList,
                 onClick = { _, item ->
                     navigateToEdit(null, item.id)
                 },
-                modifier
-                    .pointerInput(Unit) {
-                        detectDragGestures(
-                            onDragStart = {
-                                showFab = false
-                            },
-                            onDrag = { pi, offset -> },
-                            onDragEnd = { showFab = true },
-                            onDragCancel = { showFab = true }
-                        )
-                    })
+                )
         }
     }
 

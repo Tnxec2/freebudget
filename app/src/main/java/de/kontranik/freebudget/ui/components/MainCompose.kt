@@ -1,7 +1,9 @@
 package de.kontranik.freebudget.ui.components
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
@@ -11,14 +13,25 @@ import de.kontranik.freebudget.ui.components.appdrawer.AppDrawerContent
 import de.kontranik.freebudget.ui.components.appdrawer.AppDrawerItemInfo
 import de.kontranik.freebudget.ui.theme.AppTheme
 import de.kontranik.freebudget.R
+import kotlinx.coroutines.launch
 
 @Composable
 fun MainCompose(
     navController: NavHostController = rememberNavController(),
     drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
 ) {
+    val scope = rememberCoroutineScope()
+
+    val closeDrawer: () -> Unit = {
+        if (drawerState.isOpen)
+            scope.launch { drawerState.close() }
+        else
+            scope.launch { navController.popBackStack() }
+    }
+
     AppTheme {
         Surface {
+            BackHandler(enabled = drawerState.isOpen, onBack = closeDrawer)
             ModalNavigationDrawer(
                 drawerState = drawerState,
                 drawerContent = {
