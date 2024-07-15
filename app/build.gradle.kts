@@ -14,8 +14,8 @@ android {
         applicationId = "com.kontranik.freebudget"
         minSdk = 21
         targetSdk = 34
-        versionCode = 9
-        versionName = "1.2.4"
+        versionCode = 10
+        versionName = "1.3.0"
 
         setProperty("archivesBaseName", applicationId + "-v" + versionCode + "(" + versionName + ")")
 
