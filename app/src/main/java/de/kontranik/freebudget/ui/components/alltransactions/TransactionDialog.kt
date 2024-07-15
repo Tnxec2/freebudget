@@ -3,6 +3,7 @@ package de.kontranik.freebudget.ui.components.alltransactions
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,12 +17,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.DrawerState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -126,7 +129,8 @@ fun TransactionDialog(
                 singleLine = true,
                 label = { Text(stringResource(R.string.activity_transaction_description)) },
                 onValueChange = { onValueChange(itemDetails.copy(description = it)) },
-                modifier = Modifier.fillMaxWidth(1f)
+                modifier = Modifier
+                    .fillMaxWidth(1f)
                     .focusRequester(descField),
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Next,
@@ -148,7 +152,8 @@ fun TransactionDialog(
                         searchCategory = it
                         showCategoryDropdown = it.isNotEmpty()
                     },
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier
+                        .weight(1f)
                         .focusRequester(catFocus),
                     keyboardOptions = KeyboardOptions(
                         imeAction = ImeAction.Next,
@@ -191,7 +196,8 @@ fun TransactionDialog(
                     .padding(bottom = paddingSmall)
             ) {
                 OutlinedTextField(
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier
+                        .weight(1f)
                         .focusRequester(factFocus),
                     singleLine = true,
                     enabled = !itemDetails.isPlanned,
@@ -216,7 +222,8 @@ fun TransactionDialog(
                     )
                 }
                 OutlinedTextField(
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier
+                        .weight(1f)
                         .focusRequester(plannedFocus),
                     singleLine = true,
                     enabled = itemDetails.isPlanned,
@@ -267,6 +274,7 @@ fun TransactionDialog(
                         }
                     }
                 }
+                Spacer(modifier = Modifier.weight(1f))
                 DatePickerButton(
                     millis = itemDetails.date,
                     onChangeDate = {

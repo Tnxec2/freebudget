@@ -5,10 +5,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DatePickerState
+import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
@@ -25,10 +29,17 @@ import de.kontranik.freebudget.ui.theme.paddingSmall
 fun DatePickerButton(
     millis: Long,
     onChangeDate: (millis: Long) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
-    val state = rememberDatePickerState(
-        initialSelectedDateMillis = millis)
+
+    val state: DatePickerState = rememberDatePickerState(
+        initialSelectedDateMillis = millis,
+        initialDisplayMode = DisplayMode.Picker,
+    )
+
+    LaunchedEffect(key1 = millis) {
+        state.selectedDateMillis = millis
+    }
 
     var open by remember {
         mutableStateOf(false)
