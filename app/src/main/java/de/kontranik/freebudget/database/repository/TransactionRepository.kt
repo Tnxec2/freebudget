@@ -29,6 +29,7 @@ class TransactionRepository(
 
     fun checkPoint() {
         // to ensure all of the pending transactions are applied
+        // https://androidexplained.github.io/android/room/2020/10/03/room-backup-restore.html#h-restore-database
         mTransactionDao.checkpoint((SimpleSQLiteQuery("pragma wal_checkpoint(full)")))
     }
 
