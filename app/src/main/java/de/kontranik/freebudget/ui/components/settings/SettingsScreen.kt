@@ -36,7 +36,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun SettingsScreen(
     drawerState: DrawerState,
-    navigateUp: () -> Unit,
     modifier: Modifier = Modifier,
     settingsViewModel: SettingsViewModel = viewModel(factory = AppViewModelProvider.Factory),
     ) {

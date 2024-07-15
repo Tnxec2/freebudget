@@ -108,8 +108,8 @@ fun NavGraphBuilder.mainGraph(
 
         composable(MainNavOption.SettingsScreen.name){
             SettingsScreen(
-                drawerState,
-                navigateUp = { navController.navigate(MainNavOption.Overview.name) })
+                drawerState
+            )
         }
 
         composable(

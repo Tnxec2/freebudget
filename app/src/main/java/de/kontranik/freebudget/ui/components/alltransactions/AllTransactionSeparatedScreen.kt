@@ -33,7 +33,6 @@ fun AllTransactionSeparatedScreen(
     navigateToEdit: (type: TransactionType?, id: Long?) -> Unit,
     modifier: Modifier = Modifier,
     transactionViewModel: TransactionViewModel = viewModel(factory = AppViewModelProvider.Factory),
-    settingsViewModel: SettingsViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
 
     val queryState by transactionViewModel.query.observeAsState(

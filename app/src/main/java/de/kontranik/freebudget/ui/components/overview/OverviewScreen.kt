@@ -25,7 +25,6 @@ import de.kontranik.freebudget.database.viewmodel.TransactionsUiState
 import de.kontranik.freebudget.ui.AppViewModelProvider
 import de.kontranik.freebudget.ui.components.shared.MonthSelector
 import de.kontranik.freebudget.ui.components.appbar.AppBar
-import de.kontranik.freebudget.ui.components.alltransactions.FabNormalList
 import de.kontranik.freebudget.ui.components.shared.TransactionType
 import kotlinx.coroutines.launch
 
