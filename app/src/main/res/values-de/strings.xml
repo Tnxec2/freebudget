@@ -8,7 +8,7 @@
     <string name="title_activity_all_transactions_planned">Geplannte Bewegungen</string>
     <string name="title_activity_all_transactions_category">%1$s, alle</string>
     <string name="title_activity_all_transactions_category_planned">%1$s, geplannte</string>
-    <string name="confirm_category_delete">Löschen der Kategorie bestätigen</string>
+    <string name="confirm_category_delete">Löschen der Kategorie \"%1$s\" bestätigen</string>
     <string name="activity_main_header">Monatsübersicht</string>
     <string name="activity_main_receipts">Einnahmen</string>
     <string name="activity_main_receipts_planned">Einnahmen geplant</string>
@@ -69,6 +69,8 @@
     <string name="exportOK_filename">Export OK. Datei: %1$s</string>
     <string name="delete">Löschen</string>
     <string name="save">Speichern</string>
+
+    <string name="category_name_new">Name f. neue Kategorie</string>
     <string name="category_name">Kategoriename</string>
     <string name="ok">OK</string>
     <string name="cancel">Abbrechen</string>

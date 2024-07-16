@@ -142,7 +142,7 @@ fun NavGraphBuilder.mainGraph(
             CategoryListScreen(
                 categoryListState = categoryViewModel.mAllCategorys.observeAsState(initial = listOf()),
                 drawerState = drawerState,
-                navigateUp = { navController.navigate(MainNavOption.Overview.name) })
+            )
         }
 
         composable(MainNavOption.ToolScreen.name){

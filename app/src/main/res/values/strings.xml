@@ -70,9 +70,10 @@
     <string name="activity_transaction_amount">Amount</string>
     <string name="delete">Delete</string>
     <string name="save">Save</string>
+    <string name="category_name_new">new category</string>
     <string name="category_name">category name</string>
     <string name="no_category">category not set</string>
-    <string name="confirm_category_delete">confirm category delete</string>
+    <string name="confirm_category_delete">confirm delete category \"%1$s\"</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="select">Select</string>

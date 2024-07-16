@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -16,6 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import de.kontranik.freebudget.model.Transaction
 import de.kontranik.freebudget.ui.components.shared.Amount
+import de.kontranik.freebudget.ui.theme.paddingSmall
 
 @Composable
 fun AllTransactionSeparatedList(
@@ -46,7 +48,7 @@ fun AllTransactionSeparatedList(
             Amount(
                 amount = transactions.map{ if (it.amountFact != 0.0) it.amountFact else it.amountPlanned }.filter { it > 0}.sumOf { it },
                 textAlign = TextAlign.Right,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().padding(top = paddingSmall)
             )
         }
         Column(Modifier.weight(1f)) {
@@ -68,7 +70,7 @@ fun AllTransactionSeparatedList(
             Amount(
                 amount = transactions.map{ if (it.amountFact != 0.0) it.amountFact else it.amountPlanned }.filter { it < 0}.sumOf { it },
                 textAlign = TextAlign.Right,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().padding(top = paddingSmall)
             )
         }
     }

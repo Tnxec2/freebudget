@@ -20,6 +20,7 @@ import de.kontranik.freebudget.ui.components.shared.TransactionType
 import de.kontranik.freebudget.ui.theme.color_accent
 import de.kontranik.freebudget.ui.theme.color_green2
 import de.kontranik.freebudget.ui.theme.color_red2
+import de.kontranik.freebudget.ui.theme.paddingBig
 import de.kontranik.freebudget.ui.theme.paddingSmall
 
 
@@ -28,64 +29,34 @@ fun FabRegularList(
     onAdd: (type: TransactionType) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var showButtons by remember {
-        mutableStateOf(false)
-    }
-
-    fun toggleButtons() {
-        showButtons = showButtons.not()
-    }
 
     fun onClick(type: TransactionType) {
-        showButtons = false
+
         onAdd(type)
     }
 
 
     Row {
-        if (showButtons) {
-                FabTransactionItem(
-                    fabItem = FabItem(
-                        { onClick(TransactionType.INCOME_REGULAR) },
-                        color_green2,
-                        R.drawable.ic_baseline_add_24,
-                        R.string.activity_main_receipts_planned
-                    )
-                )
-            Spacer(Modifier.width(paddingSmall))
-        }
+        FabTransactionItem(
+            fabItem = FabItem(
+                { onClick(TransactionType.INCOME_REGULAR) },
+                color_green2,
+                R.drawable.ic_baseline_add_24,
+                R.string.activity_main_receipts_planned
+            )
+        )
+        Spacer(Modifier.width(paddingBig))
+
 
         FabTransactionItem(
             fabItem = FabItem(
-                { toggleButtons() },
-                color_accent,
-                R.drawable.ic_baseline_euro_symbol_24,
-                R.string.activity_main_receipts_unplanned
-            ),
-            modifier = Modifier
-                .pointerInput(Unit) {
-                    detectDragGestures(
-                        onDragStart = {
-                            showButtons = true
-                        },
-                        onDrag = { pi, offset -> },
-                        onDragEnd = { showButtons = false },
-                        onDragCancel = { showButtons = false }
-                    )
-                }
+                { onClick(TransactionType.BILLS_REGULAR) },
+                color_red2,
+                R.drawable.ic_baseline_remove_24,
+                R.string.activity_main_spending_planned
+            )
         )
 
-        if (showButtons) {
-            Spacer(Modifier.width(paddingSmall))
-            FabTransactionItem(
-                fabItem = FabItem(
-                    { onClick(TransactionType.BILLS_REGULAR) },
-                    color_red2,
-                    R.drawable.ic_baseline_remove_24,
-                    R.string.activity_main_spending_planned
-                )
-            )
-        }
     }
 }
 

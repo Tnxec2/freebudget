@@ -8,11 +8,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -23,6 +29,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -58,46 +65,68 @@ fun CategoryEditForm(
         openConfirmDeleteDialog.value = false
     }
 
+    fun onClear() {
+        viewModel.clearItem()
+    }
+
     val coroutineScope = rememberCoroutineScope()
 
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        OutlinedTextField(
-            value = categoryDetails.name,
-            onValueChange = { onValueChange(categoryDetails.copy(name = it)) },
-            label = {
-                Text(
-                    stringResource(
-                        id = R.string.category_name
+    Column {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            OutlinedTextField(
+                value = categoryDetails.name,
+                onValueChange = { onValueChange(categoryDetails.copy(name = it)) },
+                label = {
+                    Text(
+                        stringResource(
+                            id = if (categoryDetails.id != null)  R.string.category_name else R.string.category_name_new
+                        )
                     )
+                },
+                modifier = Modifier.weight(1f),
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done
                 )
-            },
-            modifier = Modifier.weight(0.5f)
-        )
-        Spacer(modifier = Modifier.width(paddingSmall))
-        Button(
-            onClick = {
-                coroutineScope.launch {
-                    save()
+            )
+            IconButton(onClick = { onClear() }) {
+                Icon(imageVector = Icons.Filled.Clear, contentDescription = "clear", modifier = Modifier.size(24.dp),)
+            }
+        }
+        Spacer(modifier = Modifier.height(paddingSmall))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.End
+        ) {
+
+            if (categoryDetails.id != null) {
+                Button(
+                    onClick = {
+                        openConfirmDeleteDialog.value = true
+                    }
+                ) {
+                    Text(text = stringResource(id = R.string.delete))
                 }
             }
-        ) {
-            Text(text = stringResource(id = R.string.save))
-        }
-        Spacer(modifier = Modifier.width(paddingSmall))
-        Button(
-            onClick = {
-                openConfirmDeleteDialog.value = true
+            Spacer(modifier = Modifier.weight(1f))
+            Button(
+                enabled = categoryDetails.name.isNotEmpty(),
+                onClick = {
+                    save()
+                }
+            ) {
+                Text(text = stringResource(id = R.string.save))
             }
-        ) {
-            Text(text = stringResource(id = R.string.delete))
         }
+
     }
+
     when {
         openConfirmDeleteDialog.value -> {
             DeleteCategoryDialog(
+                name = categoryDetails.name,
                 onDismissRequest = { openConfirmDeleteDialog.value = false },
                 onConfirmation = {
                     coroutineScope.launch {
@@ -112,6 +141,7 @@ fun CategoryEditForm(
 
 @Composable
 fun DeleteCategoryDialog(
+    name: String,
     onDismissRequest: () -> Unit,
     onConfirmation: () -> Unit,
 ) {
@@ -130,7 +160,7 @@ fun DeleteCategoryDialog(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    text = stringResource(id = R.string.confirm_category_delete),
+                    text = stringResource(id = R.string.confirm_category_delete, name),
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentSize(Alignment.Center),
