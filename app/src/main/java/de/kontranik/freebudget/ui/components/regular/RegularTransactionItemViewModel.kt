@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import de.kontranik.freebudget.database.repository.RegularTransactionRepository
 import de.kontranik.freebudget.model.RegularTransaction
 import de.kontranik.freebudget.ui.components.shared.TransactionType
+import de.kontranik.freebudget.ui.helpers.DateUtils
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -98,7 +99,7 @@ data class RegularTransactionItem(
     val category: String = "",
     val note: String = "",
     val amount: String = "",
-    val dateCreate: Long = Calendar.getInstance().timeInMillis,
+    val dateCreate: Long = DateUtils.now(),
     val dateStart: Long? = null,
     val dateEnd: Long? = null,
     val isIncome: Boolean = false,

@@ -5,8 +5,9 @@ import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import de.kontranik.freebudget.database.DatabaseHelper
+import de.kontranik.freebudget.ui.helpers.DateUtils
 import java.io.Serializable
-import java.util.*
+
 
 @Entity(tableName = DatabaseHelper.TABLE_TRANSACTION)
 class Transaction : Serializable {
@@ -16,11 +17,11 @@ class Transaction : Serializable {
     @ColumnInfo(name = DatabaseHelper.COLUMN_DESCRIPTION) var description: String = ""
     @ColumnInfo(name = DatabaseHelper.COLUMN_NOTE) var note: String? = null
     @ColumnInfo(name = DatabaseHelper.COLUMN_CATEGORY_NAME) var category: String = ""
-    @ColumnInfo(name = DatabaseHelper.COLUMN_DATE) var date: Long = Date().time
+    @ColumnInfo(name = DatabaseHelper.COLUMN_DATE) var date: Long = DateUtils.now()
     @ColumnInfo(name = DatabaseHelper.COLUMN_AMOUNT_PLANNED) var amountPlanned: Double = 0.0
     @ColumnInfo(name = DatabaseHelper.COLUMN_AMOUNT_FACT) var amountFact: Double = 0.0
-    @ColumnInfo(name = DatabaseHelper.COLUMN_DATE_CREATE) var dateCreate: Long = Date().time
-    @ColumnInfo(name = DatabaseHelper.COLUMN_DATE_EDIT) var dateEdit: Long = Date().time
+    @ColumnInfo(name = DatabaseHelper.COLUMN_DATE_CREATE) var dateCreate: Long = DateUtils.now()
+    @ColumnInfo(name = DatabaseHelper.COLUMN_DATE_EDIT) var dateEdit: Long = DateUtils.now()
 
     constructor() {}
 
@@ -67,8 +68,8 @@ class Transaction : Serializable {
         this.date = date
         this.amountPlanned = amountPlanned
         this.amountFact = amountFact
-        this.dateCreate = Date().time
-        this.dateEdit = Date().time
+        this.dateCreate = DateUtils.now()
+        this.dateEdit = DateUtils.now()
         this.note = note
     }
 

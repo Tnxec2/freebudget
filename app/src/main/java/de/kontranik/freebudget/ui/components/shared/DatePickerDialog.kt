@@ -12,7 +12,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
@@ -47,12 +46,12 @@ fun DatePickerButton(
 
     Button(
         onClick = { open = true },
-        modifier = Modifier
+        modifier = modifier
             .padding(start = paddingSmall)
     ) {
-        Text(text = DateUtils.getDate(state.selectedDateMillis!!))
+        Text(text = DateUtils.getDateMedium(millis))
     }
-    Box(modifier = Modifier) {
+    Box(modifier = modifier) {
         if (open) {
             DatePickerDialog(
                 onDismissRequest = { open = false },

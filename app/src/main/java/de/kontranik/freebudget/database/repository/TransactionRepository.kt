@@ -13,6 +13,7 @@ import de.kontranik.freebudget.database.dao.CategoryDao
 import de.kontranik.freebudget.database.dao.TransactionDao
 import de.kontranik.freebudget.model.Category
 import de.kontranik.freebudget.model.Transaction
+import de.kontranik.freebudget.ui.helpers.DateUtils
 import kotlinx.coroutines.flow.Flow
 import java.io.File
 import java.io.FileWriter
@@ -82,10 +83,9 @@ class TransactionRepository(
 
     @SuppressLint("Range")
     fun exportToCSV(fileName: String): String {
-        val dfMillis: DateFormat = SimpleDateFormat(Config.DATE_MILLIS, Locale.US)
         val dfLong: DateFormat = SimpleDateFormat(Config.DATE_LONG, Locale.US)
         val dfShort: DateFormat = SimpleDateFormat(Config.DATE_SHORT, Locale.US)
-        val outFileName = fileName + "_" + dfLong.format(Date()) + ".csv"
+        val outFileName = fileName + "_" + dfLong.format(DateUtils.now()) + ".csv"
         val directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
         val fileExport = File(directory, outFileName)
         val out = FileWriter(fileExport)

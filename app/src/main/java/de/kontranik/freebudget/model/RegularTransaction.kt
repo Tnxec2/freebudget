@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import de.kontranik.freebudget.database.DatabaseHelper
+import de.kontranik.freebudget.ui.helpers.DateUtils
 import java.io.Serializable
 
 @Entity(tableName = DatabaseHelper.TABLE_REGULAR)
@@ -18,7 +19,7 @@ class RegularTransaction : Serializable {
     @ColumnInfo(name = DatabaseHelper.COLUMN_NOTE) var note: String? = null
     @ColumnInfo(name = DatabaseHelper.COLUMN_CATEGORY_NAME) var category: String = ""
     @ColumnInfo(name = DatabaseHelper.COLUMN_AMOUNT) var amount = 0.0
-    @ColumnInfo(name = DatabaseHelper.COLUMN_DATE_CREATE) var dateCreate: Long = System.nanoTime()
+    @ColumnInfo(name = DatabaseHelper.COLUMN_DATE_CREATE) var dateCreate: Long = DateUtils.now()
     @ColumnInfo(name = DatabaseHelper.COLUMN_DATE_START) var dateStart: Long? = null
     @ColumnInfo(name = DatabaseHelper.COLUMN_DATE_END) var dateEnd: Long? = null
 
@@ -35,7 +36,7 @@ class RegularTransaction : Serializable {
         this.description = description
         this.category = category
         this.amount = amount
-        dateCreate = System.nanoTime()
+        dateCreate = DateUtils.now()
         dateStart = null
         dateEnd = null
         this.note = note
@@ -56,7 +57,7 @@ class RegularTransaction : Serializable {
         this.description = description
         this.category = category
         this.amount = amount
-        dateCreate = System.nanoTime()
+        dateCreate = DateUtils.now()
         dateStart = null
         dateEnd = null
         this.note = note

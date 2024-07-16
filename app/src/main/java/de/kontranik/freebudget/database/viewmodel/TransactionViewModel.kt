@@ -8,9 +8,11 @@ import de.kontranik.freebudget.database.FreeBudgetRoomDatabase
 import de.kontranik.freebudget.database.repository.RegularTransactionRepository
 import de.kontranik.freebudget.database.repository.TransactionRepository
 import de.kontranik.freebudget.model.Transaction
+import de.kontranik.freebudget.ui.helpers.DateUtils
 import kotlinx.coroutines.flow.map
 import java.util.Calendar
 import java.util.GregorianCalendar
+import java.util.Locale
 
 
 class TransactionViewModel(
@@ -135,8 +137,8 @@ class TransactionViewModel(
 }
 
 data class TransactionQuery(
-    val year: Int = Calendar.getInstance()[Calendar.YEAR],
-    val month: Int = Calendar.getInstance()[Calendar.MONTH] + 1,
+    val year: Int = DateUtils.getYear(),
+    val month: Int = DateUtils.getMonth(),
 )
 
 

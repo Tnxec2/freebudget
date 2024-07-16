@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.sp
 import de.kontranik.freebudget.R
 import de.kontranik.freebudget.model.RegularTransaction
 import de.kontranik.freebudget.ui.components.shared.Amount
+import de.kontranik.freebudget.ui.helpers.DateUtils
 import de.kontranik.freebudget.ui.theme.paddingSmall
 import java.text.DateFormat
 import java.util.Locale
@@ -31,11 +32,10 @@ fun RegularTransactionItem(
         java.lang.String.valueOf(regularTransaction.day),
         regularTransaction.category
     )
-    val df = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault())
     if (!regularTransaction.isDateNull(regularTransaction.dateStart)) text += ", " + stringResource(
-        R.string.start) + ": " + df.format(regularTransaction.dateStart)
+        R.string.start) + ": " + DateUtils.getDateMedium(regularTransaction.dateStart!!)
     if (!regularTransaction.isDateNull(regularTransaction.dateEnd)) text += ", " + stringResource(
-        R.string.end) + ": " + df.format(regularTransaction.dateEnd)
+        R.string.end) + ": " + DateUtils.getDateMedium(regularTransaction.dateEnd!!)
 
     Column(
         Modifier

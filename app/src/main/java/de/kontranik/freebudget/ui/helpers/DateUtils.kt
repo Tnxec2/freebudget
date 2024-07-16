@@ -1,19 +1,34 @@
 package de.kontranik.freebudget.ui.helpers
 
-import java.text.SimpleDateFormat
+import java.text.DateFormat
 import java.util.Calendar
+import java.util.GregorianCalendar
 import java.util.Locale
 
 class DateUtils {
     companion object {
-        fun getDate(milliSeconds: Long): String {
-            // Create a DateFormatter object for displaying date in specified format.
-            val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        private fun getCalendar(): Calendar {
+            return GregorianCalendar.getInstance(Locale.getDefault())
+        }
 
-            // Create a calendar object that will convert the date and time value in milliseconds to date.
-            val calendar = Calendar.getInstance();
-            calendar.timeInMillis = milliSeconds;
-            return formatter.format(calendar.time);
+        private fun getDateFormater(): DateFormat {
+            return DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault())
+        }
+
+        fun getDateMedium(milliSeconds: Long): String {
+            return getDateFormater().format(milliSeconds)
+        }
+
+        fun now(): Long {
+            return getCalendar().timeInMillis
+        }
+
+        fun getYear(): Int {
+            return getCalendar()[Calendar.YEAR]
+        }
+
+        fun getMonth(): Int {
+            return getCalendar()[Calendar.MONTH] + 1
         }
     }
 }

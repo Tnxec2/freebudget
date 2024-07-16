@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import de.kontranik.freebudget.database.repository.TransactionRepository
 import de.kontranik.freebudget.model.Transaction
 import de.kontranik.freebudget.ui.components.shared.TransactionType
+import de.kontranik.freebudget.ui.helpers.DateUtils
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -88,9 +89,9 @@ data class TransactionItemDetails(
     val amountPlanned: String = "",
     val amountFact: String = "",
 
-    val date: Long = Calendar.getInstance().timeInMillis,
-    val dateCreate: Long = Calendar.getInstance().timeInMillis,
-    val dateEdit: Long = Calendar.getInstance().timeInMillis,
+    val date: Long = DateUtils.now(),
+    val dateCreate: Long = DateUtils.now(),
+    val dateEdit: Long = DateUtils.now(),
 
     val isIncome: Boolean = false,
     val isPlanned: Boolean = false,
@@ -106,7 +107,7 @@ fun TransactionItemDetails.toTransaction(): Transaction = Transaction(
     amountPlanned = if (isIncome) abs(amountPlanned.toDoubleOrNull() ?: 0.0) else -(abs(amountPlanned.toDoubleOrNull() ?: 0.0)),
     amountFact = if (isIncome) abs(amountFact.toDoubleOrNull() ?: 0.0) else -(abs(amountFact.toDoubleOrNull() ?: 0.0)),
     dateCreate = dateCreate,
-    dateEdit = Calendar.getInstance().timeInMillis,
+    dateEdit = DateUtils.now(),
     note = note
 )
 

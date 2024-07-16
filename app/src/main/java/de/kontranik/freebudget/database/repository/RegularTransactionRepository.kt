@@ -9,6 +9,7 @@ import de.kontranik.freebudget.database.dao.CategoryDao
 import de.kontranik.freebudget.database.dao.RegularTransactionDao
 import de.kontranik.freebudget.model.Category
 import de.kontranik.freebudget.model.RegularTransaction
+import de.kontranik.freebudget.ui.helpers.DateUtils
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import java.io.File
@@ -68,7 +69,7 @@ class RegularTransactionRepository(
     fun exportToCSV(baseFileName: String): String {
         val dateFormatLong: DateFormat = SimpleDateFormat(Config.DATE_LONG, Locale.US)
         val dateFormatShort: DateFormat = SimpleDateFormat(Config.DATE_SHORT, Locale.US)
-        val outFileName = baseFileName + "_" + dateFormatLong.format(Date()) + ".csv"
+        val outFileName = baseFileName + "_" + dateFormatLong.format(DateUtils.now()) + ".csv"
         val directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
         val fileExport = File(directory, outFileName)
         val out = FileWriter(fileExport)

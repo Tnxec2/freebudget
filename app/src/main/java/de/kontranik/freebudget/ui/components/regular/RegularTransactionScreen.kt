@@ -20,6 +20,7 @@ import de.kontranik.freebudget.ui.AppViewModelProvider
 import de.kontranik.freebudget.ui.components.appbar.AppBar
 import de.kontranik.freebudget.ui.components.shared.MonthSelector
 import de.kontranik.freebudget.ui.components.shared.TransactionType
+import de.kontranik.freebudget.ui.helpers.DateUtils
 import de.kontranik.freebudget.ui.theme.paddingSmall
 import java.util.Calendar
 
@@ -41,7 +42,7 @@ fun RegularTransactionScreen(
     var bills = 0.0
 
     for (transaction in uiState.value.itemList) {
-        if (transaction.isDateInScope(Calendar.getInstance().timeInMillis)) {
+        if (transaction.isDateInScope(DateUtils.now())) {
             if (transaction.amount > 0) {
                 income += transaction.amount
             } else {

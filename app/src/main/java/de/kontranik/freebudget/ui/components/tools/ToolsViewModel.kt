@@ -13,6 +13,7 @@ import de.kontranik.freebudget.database.repository.RegularTransactionRepository
 import de.kontranik.freebudget.database.repository.TransactionRepository
 import de.kontranik.freebudget.model.RegularTransaction
 import de.kontranik.freebudget.model.Transaction
+import de.kontranik.freebudget.ui.helpers.DateUtils
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileInputStream
@@ -177,7 +178,8 @@ class ToolsViewModel(
 
         if (directory.canWrite()) {
             val dfLong: DateFormat = SimpleDateFormat(Config.DATE_LONG, Locale.US)
-            val backupDBPath = String.format("%s_%s.backup", DatabaseHelper.DATABASE_NAME, dfLong.format(Date()))
+            val backupDBPath = String.format("%s_%s.backup", DatabaseHelper.DATABASE_NAME, dfLong.format(
+                DateUtils.now()))
             val currentDB = context.getDatabasePath(DatabaseHelper.DATABASE_NAME)
             val backupDB = File(directory, backupDBPath)
             transactionRepository.checkPoint() // to ensure all of the pending transactions are applied

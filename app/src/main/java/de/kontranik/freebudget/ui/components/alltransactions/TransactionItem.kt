@@ -18,10 +18,9 @@ import androidx.compose.ui.unit.sp
 import de.kontranik.freebudget.R
 import de.kontranik.freebudget.model.Transaction
 import de.kontranik.freebudget.ui.components.shared.Amount
+import de.kontranik.freebudget.ui.helpers.DateUtils
 import de.kontranik.freebudget.ui.theme.paddingSmall
-import java.text.DateFormat
 import java.util.Calendar
-import java.util.Locale
 
 
 @Composable
@@ -31,8 +30,7 @@ fun TransactionItem(
     marked: Boolean,
     modifier: Modifier = Modifier) {
 
-    val df = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault())
-    val dateString = if (transaction.date > 0) df.format(transaction.date) else stringResource(R.string.not_setted)
+    val dateString = if (transaction.date > 0) DateUtils.getDateMedium(transaction.date) else stringResource(R.string.not_setted)
 
     Column(
         Modifier
@@ -66,7 +64,7 @@ fun TransactionItem(
 private fun TransactionItemPreview() {
     TransactionItem(
         transaction = Transaction(null, null, "Test", "Category",
-            Calendar.getInstance().timeInMillis, 10.25, 58.23, Calendar.getInstance().timeInMillis, 0L, null ),
+            DateUtils.now(), 10.25, 58.23, DateUtils.now(), 0L, null ),
         onClick = { }, marked = false)
 }
 
@@ -75,6 +73,6 @@ private fun TransactionItemPreview() {
 private fun TransactionSItemPreviewMinus() {
     TransactionItem(
         transaction = Transaction(null, null, "Test", "Category",
-            Calendar.getInstance().timeInMillis, -58.23, -44.20, Calendar.getInstance().timeInMillis, 0L, null ),
+            DateUtils.now(), -58.23, -44.20, DateUtils.now(), 0L, null ),
         onClick = { }, marked = false)
 }
