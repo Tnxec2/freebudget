@@ -72,7 +72,7 @@ fun RegularTransactionDialog(
     categoryViewModel: CategoryViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
     val itemDetails = viewModel.regularTransactionItemUiState.itemDetails
-    val categorys = categoryViewModel.mAllCategorys.observeAsState(listOf())
+    val categorys = categoryViewModel.distinctCategoryNames.observeAsState(listOf())
 
 
     fun onValueChange(item: RegularTransactionItem) {
@@ -165,12 +165,10 @@ fun RegularTransactionDialog(
                 if (showCategoryDropdown) {
                     DropdownListContent(
                         itemList = categorys.value
-                            .map { it.name }
                             .filter {
                                 searchCategory == null || it.lowercase()
                                     .startsWith(searchCategory!!.lowercase())
-                            }
-                            .sortedBy { it },
+                            },
                         scrollState = scrollStateCategory,
                         onItemClick = { _, value -> onValueChange(itemDetails.copy(category = value)) },
                         onClose = { showCategoryDropdown = false; }

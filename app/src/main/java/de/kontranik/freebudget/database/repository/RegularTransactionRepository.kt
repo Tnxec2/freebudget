@@ -58,8 +58,9 @@ class RegularTransactionRepository(
     private fun updateCategory(categoryName: String) {
         val trimmedName = categoryName.trim()
         if (trimmedName.isNotEmpty()) {
-            val dbCat = mCategoryDao.getByName(trimmedName)
-            if (dbCat == null) {
+            val list = mCategoryDao.getByName(trimmedName)
+            if ( list.isEmpty() ) {
+                println("insert category: $trimmedName")
                 mCategoryDao.insert(Category(name = trimmedName))
             }
         }

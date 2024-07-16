@@ -17,14 +17,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.DrawerState
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -76,7 +74,7 @@ fun TransactionDialog(
 ) {
     val itemDetails = viewModel.transactionItemUiState.itemDetails
 
-    val categorys = categoryViewModel.mAllCategorys.observeAsState(listOf())
+    val categorys = categoryViewModel.distinctCategoryNames.observeAsState(listOf())
 
     fun onValueChange(item: TransactionItemDetails) {
         viewModel.updateUiState(item)
@@ -177,12 +175,10 @@ fun TransactionDialog(
                 if (showCategoryDropdown) {
                     DropdownListContent(
                         itemList = categorys.value
-                            .map { it.name }
                             .filter {
                                 searchCategory == null || it.lowercase()
                                     .startsWith(searchCategory!!.lowercase())
-                            }
-                            .sortedBy { it },
+                            },
                         scrollState = scrollStateCategory,
                         onItemClick = { _, value -> onValueChange(itemDetails.copy(category = value)) },
                         onClose = { showCategoryDropdown = false; }

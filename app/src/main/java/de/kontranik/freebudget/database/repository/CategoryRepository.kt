@@ -1,6 +1,5 @@
 package de.kontranik.freebudget.database.repository
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import de.kontranik.freebudget.database.FreeBudgetRoomDatabase
 
@@ -20,23 +19,18 @@ class CategoryRepository(
         FreeBudgetRoomDatabase.databaseWriteExecutor.execute {
             category.name = category.name.trim()
             if (category.name.isNotEmpty()) {
-                val categoryInDB = mCategoryDao.getByName(category.name)
-                if ( categoryInDB == null)
+                val list = mCategoryDao.getByName(category.name)
+                if ( list.isEmpty() ) {
+                    println("insert category: ${category.name}")
                     mCategoryDao.insert(category)
+                }
+
             }
         }
     }
 
     fun getAll(): LiveData<List<Category>> {
         return mCategoryDao.getAll
-    }
-
-    fun getById(id: Long): LiveData<Category> {
-        return mCategoryDao.getLiveById(id)
-    }
-
-    fun getByName(name: String): LiveData<Category> {
-        return mCategoryDao.getLiveByName(name)
     }
 
     fun delete(id: Long) {

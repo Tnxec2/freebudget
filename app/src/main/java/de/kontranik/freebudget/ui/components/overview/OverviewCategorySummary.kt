@@ -46,7 +46,9 @@ fun OverviewCategorySummary(
         if (categoryName.isEmpty()) categoryName = notDefined
         if (transaction.amountFact < 0) {
             if (categoryList.containsKey(categoryName)) {
-                categoryList[categoryName]?.weight?.plus(abs(transaction.amountFact))
+                categoryList[categoryName]?.let {
+                    it.weight += abs(transaction.amountFact)
+                }
             } else {
                 categoryList[categoryName] = Category(0, categoryName, abs(transaction.amountFact))
             }

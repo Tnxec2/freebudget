@@ -16,18 +16,12 @@ interface CategoryDao {
     @Query("DELETE FROM ${DatabaseHelper.TABLE_CATEGORY} where ${DatabaseHelper.COLUMN_ID} = :id")
     fun delete(id: Long)
 
-    @Query("SELECT * FROM ${DatabaseHelper.TABLE_CATEGORY} where ${DatabaseHelper.COLUMN_ID} = :id LIMIT 1")
-    fun getLiveById(id: Long): LiveData<Category>
-
-    @Query("SELECT * FROM ${DatabaseHelper.TABLE_CATEGORY} where ${DatabaseHelper.COLUMN_CATEGORY_NAME} = :name LIMIT 1")
-    fun getLiveByName(name: String): LiveData<Category>
-
-    @Query("SELECT * FROM ${DatabaseHelper.TABLE_CATEGORY} where ${DatabaseHelper.COLUMN_CATEGORY_NAME} = :name LIMIT 1")
-    fun getByName(name: String): Category?
+    @Query("SELECT * FROM ${DatabaseHelper.TABLE_CATEGORY} where ${DatabaseHelper.COLUMN_CATEGORY_NAME} = :name ")
+    fun getByName(name: String): List<Category>
 
     @get:Query("SELECT * FROM ${DatabaseHelper.TABLE_CATEGORY}")
     val getAll: LiveData<List<Category>>
 
-    @Query("SELECT * FROM ${DatabaseHelper.TABLE_CATEGORY} where ${DatabaseHelper.COLUMN_ID} = :id LIMIT 1")
+    @Query("SELECT * FROM ${DatabaseHelper.TABLE_CATEGORY} where ${DatabaseHelper.COLUMN_ID} = :id")
     fun getById(id: Long): Category?
 }

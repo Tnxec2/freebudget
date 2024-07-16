@@ -28,21 +28,14 @@ class CategoryItemViewModel(
         private set
 
 
-    fun insert(category: Category) {
-        mRepository.insert(category)
-    }
-
-    fun update(category: Category) {
-        mRepository.update(category)
-    }
-
     fun save(category: Category) {
         if (category.name.isEmpty()) return
 
         if (category.id != null)
-            update(category)
-        else
-            insert(category)
+            mRepository.update(category)
+        else {
+            mRepository.insert(category)
+        }
     }
 
     fun delete(category: Category) {
