@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import de.kontranik.freebudget.model.Transaction
@@ -23,10 +24,14 @@ fun AllTransactionList(
 
     var lastEditedId: Long? = null
 
-    if (markLastEdited && transactions.isNotEmpty()) {
-        lastEditedId = transactions.first().id
-        val lastEditedDate = transactions.first().dateEdit
-        transactions.forEach { item -> if (item.dateEdit > lastEditedDate) lastEditedId = item.id}
+
+    if (transactions.isNotEmpty()) {
+        lastEditedId = transactions.maxBy { it.dateEdit }.id
+    }
+
+    LaunchedEffect(key1 = transactions, key2 = markLastEdited) {
+        val indexOfLastEditedItem = transactions.indexOfFirst { it.id == lastEditedId }
+        if (markLastEdited && indexOfLastEditedItem >= 0) state.scrollToItem(indexOfLastEditedItem)
     }
 
     LazyColumn(
