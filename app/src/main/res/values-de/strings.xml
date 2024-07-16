@@ -100,8 +100,8 @@
     <string name="no">Nein</string>
     <string name="do_you_want_restore">Möchten Sie die Datenbank wiederherstellen?</string>
     <string name="db_restore">Datenbank wiederherstellen</string>
-    <string name="receipts_planned_rest">Rest geplante Einnahmen</string>
-    <string name="spending_planned_rest">Rest geplante Ausgaben</string>
+    <string name="receipts_planned_rest">Rest Einnahmen geplannt</string>
+    <string name="spending_planned_rest">Rest Ausgaben geplannt</string>
     <string name="total_diff">Differenz gesamt</string>
     <string name="activity_transaction_note">Notiz</string>
     <string name="activity_transaction_close">Schließen</string>
