@@ -42,6 +42,7 @@ abstract class FreeBudgetRoomDatabase : RoomDatabase() {
                             FreeBudgetRoomDatabase::class.java,
                             DATABASE_NAME
                         )
+                            .addMigrations(MIGRATION_1_2)
                             .setJournalMode(JournalMode.TRUNCATE)
                             .addMigrations()
                             .build()
@@ -52,7 +53,14 @@ abstract class FreeBudgetRoomDatabase : RoomDatabase() {
         }
 
         private const val DATABASE_NAME = "freebudget.db" // db name
-        internal const val SCHEMA = 1 // db version
+        internal const val SCHEMA = 2 // db version
 
+    }
+}
+
+val MIGRATION_1_2 = object : Migration(1, 2) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        // delete double entries from category table
+        database.execSQL("DELETE FROM ${DatabaseHelper.TABLE_CATEGORY} WHERE ${DatabaseHelper.COLUMN_ID} NOT IN (SELECT MIN(${DatabaseHelper.COLUMN_ID}) FROM ${DatabaseHelper.TABLE_CATEGORY} GROUP BY ${DatabaseHelper.COLUMN_CATEGORY_NAME})")
     }
 }
