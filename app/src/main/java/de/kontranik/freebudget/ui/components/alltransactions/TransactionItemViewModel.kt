@@ -13,7 +13,6 @@ import de.kontranik.freebudget.ui.helpers.DateUtils
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import java.util.Calendar
 import kotlin.math.abs
 
 class TransactionItemViewModel(
@@ -59,10 +58,6 @@ class TransactionItemViewModel(
     fun updateUiState(itemDetails: TransactionItemDetails) {
         transactionItemUiState =
             TransactionItemUiState(itemDetails = itemDetails)
-    }
-
-    companion object {
-        private const val TIMEOUT_MILLIS = 5_000L
     }
 }
 

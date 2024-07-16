@@ -16,7 +16,6 @@ import de.kontranik.freebudget.database.viewmodel.RegularTransactionsUiState
 import de.kontranik.freebudget.ui.components.appbar.AppBar
 import de.kontranik.freebudget.ui.components.shared.MonthSelector
 import de.kontranik.freebudget.ui.components.shared.TransactionType
-import de.kontranik.freebudget.ui.helpers.DateUtils
 import de.kontranik.freebudget.ui.theme.paddingSmall
 
 @Composable

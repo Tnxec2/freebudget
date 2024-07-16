@@ -6,11 +6,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -20,7 +18,6 @@ import androidx.compose.material3.DrawerState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -42,7 +39,6 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import de.kontranik.freebudget.R
 import de.kontranik.freebudget.database.viewmodel.CategoryViewModel
@@ -82,8 +78,6 @@ fun TransactionDialog(
     }
 
     val coroutineScope = rememberCoroutineScope()
-
-
 
     var showCategoryDropdown by rememberSaveable {
         mutableStateOf(false)
@@ -163,7 +157,7 @@ fun TransactionDialog(
                 )
                 IconButton(
                     onClick = {
-                        if (showCategoryDropdown.not()) searchCategory = null;
+                        if (showCategoryDropdown.not()) searchCategory = null
                         showCategoryDropdown = showCategoryDropdown.not()
                     }) {
                     Icon(imageVector = Icons.Filled.KeyboardArrowDown, contentDescription = "open")

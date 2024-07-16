@@ -1,27 +1,19 @@
 package de.kontranik.freebudget.ui.components.regular
 
-import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.tooling.preview.Preview
 import de.kontranik.freebudget.R
-import de.kontranik.freebudget.ui.components.shared.FabItem
 import de.kontranik.freebudget.ui.components.alltransactions.FabNormalList
+import de.kontranik.freebudget.ui.components.shared.FabItem
 import de.kontranik.freebudget.ui.components.shared.FabTransactionItem
 import de.kontranik.freebudget.ui.components.shared.TransactionType
-import de.kontranik.freebudget.ui.theme.color_accent
 import de.kontranik.freebudget.ui.theme.color_green2
 import de.kontranik.freebudget.ui.theme.color_red2
 import de.kontranik.freebudget.ui.theme.paddingBig
-import de.kontranik.freebudget.ui.theme.paddingSmall
 
 
 @Composable

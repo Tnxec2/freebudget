@@ -11,21 +11,17 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.lifecycle.viewmodel.compose.viewModel
 import de.kontranik.freebudget.R
 import de.kontranik.freebudget.database.viewmodel.TransactionQuery
-import de.kontranik.freebudget.database.viewmodel.TransactionViewModel
 import de.kontranik.freebudget.database.viewmodel.TransactionsUiState
-import de.kontranik.freebudget.ui.AppViewModelProvider
-import de.kontranik.freebudget.ui.components.shared.MonthSelector
 import de.kontranik.freebudget.ui.components.appbar.AppBar
+import de.kontranik.freebudget.ui.components.shared.MonthSelector
 import de.kontranik.freebudget.ui.components.shared.TransactionType
 import kotlinx.coroutines.launch
 
