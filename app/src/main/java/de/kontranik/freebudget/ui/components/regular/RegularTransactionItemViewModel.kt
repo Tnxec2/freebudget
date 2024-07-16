@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.text.NumberFormat
-import java.util.Calendar
 import kotlin.math.abs
 
 class RegularTransactionItemViewModel(
@@ -29,38 +28,26 @@ class RegularTransactionItemViewModel(
     var regularTransactionItemUiState by mutableStateOf(RegularTransactionItemUiState())
         private set
 
-    private val itemId: String? = savedStateHandle[RegularTransactionItemDestination.ITEM_ID_ARG]
-    private val itemType: String? = savedStateHandle[RegularTransactionItemDestination.ITEM_TYPE_ARG]
+    private val monthParam: String? = savedStateHandle[RegularTransactionItemDestination.MONTH_ARG]
+    private val itemIdParam: String? = savedStateHandle[RegularTransactionItemDestination.ITEM_ID_ARG]
+    private val itemTypeParam: String? = savedStateHandle[RegularTransactionItemDestination.ITEM_TYPE_ARG]
 
     init {
         viewModelScope.launch {
 
-            regularTransactionItemUiState = if (itemId != null) {
-                mRepository.getById(itemId.toLong())
+            regularTransactionItemUiState = if (itemIdParam != null) {
+                mRepository.getById(itemIdParam.toLong())
                     .filterNotNull()
                     .first()
                     .toItemUiState()
             } else {
                 RegularTransactionItemUiState(RegularTransactionItem(
-                    isIncome = itemType == TransactionType.INCOME_REGULAR.name)
+                    month = monthParam?.toIntOrNull() ?: 0,
+                    isIncome = itemTypeParam == TransactionType.INCOME_REGULAR.name)
                 )
             }
         }
     }
-
-//    private val itemId: Long = checkNotNull(savedStateHandle[RegularTransactionDestination.itemIdArg])
-//
-//    var regularTransactionDialogUiState: StateFlow<RegularTransactionItemUiState> =
-//        mRepository.getById(itemId)
-//            .filterNotNull()
-//            .map {
-//                RegularTransactionItemUiState(itemDetails = it.toItemDetails())
-//            }.stateIn(
-//                scope = viewModelScope,
-//                started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-//                initialValue = RegularTransactionItemUiState()
-//            )
-
 
     fun insert(regularTransaction: RegularTransaction) {
         mRepository.insertRegularTransaction(regularTransaction)

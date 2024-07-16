@@ -124,8 +124,8 @@ fun NavGraphBuilder.mainGraph(
         composable(MainNavOption.RegularTransactions.name){
             RegularTransactionScreen(
                 drawerState = drawerState,
-                navigateToEdit = { type, id ->
-                    navController.navigate("${RegularTransactionItemDestination.route}/${type}/${id}")
+                navigateToEdit = { month, type, id ->
+                    navController.navigate("${RegularTransactionItemDestination.route}/${month}/${type}/${id}")
                 },
                 monthState = regularTransactionViewModel.getMonth().observeAsState(
                     0
@@ -163,6 +163,7 @@ fun NavGraphBuilder.mainGraph(
         composable(
             route = RegularTransactionItemDestination.routeWithArgs,
             arguments = listOf(
+                navArgument(RegularTransactionItemDestination.MONTH_ARG) { type = NavType.StringType; nullable = true},
                 navArgument(RegularTransactionItemDestination.ITEM_ID_ARG) { type = NavType.StringType; nullable = true},
                 navArgument(RegularTransactionItemDestination.ITEM_TYPE_ARG) { type = NavType.StringType; nullable = true}
             )

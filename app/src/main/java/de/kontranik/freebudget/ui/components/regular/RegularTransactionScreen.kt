@@ -22,7 +22,7 @@ import de.kontranik.freebudget.ui.theme.paddingSmall
 @Composable
 fun RegularTransactionScreen(
     drawerState: DrawerState,
-    navigateToEdit: (type: TransactionType?, id: Long?) -> Unit,
+    navigateToEdit: (month: Int?, type: TransactionType?, id: Long?) -> Unit,
     modifier: Modifier = Modifier,
     monthState: State<Int>,
     uiState: State<RegularTransactionsUiState>,
@@ -52,7 +52,7 @@ fun RegularTransactionScreen(
         modifier = modifier.fillMaxSize(),
         floatingActionButton = {
             if (!listState.isScrollInProgress) FabRegularList(onAdd = { type ->
-                navigateToEdit(type, null)
+                navigateToEdit(monthState.value, type, null)
             })
         },
         floatingActionButtonPosition = FabPosition.Center
@@ -81,7 +81,7 @@ fun RegularTransactionScreen(
                 state = listState,
                 transactions = uiState.value.itemList,
                 onClick = { _, item ->
-                    navigateToEdit(null, item.id)
+                    navigateToEdit(null,  null, item.id)
                 },
                 )
         }

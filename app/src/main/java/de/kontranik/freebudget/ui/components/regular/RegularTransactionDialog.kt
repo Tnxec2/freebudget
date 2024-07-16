@@ -58,9 +58,10 @@ import kotlinx.coroutines.launch
 object RegularTransactionItemDestination : NavigationDestination {
     override val route = "RegularTransactionDialog"
     override val titleRes = R.string.regular
+    const val MONTH_ARG = "month"
     const val ITEM_ID_ARG = "itemId"
     const val ITEM_TYPE_ARG = "type"
-    val routeWithArgs = "$route/{$ITEM_TYPE_ARG}/{$ITEM_ID_ARG}"
+    val routeWithArgs = "$route/{$MONTH_ARG}/{$ITEM_TYPE_ARG}/{$ITEM_ID_ARG}"
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
