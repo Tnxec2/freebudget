@@ -1,21 +1,25 @@
 package de.kontranik.freebudget.ui.components.overview
 
+import android.R.attr.maxLines
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import de.kontranik.freebudget.R
 import de.kontranik.freebudget.model.Transaction
 import de.kontranik.freebudget.ui.components.shared.Amount
 import de.kontranik.freebudget.ui.components.shared.swipableModifier
 import de.kontranik.freebudget.ui.theme.paddingSmall
 import kotlin.math.abs
+
 
 const val column1Weight = .5f //
 const val column2Weight = .25f //
@@ -80,28 +84,40 @@ fun OverviewSummary(
                 modifier = Modifier.weight(column3Weight))
         }
         Row(Modifier.fillMaxWidth()) {
-            Text(text = stringResource(id = R.string.activity_main_receipts_planned), Modifier.weight(
+            Text(text = stringResource(id = R.string.activity_main_receipts_planned),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.weight(
                 column1Weight
             ))
             Amount(amount = incomePlanned, modifier = Modifier.weight(column2Weight))
             Amount(amount = incomePlannedFact, modifier = Modifier.weight(column3Weight))
         }
         Row(Modifier.fillMaxWidth()) {
-            Text(text = stringResource(id = R.string.activity_main_receipts_unplanned), Modifier.weight(
+            Text(text = stringResource(id = R.string.activity_main_receipts_unplanned),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.weight(
                 column1Weight
             ))
             Text(text = "", Modifier.weight(column2Weight))
             Amount(amount = incomeUnplannedFact, modifier = Modifier.weight(column3Weight))
         }
         Row(Modifier.fillMaxWidth()) {
-            Text(text = stringResource(id = R.string.activity_main_spending_planned), Modifier.weight(
+            Text(text = stringResource(id = R.string.activity_main_spending_planned),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.weight(
                 column1Weight
             ))
             Amount(amount = -billsPlanned, modifier = Modifier.weight(column2Weight))
             Amount(amount = -billsPlannedFact, modifier = Modifier.weight(column3Weight))
         }
         Row(Modifier.fillMaxWidth()) {
-            Text(text = stringResource(id = R.string.activity_main_spending_unplanned), Modifier.weight(
+            Text(text = stringResource(id = R.string.activity_main_spending_unplanned),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.weight(
                 column1Weight
             ))
             Text(text = "", Modifier.weight(column2Weight))
@@ -111,6 +127,8 @@ fun OverviewSummary(
             Text(
                 text = stringResource(id = R.string.activity_main_total),
                 fontWeight = FontWeight.Bold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.weight(column1Weight))
             Amount(
                 amount = incomePlanned - billsPlanned,
@@ -120,14 +138,22 @@ fun OverviewSummary(
                 modifier = Modifier.weight(column3Weight))
         }
         Row(Modifier.fillMaxWidth()) {
-            Text(text = stringResource(id = R.string.receipts_planned_rest), Modifier.weight(
-                column1Weight
-            ))
+            Text(
+                text = stringResource(id = R.string.receipts_planned_rest),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier
+                .weight(column1Weight)
+                .wrapContentWidth()
+            )
             Amount(amount = incomePlannedRest, modifier = Modifier.weight(column2Weight))
             Text(text = "", modifier = Modifier.weight(column3Weight))
         }
         Row(Modifier.fillMaxWidth()) {
-            Text(text = stringResource(id = R.string.spending_planned_rest), Modifier.weight(
+            Text(text = stringResource(id = R.string.spending_planned_rest),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.weight(
                 column1Weight
             ))
             Amount(amount = -billsPlannedRest, modifier = Modifier.weight(column2Weight))
@@ -137,6 +163,8 @@ fun OverviewSummary(
             Text(
                 text = stringResource(id = R.string.total_diff),
                 fontWeight = FontWeight.Bold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.weight(column1Weight))
             Text(text = "", Modifier.weight(column2Weight))
             Amount(amount = incomePlannedRest - billsPlannedRest + (incomePlannedFact + incomeUnplannedFact - billsPlannedFact - billsUnplannedFact), modifier = Modifier.weight(
