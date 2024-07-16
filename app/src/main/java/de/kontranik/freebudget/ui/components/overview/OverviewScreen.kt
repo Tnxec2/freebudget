@@ -9,6 +9,7 @@ import androidx.compose.material3.DrawerState
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -36,18 +37,13 @@ fun OverviewScreen(
     navToAllTransactionsSeparated: () -> Unit,
     navToRegularTransactions: () -> Unit,
     modifier: Modifier = Modifier,
-    transactionViewModel: TransactionViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    queryState: State<TransactionQuery>,
+    uiState: State<TransactionsUiState>,
+    prevMonth: ()-> Unit,
+    nextMonth: ()-> Unit,
     ) {
 
     val coroutineScope = rememberCoroutineScope()
-
-    val queryState by transactionViewModel.query.observeAsState(
-        TransactionQuery()
-    )
-
-    val uiState = transactionViewModel.transactionsUiState.observeAsState(
-        TransactionsUiState()
-    )
 
     var showFab by remember {
         mutableStateOf(true)
@@ -73,17 +69,19 @@ fun OverviewScreen(
                 .padding(padding)
                 .fillMaxSize(),
         ) {
-            MonthSelector(
-                year = queryState.year,
-                month = queryState.month,
-                onPrev = { transactionViewModel.prevMonth() },
-                onNext = { transactionViewModel.nextMonth() },
-                modifier = modifier
-            )
+            queryState.value.let {
+                MonthSelector(
+                    year = it.year,
+                    month = it.month,
+                    onPrev = { prevMonth() },
+                    onNext = { nextMonth() },
+                    modifier = modifier
+                )
+            }
             OverviewSummary(
                 transactions = uiState.value.itemList,
-                onPrev = { transactionViewModel.prevMonth() },
-                onNext = { transactionViewModel.nextMonth() }
+                onPrev = { prevMonth() },
+                onNext = { nextMonth() }
                 , modifier = Modifier.pointerInput(Unit) {
                     detectDragGestures(
                         onDragStart = {

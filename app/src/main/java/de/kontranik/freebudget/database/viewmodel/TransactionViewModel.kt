@@ -1,5 +1,7 @@
 package de.kontranik.freebudget.database.viewmodel
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
@@ -25,7 +27,12 @@ class TransactionViewModel(
         //getTransactions()
     }
 
-    var query = MutableLiveData(TransactionQuery())
+    lateinit var query: MutableLiveData<TransactionQuery>
+
+    init {
+        println("init query")
+        query = MutableLiveData(TransactionQuery())
+    }
 
     val transactionsUiState = query.switchMap { query ->
         transactionRepository.getTransactions(query.year, query.month)

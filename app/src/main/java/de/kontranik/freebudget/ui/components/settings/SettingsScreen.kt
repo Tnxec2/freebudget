@@ -37,7 +37,7 @@ import kotlinx.coroutines.launch
 fun SettingsScreen(
     drawerState: DrawerState,
     modifier: Modifier = Modifier,
-    settingsViewModel: SettingsViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    settingsViewModel: SettingsViewModel,
     ) {
 
     val coroutineScope = rememberCoroutineScope()

@@ -4,6 +4,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
@@ -13,6 +14,12 @@ import de.kontranik.freebudget.ui.components.appdrawer.AppDrawerContent
 import de.kontranik.freebudget.ui.components.appdrawer.AppDrawerItemInfo
 import de.kontranik.freebudget.ui.theme.AppTheme
 import de.kontranik.freebudget.R
+import de.kontranik.freebudget.database.viewmodel.CategoryViewModel
+import de.kontranik.freebudget.database.viewmodel.RegularTransactionViewModel
+import de.kontranik.freebudget.database.viewmodel.TransactionViewModel
+import de.kontranik.freebudget.ui.AppViewModelProvider
+import de.kontranik.freebudget.ui.components.settings.SettingsViewModel
+import de.kontranik.freebudget.ui.components.tools.ToolsViewModel
 import kotlinx.coroutines.launch
 
 @Composable
@@ -28,6 +35,12 @@ fun MainCompose(
         else
             scope.launch { navController.popBackStack() }
     }
+
+    val transactionViewModel: TransactionViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    val regularTransactionViewModel: RegularTransactionViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    val categoryViewModel: CategoryViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    val settingsViewModel: SettingsViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    val toolsViewModel: ToolsViewModel = viewModel(factory = AppViewModelProvider.Factory)
 
     AppTheme {
         Surface {
@@ -60,7 +73,7 @@ fun MainCompose(
                     navController,
                     startDestination = NavRoutes.MainRoute.name
                 ) {
-                    mainGraph(drawerState, navController)
+                    mainGraph(drawerState, navController, transactionViewModel, regularTransactionViewModel, categoryViewModel, settingsViewModel, toolsViewModel)
                 }
             }
         }

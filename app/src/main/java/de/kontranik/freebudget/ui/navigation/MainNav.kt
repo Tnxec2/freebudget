@@ -2,12 +2,19 @@ package de.kontranik.freebudget.ui.navigation
 
 
 import androidx.compose.material3.DrawerState
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
+import de.kontranik.freebudget.database.viewmodel.CategoryViewModel
+import de.kontranik.freebudget.database.viewmodel.RegularTransactionViewModel
+import de.kontranik.freebudget.database.viewmodel.RegularTransactionsUiState
+import de.kontranik.freebudget.database.viewmodel.TransactionQuery
+import de.kontranik.freebudget.database.viewmodel.TransactionViewModel
+import de.kontranik.freebudget.database.viewmodel.TransactionsUiState
 import de.kontranik.freebudget.ui.components.NavRoutes
 import de.kontranik.freebudget.ui.components.alltransactions.AllTransactionScreen
 import de.kontranik.freebudget.ui.components.alltransactions.AllTransactionSeparatedScreen
@@ -20,19 +27,27 @@ import de.kontranik.freebudget.ui.components.regular.RegularTransactionDialog
 import de.kontranik.freebudget.ui.components.regular.RegularTransactionItemDestination
 import de.kontranik.freebudget.ui.components.regular.RegularTransactionScreen
 import de.kontranik.freebudget.ui.components.settings.SettingsScreen
+import de.kontranik.freebudget.ui.components.settings.SettingsViewModel
 import de.kontranik.freebudget.ui.components.tools.ToolsScreen
+import de.kontranik.freebudget.ui.components.tools.ToolsViewModel
 
 fun NavGraphBuilder.mainGraph(
     drawerState: DrawerState,
-    navController: NavHostController
+    navController: NavHostController,
+    transactionViewModel: TransactionViewModel,
+    regularTransactionViewModel: RegularTransactionViewModel,
+    categoryViewModel: CategoryViewModel,
+    settingsViewModel: SettingsViewModel,
+    toolsViewModel: ToolsViewModel,
 ) {
+
     navigation(
         startDestination = MainNavOption.Overview.name,
         route = NavRoutes.MainRoute.name) {
 
         composable(MainNavOption.Overview.name){
             OverviewScreen(
-                drawerState,
+                drawerState = drawerState,
                 navigateToNewTransaction = { type ->
                     navController.navigate("${TransactionItemDestination.route}/${type}/${null}")
                 },
@@ -47,6 +62,10 @@ fun NavGraphBuilder.mainGraph(
                             AllTransactionsScreenDestination.route
                     )},
                 navToRegularTransactions = {navController.navigate(MainNavOption.RegularTransactions.name)},
+                queryState = transactionViewModel.query.observeAsState(initial = TransactionQuery()),
+                uiState = transactionViewModel.transactionsUiState.observeAsState(initial = TransactionsUiState()),
+                prevMonth = { transactionViewModel.prevMonth() },
+                nextMonth = { transactionViewModel.nextMonth() },
             )
         }
 
@@ -54,10 +73,16 @@ fun NavGraphBuilder.mainGraph(
             route = AllTransactionsScreenDestination.route,
         ){
             AllTransactionScreen(
-                drawerState,
+                drawerState = drawerState,
                 navigateToEdit = { type, id ->
                     navController.navigate("${TransactionItemDestination.route}/${type}/${id}")
-                }
+                },
+                queryState = transactionViewModel.query.observeAsState(initial = TransactionQuery()),
+                uiState = transactionViewModel.transactionsUiState.observeAsState(initial = TransactionsUiState()),
+                prevMonth = { transactionViewModel.prevMonth() },
+                nextMonth = { transactionViewModel.nextMonth() },
+                planRegular = { transactionViewModel.planRegular() },
+                markLastEditedState = settingsViewModel.markLastEditedState
             )
         }
 
@@ -69,46 +94,69 @@ fun NavGraphBuilder.mainGraph(
             )
         ){
             AllTransactionScreen(
-                drawerState,
+                drawerState = drawerState,
                 navigateToEdit = { type, id ->
                     navController.navigate("${TransactionItemDestination.route}/${type}/${id}")
-                }
+                },
+                queryState = transactionViewModel.query.observeAsState(initial = TransactionQuery()),
+                uiState = transactionViewModel.transactionsUiState.observeAsState(initial = TransactionsUiState()),
+                prevMonth = { transactionViewModel.prevMonth() },
+                nextMonth = { transactionViewModel.nextMonth() },
+                planRegular = { transactionViewModel.planRegular() },
+                markLastEditedState = settingsViewModel.markLastEditedState,
             )
         }
 
         composable(MainNavOption.AllTransactionsSeparated.name){
             AllTransactionSeparatedScreen(
-                drawerState,
+                drawerState = drawerState,
                 navigateToEdit = { type, id ->
                     navController.navigate("${TransactionItemDestination.route}/${type}/${id}")
-                }
+                },
+                queryState = transactionViewModel.query.observeAsState(initial = TransactionQuery()),
+                uiState = transactionViewModel.transactionsUiState.observeAsState(initial = TransactionsUiState()),
+                prevMonth = { transactionViewModel.prevMonth() },
+                nextMonth = { transactionViewModel.nextMonth() },
+                planRegular = { transactionViewModel.planRegular() },
             )
         }
 
         composable(MainNavOption.RegularTransactions.name){
             RegularTransactionScreen(
-                drawerState,
+                drawerState = drawerState,
                 navigateToEdit = { type, id ->
                     navController.navigate("${RegularTransactionItemDestination.route}/${type}/${id}")
-                }
+                },
+                monthState = regularTransactionViewModel.getMonth().observeAsState(
+                    0
+                ),
+                uiState = regularTransactionViewModel.regularTRansactionsUiState.observeAsState(
+                    RegularTransactionsUiState()
+                ),
+                prevMonth = { regularTransactionViewModel.prevMonth() },
+                nextMonth = { regularTransactionViewModel.nextMonth() },
             )
         }
 
         composable(MainNavOption.Categories.name){
             CategoryListScreen(
-                drawerState,
+                categoryListState = categoryViewModel.mAllCategorys.observeAsState(initial = listOf()),
+                drawerState = drawerState,
                 navigateUp = { navController.navigate(MainNavOption.Overview.name) })
         }
 
         composable(MainNavOption.ToolScreen.name){
             ToolsScreen(
-                drawerState,
-                navigateBack = { navController.navigateUp() })
+                drawerState = drawerState,
+                navigateBack = { navController.navigateUp() },
+                toolsViewModel = toolsViewModel,
+                )
         }
 
         composable(MainNavOption.SettingsScreen.name){
             SettingsScreen(
-                drawerState
+                drawerState = drawerState,
+                settingsViewModel = settingsViewModel,
             )
         }
 
@@ -120,7 +168,7 @@ fun NavGraphBuilder.mainGraph(
             )
         ){
             RegularTransactionDialog(
-                drawerState,
+                drawerState = drawerState,
                 navigateBack = { navController.popBackStack() }
             )
         }
@@ -133,7 +181,7 @@ fun NavGraphBuilder.mainGraph(
             )
         ){
             TransactionDialog(
-                drawerState,
+                drawerState = drawerState,
                 navigateBack = { navController.popBackStack() }
             )
         }

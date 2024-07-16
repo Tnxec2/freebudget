@@ -9,34 +9,26 @@ import androidx.compose.material3.DrawerState
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
 import de.kontranik.freebudget.R
-import de.kontranik.freebudget.database.viewmodel.RegularTransactionViewModel
 import de.kontranik.freebudget.database.viewmodel.RegularTransactionsUiState
-import de.kontranik.freebudget.ui.AppViewModelProvider
 import de.kontranik.freebudget.ui.components.appbar.AppBar
 import de.kontranik.freebudget.ui.components.shared.MonthSelector
 import de.kontranik.freebudget.ui.components.shared.TransactionType
 import de.kontranik.freebudget.ui.helpers.DateUtils
 import de.kontranik.freebudget.ui.theme.paddingSmall
-import java.util.Calendar
 
 @Composable
 fun RegularTransactionScreen(
     drawerState: DrawerState,
     navigateToEdit: (type: TransactionType?, id: Long?) -> Unit,
     modifier: Modifier = Modifier,
-    regularTransactionViewModel: RegularTransactionViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    monthState: State<Int>,
+    uiState: State<RegularTransactionsUiState>,
+    prevMonth: ()-> Unit,
+    nextMonth: ()-> Unit,
 ) {
-    val monthState by regularTransactionViewModel.getMonth().observeAsState(
-        0
-    )
-    val uiState = regularTransactionViewModel.regularTRansactionsUiState.observeAsState(
-        RegularTransactionsUiState()
-    )
 
     var income = 0.0
     var bills = 0.0
@@ -70,19 +62,19 @@ fun RegularTransactionScreen(
                 .padding(padding)
                 .fillMaxSize(),
         ) {
-            monthState.let {
+            monthState.value.let {
                 MonthSelector(
                     month = it,
-                    onPrev = { regularTransactionViewModel.prevMonth() },
-                    onNext = { regularTransactionViewModel.nextMonth() },
+                    onPrev = { prevMonth() },
+                    onNext = { nextMonth() },
                     modifier = modifier
                 )
             }
             RegularTransactionSummary(
                 income = income,
                 bills = bills,
-                onPrev = { regularTransactionViewModel.prevMonth() },
-                onNext = { regularTransactionViewModel.nextMonth() },
+                onPrev = { prevMonth() },
+                onNext = { nextMonth() },
                 modifier = modifier)
             Box(modifier = Modifier.padding(bottom = paddingSmall))
             RegularTransactionList(

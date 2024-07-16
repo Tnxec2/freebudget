@@ -21,6 +21,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -45,16 +46,15 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun CategoryListScreen(
+    categoryListState: State<List<Category>>,
     drawerState: DrawerState,
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: CategoryViewModel = viewModel(factory = AppViewModelProvider.Factory),
     itemViewModel: CategoryItemViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
-    val categoryList = viewModel.mAllCategorys.observeAsState(listOf())
 
     fun selectItem(category: Category) {
         itemViewModel.updateUiState(category.toCategoryDetails())
@@ -77,7 +77,7 @@ fun CategoryListScreen(
                 .padding(padding)
                 .padding(paddingSmall)) {
             LazyColumn(modifier = Modifier.weight(1f)) {
-                itemsIndexed(categoryList.value) { index, item ->
+                itemsIndexed(categoryListState.value) { index, item ->
                     if (index != 0) {
                         HorizontalDivider(color = MaterialTheme.colorScheme.primary, thickness = 0.5.dp)
                     }

@@ -40,7 +40,8 @@ fun ToolsScreen(
     drawerState: DrawerState,
     navigateBack: () -> Unit,
     modifier: Modifier = Modifier,
-    toolsViewModel: ToolsViewModel = viewModel(factory = AppViewModelProvider.Factory),) {
+    toolsViewModel: ToolsViewModel
+) {
 
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
