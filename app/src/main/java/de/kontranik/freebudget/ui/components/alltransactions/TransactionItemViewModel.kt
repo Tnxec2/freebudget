@@ -48,19 +48,12 @@ class TransactionItemViewModel(
         }
     }
 
-    fun insert(transaction: Transaction) {
-        mRepository.insert(transaction)
-    }
-
-    fun update(transaction: Transaction) {
-        mRepository.update(transaction)
-    }
-
     fun save(transaction: Transaction) {
+        transaction.dateEdit = DateUtils.now()
         if (transaction.id == null)
-            insert(transaction)
+            mRepository.insert(transaction)
         else
-            update(transaction)
+            mRepository.update(transaction)
     }
 
     fun updateUiState(itemDetails: TransactionItemDetails) {
