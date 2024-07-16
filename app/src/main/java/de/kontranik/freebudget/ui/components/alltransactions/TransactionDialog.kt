@@ -48,6 +48,7 @@ import de.kontranik.freebudget.R
 import de.kontranik.freebudget.database.viewmodel.CategoryViewModel
 import de.kontranik.freebudget.ui.AppViewModelProvider
 import de.kontranik.freebudget.ui.components.appbar.AppBar
+import de.kontranik.freebudget.ui.components.shared.AmountTypeSelector
 import de.kontranik.freebudget.ui.components.shared.DatePickerButton
 import de.kontranik.freebudget.ui.components.shared.DropdownListContent
 import de.kontranik.freebudget.ui.navigation.NavigationDestination
@@ -82,10 +83,7 @@ fun TransactionDialog(
 
     val coroutineScope = rememberCoroutineScope()
 
-    val amountType = listOf(
-        stringResource(id = R.string.activity_main_receipts),
-        stringResource(id = R.string.activity_main_spending)
-    )
+
 
     var showCategoryDropdown by rememberSaveable {
         mutableStateOf(false)
@@ -208,7 +206,7 @@ fun TransactionDialog(
                     ),
                 )
                 IconButton(
-                    enabled = !itemDetails.isPlanned && itemDetails.amountPlanned.isNotEmpty(),
+                    enabled = itemDetails.canCopy(),
                     onClick = { onValueChange(itemDetails.copy(amountFact = itemDetails.amountPlanned)) }) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_copy_back),
@@ -240,36 +238,7 @@ fun TransactionDialog(
                     .fillMaxWidth()
                     .padding(bottom = paddingSmall)
             ) {
-
-                Column {
-                    amountType.forEach { text ->
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier
-                                .selectable(
-                                    selected = ((text == amountType[0] && itemDetails.isIncome) || (text == amountType[1] && !itemDetails.isIncome)),
-                                    onClick = {
-                                        onValueChange(itemDetails.copy(isIncome = text == amountType[0]))
-                                    }
-                                )
-                                .padding(start = paddingSmall)
-
-                        ) {
-                            RadioButton(
-                                selected = ((text == amountType[0] && itemDetails.isIncome) || (text == amountType[1] && !itemDetails.isIncome)),
-                                onClick = {
-                                    onValueChange(itemDetails.copy(isIncome = text == amountType[0]))
-                                },
-                                modifier = Modifier
-                                    .height(30.dp)
-                                    .padding(horizontal = 0.dp, vertical = 0.dp)
-                            )
-                            Text(
-                                text = text,
-                            )
-                        }
-                    }
-                }
+                AmountTypeSelector(isIncome = itemDetails.isIncome, onValueChange = { onValueChange(itemDetails.copy(isIncome = it)) })
                 Spacer(modifier = Modifier.weight(1f))
                 DatePickerButton(
                     millis = itemDetails.date,

@@ -97,6 +97,13 @@ data class TransactionItemDetails(
     val isPlanned: Boolean = false,
 )
 
+fun TransactionItemDetails.canCopy(): Boolean{
+    return  !isPlanned
+            && amountPlanned.isNotEmpty()
+            && amountPlanned != "0.0"
+            && (amountFact == "0.0" || amountFact.isEmpty())
+}
+
 
 fun TransactionItemDetails.toTransaction(): Transaction = Transaction(
     id = id,

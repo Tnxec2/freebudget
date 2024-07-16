@@ -49,6 +49,7 @@ import de.kontranik.freebudget.R
 import de.kontranik.freebudget.database.viewmodel.CategoryViewModel
 import de.kontranik.freebudget.ui.AppViewModelProvider
 import de.kontranik.freebudget.ui.components.appbar.AppBar
+import de.kontranik.freebudget.ui.components.shared.AmountTypeSelector
 import de.kontranik.freebudget.ui.components.shared.DropdownList
 import de.kontranik.freebudget.ui.components.shared.DropdownListContent
 import de.kontranik.freebudget.ui.theme.paddingSmall
@@ -195,36 +196,7 @@ fun RegularTransactionDialog(
                     ),
                     keyboardActions = KeyboardActions( onNext = {dayFocus.requestFocus()})
                 )
-                Column {
-                    amountType.forEach { text ->
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier
-                                .selectable(
-                                    selected = ((text == amountType[0] && itemDetails.isIncome) || (text == amountType[1] && !itemDetails.isIncome)),
-                                    onClick = {
-                                        onValueChange(itemDetails.copy(isIncome = text == amountType[0]))
-                                    }
-                                )
-                                .padding(start = paddingSmall)
-
-                        ) {
-                            RadioButton(
-                                selected = ((text == amountType[0] && itemDetails.isIncome) || (text == amountType[1] && !itemDetails.isIncome)),
-                                onClick = {
-                                    onValueChange(itemDetails.copy(isIncome = text == amountType[0]))
-                                },
-                                modifier = Modifier
-                                    //HERE YOU GO
-                                    .height(30.dp)
-                                    .padding(horizontal = 0.dp, vertical = 0.dp)
-                            )
-                            Text(
-                                text = text,
-                            )
-                        }
-                    }
-                }
+                AmountTypeSelector(isIncome = itemDetails.isIncome, onValueChange = { onValueChange(itemDetails.copy(isIncome = it)) })
             }
             Row(
                 verticalAlignment = Alignment.CenterVertically,
