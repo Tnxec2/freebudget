@@ -12,9 +12,9 @@
 
     <string name="title_new_transaction">Neue Bewegung</string>
     <string name="title_transaction">Bewegung</string>
-    <string name="title_all_transactions_planned">Geplannte Bewegungen</string>
+    <string name="title_all_transactions_planned">Geplante Bewegungen</string>
     <string name="title_all_transactions_category">%1$s, alle</string>
-    <string name="title_all_transactions_category_planned">%1$s, geplannte</string>
+    <string name="title_all_transactions_category_planned">%1$s, geplante</string>
     <string name="title_new_regular_transaction">Neue reguläre Bewegung</string>
 
     <string name="confirm_category_delete">Wollen Sie Kategorie \"%1$s\" wirklich löschen?</string>
