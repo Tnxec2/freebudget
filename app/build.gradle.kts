@@ -17,7 +17,7 @@ android {
         versionCode = 10
         versionName = "1.3.0"
 
-        setProperty("archivesBaseName", applicationId + "-v" + versionCode + "(" + versionName + ")")
+        setProperty("archivesBaseName", "$applicationId-v$versionCode($versionName)")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -40,18 +40,8 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
-
-        val args = arrayListOf<String>()
-        args.addAll(freeCompilerArgs)
-        args.add(
-            "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi"
-        )
-
-        freeCompilerArgs = args.toList()
-
     }
     buildFeatures {
-        viewBinding = true
         compose = true
     }
     composeOptions {
@@ -76,15 +66,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.common.java8)
 
-    implementation( libs.androidx.appcompat)
-    implementation("com.google.android.material:material:1.7.0") // legacy material
-    implementation( libs.androidx.recyclerview)
-    // For control over item selection of both touch and mouse driven selection
-    implementation( libs.androidx.recyclerview.selection)
-    implementation( libs.androidx.constraintlayout)
-    implementation( libs.androidx.legacy.support.v4)
-    implementation( libs.androidx.preference.ktx)
-
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.runtime)
     implementation(libs.androidx.compose.ui)
@@ -96,13 +77,6 @@ dependencies {
     implementation(libs.androidx.activity.compose)
 
     // Navigation
-    // Kotlin
-    implementation(libs.androidx.navigation.fragment.ktx)
-    implementation(libs.androidx.navigation.ui.ktx)
-    // Feature module Support
-    implementation(libs.androidx.navigation.dynamic.features.fragment)
-    // Testing Navigation
-    androidTestImplementation(libs.androidx.navigation.testing)
     // Jetpack Compose Integration
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.hilt.navigation.compose)
