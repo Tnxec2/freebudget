@@ -8,7 +8,7 @@ import de.kontranik.freebudget.ui.navigation.NavigationDestination
 
 object RegularTransactionItemDestination : NavigationDestination {
     override val route = "RegularTransactionDialog"
-    override val titleRes = R.string.regular
+    override val titleRes = R.string.title_regular_transactions
     const val MONTH_ARG = "month"
     const val ITEM_ID_ARG = "itemId"
     const val ITEM_TYPE_ARG = "type"

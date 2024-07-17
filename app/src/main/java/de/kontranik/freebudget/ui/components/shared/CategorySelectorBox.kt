@@ -62,7 +62,7 @@ fun CategorySelectorBox(
             OutlinedTextField(
                 singleLine = true,
                 value = category,
-                label = { Text(stringResource(R.string.activity_category)) },
+                label = { Text(stringResource(R.string.title_category)) },
                 onValueChange = {
                     onValueChange(it)
                     searchCategory = it

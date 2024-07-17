@@ -1,6 +1,8 @@
 package de.kontranik.freebudget.ui.components.shared
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
@@ -26,32 +28,37 @@ import de.kontranik.freebudget.ui.theme.paddingSmall
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatePickerButton(
-    millis: Long,
+    millis: Long?,
     onChangeDate: (millis: Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
 
     val state: DatePickerState = rememberDatePickerState(
-        initialSelectedDateMillis = millis,
+        initialSelectedDateMillis = millis ?: DateUtils.now(),
         initialDisplayMode = DisplayMode.Picker,
     )
 
     LaunchedEffect(key1 = millis) {
-        state.selectedDateMillis = millis
+        state.selectedDateMillis = millis ?: DateUtils.now()
     }
 
     var open by remember {
         mutableStateOf(false)
     }
 
+    Column(modifier = modifier
+        .padding(start = paddingSmall)
+        .fillMaxWidth()) {
+
     Button(
         onClick = { open = true },
-        modifier = modifier
+        modifier = Modifier
             .padding(start = paddingSmall)
+            .fillMaxWidth()
     ) {
-        Text(text = DateUtils.getDateMedium(millis))
+        Text(text = if (millis != null) DateUtils.getDateMedium(millis) else stringResource(id = R.string.not_setted))
     }
-    Box(modifier = modifier) {
+    Box(modifier = Modifier) {
         if (open) {
             DatePickerDialog(
                 onDismissRequest = { open = false },
@@ -62,14 +69,14 @@ fun DatePickerButton(
                             open = false
                         }
                     ) {
-                        Text(text = stringResource(id = R.string.ok))
+                        Text(text = stringResource(id = android.R.string.ok))
                     }
                 },
                 dismissButton = {
                     Button(
                         onClick = { open = false }
                     ) {
-                        Text(text = stringResource(id = R.string.cancel))
+                        Text(text = stringResource(id = android.R.string.cancel))
                     }
                 }
             ) {
@@ -79,5 +86,7 @@ fun DatePickerButton(
                 )
             }
         }
+    }
+
     }
 }

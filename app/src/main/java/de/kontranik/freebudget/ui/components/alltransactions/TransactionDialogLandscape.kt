@@ -41,7 +41,7 @@ fun TransactionDialogLandscape(
     Scaffold(
         topBar = {
             AppBar(
-                title = if (itemDetails.id != null) R.string.title_activity_transaction else R.string.title_activity_new_transaction,
+                title = if (itemDetails.id != null) R.string.title_transaction else R.string.title_new_transaction,
                 drawerState = drawerState
             )
         },

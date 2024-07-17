@@ -106,7 +106,7 @@ fun DropdownListContent(
         ) {
             itemsIndexed(itemList) { index, item ->
                 if (index != 0) {
-                    HorizontalDivider(thickness = 1.dp, color = Color.LightGray)
+                    HorizontalDivider(color = MaterialTheme.colorScheme.primary, thickness = 0.5.dp)
                 }
                 Box(
                     modifier = Modifier

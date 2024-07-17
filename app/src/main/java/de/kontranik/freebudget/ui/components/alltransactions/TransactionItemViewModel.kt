@@ -29,6 +29,7 @@ class TransactionItemViewModel(
 
     private val itemId: String? = savedStateHandle[TransactionItemDestination.ITEM_ID_ARG]
     private val itemType: String? = savedStateHandle[TransactionItemDestination.ITEM_TYPE_ARG]
+    private val editPlanned: String? = savedStateHandle[TransactionItemDestination.EDIT_PLANNED_ARG]
 
     init {
         viewModelScope.launch {
@@ -37,11 +38,11 @@ class TransactionItemViewModel(
                 mRepository.getTransactionByID(itemId.toLong())
                     .filterNotNull()
                     .first()
-                    .toItemUiState()
+                    .toItemUiState(editPlanned.toBoolean())
             } else {
                 TransactionItemUiState(TransactionItemDetails(
                     isIncome = itemType == TransactionType.INCOME_REGULAR.name || itemType == TransactionType.INCOME.name,
-                    isPlanned = itemType == TransactionType.INCOME_REGULAR.name || itemType == TransactionType.BILLS_REGULAR.name
+                    isPlanned = editPlanned.toBoolean() || itemType == TransactionType.INCOME_REGULAR.name || itemType == TransactionType.BILLS_REGULAR.name
                 ))
             }
         }
@@ -107,11 +108,11 @@ fun TransactionItemDetails.toTransaction(): Transaction = Transaction(
 )
 
 
-fun Transaction.toItemUiState(): TransactionItemUiState = TransactionItemUiState(
-    itemDetails = this.toItemDetails()
+fun Transaction.toItemUiState(editPlanned: Boolean): TransactionItemUiState = TransactionItemUiState(
+    itemDetails = this.toItemDetails(editPlanned)
 )
 
-fun Transaction.toItemDetails(): TransactionItemDetails = TransactionItemDetails(
+fun Transaction.toItemDetails(editPlanned: Boolean): TransactionItemDetails = TransactionItemDetails(
     id = id,
     regularCreateTime = regularCreateTime,
     description = description,
@@ -123,5 +124,5 @@ fun Transaction.toItemDetails(): TransactionItemDetails = TransactionItemDetails
     dateCreate = dateCreate,
     dateEdit = dateEdit,
     isIncome = ( amountFact == 0.0 && amountPlanned > 0) || (amountFact > 0),
-    isPlanned = false
+    isPlanned = editPlanned
 )

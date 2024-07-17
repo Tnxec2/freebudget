@@ -23,10 +23,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import de.kontranik.freebudget.R
 import de.kontranik.freebudget.config.Config
-import de.kontranik.freebudget.ui.AppViewModelProvider
 import de.kontranik.freebudget.ui.components.appbar.AppBar
 import de.kontranik.freebudget.ui.theme.paddingMedium
 import de.kontranik.freebudget.ui.theme.paddingSmall
@@ -45,7 +43,7 @@ fun SettingsScreen(
     Scaffold(
         topBar = {
             AppBar(
-                title = R.string.app_settings,
+                title = R.string.title_settings,
                 drawerState = drawerState) }
     ) { padding ->
         Column(modifier
@@ -116,7 +114,7 @@ fun SettingsScreen(
             Spacer(modifier = Modifier.height(paddingMedium))
 
             Text(
-                text = stringResource(id = R.string.all_transactions),
+                text = stringResource(id = R.string.title_all_transactions),
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.fillMaxWidth()
             )

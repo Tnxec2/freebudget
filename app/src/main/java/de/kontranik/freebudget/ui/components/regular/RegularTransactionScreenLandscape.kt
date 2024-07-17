@@ -38,7 +38,7 @@ fun RegularTransactionScreenLandscape(
 
     Scaffold(
         topBar = { AppBar(
-            title = R.string.regular,
+            title = R.string.title_regular_transactions,
             drawerState = drawerState) },
         modifier = modifier.fillMaxSize(),
         floatingActionButton = {

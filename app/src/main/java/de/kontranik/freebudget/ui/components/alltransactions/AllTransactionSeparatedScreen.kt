@@ -17,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import de.kontranik.freebudget.R
 import de.kontranik.freebudget.database.viewmodel.TransactionQuery
 import de.kontranik.freebudget.database.viewmodel.TransactionsUiState
+import de.kontranik.freebudget.model.Transaction
 import de.kontranik.freebudget.ui.components.appbar.AppBar
 import de.kontranik.freebudget.ui.components.shared.MonthSelector
 import de.kontranik.freebudget.ui.components.shared.TransactionType
@@ -25,13 +26,14 @@ import de.kontranik.freebudget.ui.theme.paddingSmall
 @Composable
 fun AllTransactionSeparatedScreen(
     drawerState: DrawerState,
-    navigateToEdit: (type: TransactionType?, id: Long?) -> Unit,
+    navigateToEdit: (type: TransactionType?, id: Long?, planned: Boolean) -> Unit,
     modifier: Modifier = Modifier,
     queryState: State<TransactionQuery>,
     uiState: State<TransactionsUiState>,
     prevMonth: ()-> Unit,
     nextMonth: ()-> Unit,
     planRegular: ()-> Unit,
+    onDelete: (transaction: Transaction) -> Unit,
 ) {
 
     val listStateLeft = rememberLazyListState()
@@ -39,13 +41,13 @@ fun AllTransactionSeparatedScreen(
 
     Scaffold(
         topBar = { AppBar(
-            title = R.string.all_transactions_separated,
+            title = R.string.title_all_transactions_separated,
             drawerState = drawerState) },
         modifier = modifier.fillMaxSize(),
         floatingActionButton = {
             if (!listStateLeft.isScrollInProgress && !listStateRight.isScrollInProgress)
                 FabNormalList(onAdd = { type ->
-                    navigateToEdit(type, null)
+                    navigateToEdit(type, null, false)
                 })
         },
         floatingActionButtonPosition = FabPosition.Center,
@@ -79,7 +81,16 @@ fun AllTransactionSeparatedScreen(
             AllTransactionSeparatedList(
                 transactions = uiState.value.itemList,
                 onClick = { _, item ->
-                    navigateToEdit(null, item.id)
+                    navigateToEdit(null, item.id, false)
+                },
+                onEdit = { _, item ->
+                    navigateToEdit(null, item.id, false)
+                },
+                onEditPlanned = { _, item ->
+                    navigateToEdit(null, item.id, true)
+                },
+                onDelete = { _, item ->
+                    onDelete(item)
                 },
                 stateLeft = listStateLeft,
                 stateRight = listStateRight,

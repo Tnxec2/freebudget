@@ -49,7 +49,7 @@ fun NavGraphBuilder.mainGraph(
             OverviewScreen(
                 drawerState = drawerState,
                 navigateToNewTransaction = { type ->
-                    navController.navigate("${TransactionItemDestination.route}/${type}/${null}")
+                    navController.navigate("${TransactionItemDestination.route}/${type}/${null}/${false}")
                 },
                 navToAllTransactionsSeparated = {
                     navController.navigate(MainNavOption.AllTransactionsSeparated.name)
@@ -74,14 +74,15 @@ fun NavGraphBuilder.mainGraph(
         ){
             AllTransactionScreen(
                 drawerState = drawerState,
-                navigateToEdit = { type, id ->
-                    navController.navigate("${TransactionItemDestination.route}/${type}/${id}")
+                navigateToEdit = { type, id, planned ->
+                    navController.navigate("${TransactionItemDestination.route}/${type}/${id}/${planned}")
                 },
                 queryState = transactionViewModel.query.observeAsState(initial = TransactionQuery()),
                 uiState = transactionViewModel.transactionsUiState.observeAsState(initial = TransactionsUiState()),
                 prevMonth = { transactionViewModel.prevMonth() },
                 nextMonth = { transactionViewModel.nextMonth() },
                 planRegular = { transactionViewModel.planRegular() },
+                onDelete = { it.id?.let { id -> transactionViewModel.delete(id) } },
                 markLastEditedState = settingsViewModel.markLastEditedState
             )
         }
@@ -95,14 +96,15 @@ fun NavGraphBuilder.mainGraph(
         ){
             AllTransactionScreen(
                 drawerState = drawerState,
-                navigateToEdit = { type, id ->
-                    navController.navigate("${TransactionItemDestination.route}/${type}/${id}")
+                navigateToEdit = { type, id, planned ->
+                    navController.navigate("${TransactionItemDestination.route}/${type}/${id}/${planned}")
                 },
                 queryState = transactionViewModel.query.observeAsState(initial = TransactionQuery()),
                 uiState = transactionViewModel.transactionsUiState.observeAsState(initial = TransactionsUiState()),
                 prevMonth = { transactionViewModel.prevMonth() },
                 nextMonth = { transactionViewModel.nextMonth() },
                 planRegular = { transactionViewModel.planRegular() },
+                onDelete = { it.id?.let { id -> transactionViewModel.delete(id) } },
                 markLastEditedState = settingsViewModel.markLastEditedState,
             )
         }
@@ -110,14 +112,15 @@ fun NavGraphBuilder.mainGraph(
         composable(MainNavOption.AllTransactionsSeparated.name){
             AllTransactionSeparatedScreen(
                 drawerState = drawerState,
-                navigateToEdit = { type, id ->
-                    navController.navigate("${TransactionItemDestination.route}/${type}/${id}")
+                navigateToEdit = { type, id, planned ->
+                    navController.navigate("${TransactionItemDestination.route}/${type}/${id}/${planned}")
                 },
                 queryState = transactionViewModel.query.observeAsState(initial = TransactionQuery()),
                 uiState = transactionViewModel.transactionsUiState.observeAsState(initial = TransactionsUiState()),
                 prevMonth = { transactionViewModel.prevMonth() },
                 nextMonth = { transactionViewModel.nextMonth() },
                 planRegular = { transactionViewModel.planRegular() },
+                onDelete = { it.id?.let { id -> transactionViewModel.delete(id) } },
             )
         }
 
@@ -178,7 +181,8 @@ fun NavGraphBuilder.mainGraph(
             route = TransactionItemDestination.routeWithArgs,
             arguments = listOf(
                 navArgument(TransactionItemDestination.ITEM_ID_ARG) { type = NavType.StringType; nullable = true},
-                navArgument(TransactionItemDestination.ITEM_TYPE_ARG) { type = NavType.StringType; nullable = true}
+                navArgument(TransactionItemDestination.ITEM_TYPE_ARG) { type = NavType.StringType; nullable = true},
+                navArgument(TransactionItemDestination.EDIT_PLANNED_ARG) { type = NavType.StringType},
             )
         ){
             TransactionDialog(

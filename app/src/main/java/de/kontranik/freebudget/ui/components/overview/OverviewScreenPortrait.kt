@@ -49,7 +49,7 @@ fun OverviewScreenPortrait(
 
     Scaffold(
         topBar = { AppBar(
-            title = R.string.overview_list,
+            title = R.string.title_overview,
             drawerState = drawerState)
         },
         floatingActionButton = {

@@ -29,7 +29,7 @@ fun CategoryListScreenLandscape(
     Scaffold(
         topBar = {
             AppBar(
-                titleString = stringResource(id = R.string.activity_category),
+                titleString = stringResource(id = R.string.title_category),
                 drawerState = drawerState,
             )
         },

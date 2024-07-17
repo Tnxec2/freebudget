@@ -32,6 +32,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import de.kontranik.freebudget.R
 import de.kontranik.freebudget.database.viewmodel.TransactionQuery
 import de.kontranik.freebudget.database.viewmodel.TransactionsUiState
+import de.kontranik.freebudget.model.Transaction
 import de.kontranik.freebudget.ui.AppViewModelProvider
 import de.kontranik.freebudget.ui.components.appbar.AppBar
 import de.kontranik.freebudget.ui.components.shared.MonthSelector
@@ -43,7 +44,7 @@ import kotlinx.coroutines.launch
 
 object AllTransactionsScreenDestination : NavigationDestination {
     override val route = "AllTransactionsScreen"
-    override val titleRes = R.string.all_transactions
+    override val titleRes = R.string.title_all_transactions
     const val CATEGORY_NAME_ARG = "categoryName"
     val routeWithArgs = "$route/{$CATEGORY_NAME_ARG}"
 }
@@ -51,7 +52,7 @@ object AllTransactionsScreenDestination : NavigationDestination {
 @Composable
 fun AllTransactionScreen(
     drawerState: DrawerState,
-    navigateToEdit: (type: TransactionType?, id: Long?) -> Unit,
+    navigateToEdit: (type: TransactionType?, id: Long?, planned: Boolean) -> Unit,
     modifier: Modifier = Modifier,
     queryState: State<TransactionQuery>,
     uiState: State<TransactionsUiState>,
@@ -59,6 +60,7 @@ fun AllTransactionScreen(
     prevMonth: ()-> Unit,
     nextMonth: ()-> Unit,
     planRegular: ()-> Unit,
+    onDelete: (transaction: Transaction) -> Unit,
     allTransactionsScreenViewModel: AllTransactionsScreenViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
     val context = LocalContext.current
@@ -111,7 +113,7 @@ fun AllTransactionScreen(
         modifier = modifier.fillMaxSize(),
         floatingActionButton = {
             if (!listState.isScrollInProgress) FabNormalList(onAdd = { type ->
-                navigateToEdit(type, null)
+                navigateToEdit(type, null, false)
             })
         },
         floatingActionButtonPosition = FabPosition.Center
@@ -152,7 +154,16 @@ fun AllTransactionScreen(
                 },
                 markLastEdited = markLastEditedState.value,
                 onClick = { _, item ->
-                    navigateToEdit(null, item.id)
+                    navigateToEdit(null, item.id, false)
+                },
+                onEdit = { _, item ->
+                    navigateToEdit(null, item.id, false)
+                },
+                onEditPlanned = { _, item ->
+                    navigateToEdit(null, item.id, true)
+                },
+                onDelete = { _, item ->
+                    onDelete(item)
                 },
                 state = listState,
                 modifier = Modifier

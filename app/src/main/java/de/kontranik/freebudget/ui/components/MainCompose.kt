@@ -88,45 +88,45 @@ object DrawerParams {
     val drawerButtons = arrayListOf(
         AppDrawerItemInfo(
             MainNavOption.Overview,
-            R.string.overview_list,
+            R.string.title_overview,
             R.drawable.ic_assessment_24dp,
-            R.string.overview_list
+            R.string.title_overview
         ),
         AppDrawerItemInfo(
             MainNavOption.AllTransactionsScreen,
-            R.string.all_transactions,
+            R.string.title_all_transactions,
             R.drawable.ic_view_list_24dp,
-            R.string.all_transactions
+            R.string.title_all_transactions
         ),
         AppDrawerItemInfo(
             MainNavOption.AllTransactionsSeparated,
-            R.string.all_transactions_separated,
+            R.string.title_all_transactions_separated,
             R.drawable.ic_view_list_24dp,
-            R.string.all_transactions_separated
+            R.string.title_all_transactions_separated
         ),
         AppDrawerItemInfo(
             MainNavOption.RegularTransactions,
-            R.string.regular,
+            R.string.title_regular_transactions,
             R.drawable.ic_view_list_24dp,
-            R.string.regular
+            R.string.title_regular_transactions
         ),
         AppDrawerItemInfo(
             MainNavOption.Categories,
-            R.string.activity_category,
+            R.string.title_category,
             R.drawable.ic_view_agenda,
-            R.string.activity_category
+            R.string.title_category
         ),
         AppDrawerItemInfo(
             MainNavOption.ToolScreen,
-            R.string.tools,
+            R.string.title_tools,
             R.drawable.ic_menu_manage,
-            R.string.tools
+            R.string.title_tools
         ),
         AppDrawerItemInfo(
             MainNavOption.SettingsScreen,
-            R.string.app_settings,
+            R.string.title_settings,
             R.drawable.ic_settings_24dp,
-            R.string.app_settings
+            R.string.title_settings
         ),
     )
 }

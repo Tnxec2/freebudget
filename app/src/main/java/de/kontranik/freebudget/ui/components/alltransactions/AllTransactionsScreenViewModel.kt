@@ -24,16 +24,16 @@ class AllTransactionsScreenViewModel(
     fun getTitle(showOnlyPlanned: Boolean, context: Context): String {
         return if (showOnlyPlanned)
             if (categoryName == null)
-                context.getString(R.string.title_activity_all_transactions_planned)
+                context.getString(R.string.title_all_transactions_planned)
             else
                 context.getString(
-                    R.string.title_activity_all_transactions_category_planned,
+                    R.string.title_all_transactions_category_planned,
                     categoryName
                 )
         else
             if (categoryName == null)
-                context.getString(R.string.title_activity_all_transactions)
+                context.getString(R.string.title_all_transactions)
             else
-                context.getString(R.string.title_activity_all_transactions_category, categoryName)
+                context.getString(R.string.title_all_transactions_category, categoryName)
     }
 }

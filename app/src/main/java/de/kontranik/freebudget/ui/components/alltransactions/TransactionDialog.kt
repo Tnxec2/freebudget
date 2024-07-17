@@ -9,10 +9,11 @@ import de.kontranik.freebudget.ui.navigation.NavigationDestination
 
 object TransactionItemDestination : NavigationDestination {
     override val route = "TransactionDialog"
-    override val titleRes = R.string.title_activity_transaction
+    override val titleRes = R.string.title_transaction
     const val ITEM_ID_ARG = "itemId"
     const val ITEM_TYPE_ARG = "type"
-    val routeWithArgs = "$route/{$ITEM_TYPE_ARG}/{$ITEM_ID_ARG}"
+    const val EDIT_PLANNED_ARG = "editPlanned"
+    val routeWithArgs = "$route/{$ITEM_TYPE_ARG}/{$ITEM_ID_ARG}/{$EDIT_PLANNED_ARG}"
 }
 
 @Composable
@@ -20,7 +21,7 @@ fun TransactionDialog(
     drawerState: DrawerState,
     navigateBack: () -> Unit,
 ) {
-    
+
     OrientationChangesHandler(portraitLayout = {
         TransactionDialogPortrait(
             drawerState = drawerState,

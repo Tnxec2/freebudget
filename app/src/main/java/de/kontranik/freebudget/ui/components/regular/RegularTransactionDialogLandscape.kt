@@ -41,7 +41,7 @@ fun RegularTransactionDialogLandscape(
 
     Scaffold(
         topBar = { AppBar(
-            title = if (itemDetails.id != null) R.string.regular else R.string.new_regular_transaction,
+            title = if (itemDetails.id != null) R.string.title_regular_transactions else R.string.title_new_regular_transaction,
             drawerState = drawerState) },
         modifier = modifier.fillMaxSize(),
     ) { padding ->

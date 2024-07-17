@@ -18,6 +18,9 @@ fun AllTransactionList(
     transactions: List<Transaction>,
     markLastEdited: Boolean,
     onClick: (position: Int, item: Transaction) -> Unit,
+    onEdit: (position: Int, item: Transaction) -> Unit,
+    onEditPlanned: (position: Int, item: Transaction) -> Unit,
+    onDelete: (position: Int, item: Transaction) -> Unit,
     modifier: Modifier = Modifier,
     state: LazyListState = rememberLazyListState(),
     ) {
@@ -29,11 +32,6 @@ fun AllTransactionList(
         lastEditedId = transactions.maxBy { it.dateEdit }.id
     }
 
-    LaunchedEffect(key1 = transactions, key2 = markLastEdited) {
-        val indexOfLastEditedItem = transactions.indexOfFirst { it.id == lastEditedId }
-        if (markLastEdited && indexOfLastEditedItem >= 0) state.scrollToItem(indexOfLastEditedItem)
-    }
-
     LazyColumn(
         state = state,
         modifier = Modifier.fillMaxSize()) {
@@ -41,6 +39,9 @@ fun AllTransactionList(
             TransactionItem(
                 transaction,
                 onClick = {onClick(index, transaction)} ,
+                onEdit = { onEdit(index, transaction)},
+                onEditPlanned = {onEditPlanned(index, transaction)},
+                onDelete = {onDelete(index, transaction)},
                 marked = markLastEdited && transaction.id == lastEditedId,
                 modifier)
             if (index < transactions.lastIndex)

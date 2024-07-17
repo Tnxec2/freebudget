@@ -39,7 +39,7 @@ fun OverviewCategorySummary(
 
     val categoryList = mutableMapOf<String, Category>()
     var maxCategoryWeight = 0.0
-    val notDefined = stringResource(R.string.activity_transaction_not_define)
+    val notDefined = stringResource(R.string.category_not_defined)
 
     transactions.forEach { transaction ->
         var categoryName = transaction.category.trim()
@@ -70,7 +70,7 @@ fun OverviewCategorySummary(
                 onClick = onSelect,
             )
             if (index < transactions.lastIndex)
-                HorizontalDivider(color = MaterialTheme.colorScheme.primary, thickness = 1.dp)
+                HorizontalDivider(color = MaterialTheme.colorScheme.primary, thickness = 0.5.dp)
         }
     }
 }

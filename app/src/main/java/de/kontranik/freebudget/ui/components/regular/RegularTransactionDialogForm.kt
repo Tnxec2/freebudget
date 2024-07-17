@@ -10,6 +10,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,11 +29,15 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.kontranik.freebudget.R
 import de.kontranik.freebudget.ui.components.shared.AmountTypeSelector
 import de.kontranik.freebudget.ui.components.shared.CategorySelectorBox
+import de.kontranik.freebudget.ui.components.shared.DatePickerButton
 import de.kontranik.freebudget.ui.components.shared.DropdownList
+import de.kontranik.freebudget.ui.helpers.DateUtils
+import de.kontranik.freebudget.ui.theme.AppTheme
 import de.kontranik.freebudget.ui.theme.paddingSmall
 
 
@@ -73,7 +81,6 @@ fun RegularTransactionDialogForm(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = paddingSmall)
             ) {
                 OutlinedTextField(
                     singleLine = true,
@@ -120,6 +127,48 @@ fun RegularTransactionDialogForm(
                     onItemClick = { pos, _ -> onValueChange(itemDetails.copy(month = pos)) },
                 )
             }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = stringResource(id = R.string.start_date),
+                    modifier = Modifier.weight(1f))
+                DatePickerButton(
+                    millis = itemDetails.dateStart,
+                    onChangeDate = {
+                        onValueChange(itemDetails.copy(dateStart = it)) },
+                    modifier = Modifier.weight(1f)
+                )
+                IconButton(
+                    enabled = itemDetails.dateStart != null,
+                    onClick = {
+                    onValueChange(itemDetails.copy(dateStart = null))
+                }) {
+                    Icon(imageVector = Icons.Filled.Clear, contentDescription = "clear date")
+                }
+            }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = stringResource(id = R.string.end_date),
+                    modifier = Modifier.weight(1f))
+                DatePickerButton(
+                    millis = itemDetails.dateEnd,
+                    onChangeDate = {
+                        onValueChange(itemDetails.copy(dateEnd = it))
+                    },
+                    modifier = Modifier.weight(1f)
+                )
+                IconButton(
+                    enabled = itemDetails.dateEnd != null,
+                    onClick = {
+                    onValueChange(itemDetails.copy(dateEnd = null))
+                }) {
+                    Icon(imageVector = Icons.Filled.Clear, contentDescription = "clear date")
+                }
+            }
             OutlinedTextField(
                 value = itemDetails.note,
                 label = { Text(stringResource(R.string.activity_transaction_note)) },
@@ -132,7 +181,24 @@ fun RegularTransactionDialogForm(
                     imeAction = ImeAction.Done
                 )
             )
-
     }
 }
 
+@Preview
+@Composable
+private fun RegularTransactionDialogFormPreview() {
+    val item = RegularTransactionItem().copy(
+        day = "15",
+        month = 2,
+        description = "Description",
+        category = "Category",
+        amount = "292.20",
+        dateStart = DateUtils.now(),
+        dateEnd = DateUtils.now(),
+        note = "This is a note"
+    )
+    AppTheme {
+        RegularTransactionDialogForm(itemDetails = item, onValueChange = {})
+    }
+
+}

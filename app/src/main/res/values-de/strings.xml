@@ -1,15 +1,24 @@
 <resources>
     <string name="app_name">Mein freies Budget</string>
-    <string name="title_activity_main">Übersicht</string>
 
-    <string name="title_activity_new_transaction">Neue Bewegung</string>
-    <string name="title_activity_transaction">Bewegung</string>
-    <string name="title_activity_all_transactions">Alle Bewegungen</string>
-    <string name="title_activity_all_transactions_planned">Geplannte Bewegungen</string>
-    <string name="title_activity_all_transactions_category">%1$s, alle</string>
-    <string name="title_activity_all_transactions_category_planned">%1$s, geplannte</string>
-    <string name="confirm_category_delete">Löschen der Kategorie \"%1$s\" bestätigen</string>
-    <string name="activity_main_header">Monatsübersicht</string>
+
+    <string name="title_overview">Monatsübersicht</string>
+    <string name="title_all_transactions">Alle Bewegungen</string>
+    <string name="title_all_transactions_separated">Alle Bewegungen aufgeteilt</string>
+    <string name="title_regular_transactions">Reguläre Bewegungen</string>
+    <string name="title_category">Kategorie</string>
+    <string name="title_tools">Extras</string>
+    <string name="title_settings">Einstellungen</string>
+
+    <string name="title_new_transaction">Neue Bewegung</string>
+    <string name="title_transaction">Bewegung</string>
+    <string name="title_all_transactions_planned">Geplannte Bewegungen</string>
+    <string name="title_all_transactions_category">%1$s, alle</string>
+    <string name="title_all_transactions_category_planned">%1$s, geplannte</string>
+    <string name="title_new_regular_transaction">Neue reguläre Bewegung</string>
+
+    <string name="confirm_category_delete">Wollen Sie Kategorie \"%1$s\" wirklich löschen?</string>
+
     <string name="activity_main_receipts">Einnahmen</string>
     <string name="activity_main_receipts_planned">Einnahmen geplant</string>
     <string name="activity_main_receipts_unplanned">Einnahmen ungeplant</string>
@@ -24,16 +33,17 @@
     <string name="activity_transaction_description">Bezeichnung</string>
     <string name="activity_transaction_amount_planned">Betrag geplannt</string>
     <string name="activity_transaction_amount_fact">Betrag faktisch</string>
-    <string name="activity_transaction_freq">Wiederholung</string>
+
     <string name="activity_transaction_save">Speichern</string>
     <string name="activity_transaction_saveAclose">Übernehmen</string>
     <string name="activity_transaction_copy">Kopieren</string>
     <string name="activity_transaction_delete">Löschen</string>
-    <string name="activity_transaction_not_define">nicht festgelegt</string>
+
+    <string name="category_not_defined">nicht festgelegt</string>
+
     <string name="prev">zurück</string>
     <string name="next">vor</string>
-    <string name="tools">Extras</string>
-    <string name="app_settings">Einstellungen</string>
+
     <string name="app_settings_sort">Sortieren nach</string>
     <string name="app_settings_sort_description">Bezeichnung</string>
     <string name="app_settings_sort_categoryname">Kategory</string>
@@ -44,13 +54,8 @@
     <string name="app_settings_save">Speichern</string>
     <string name="app_settings_sort_notsort">nicht sortieren</string>
     <string name="app_settings_sort_abs_amount">absolute Betrag</string>
-    <string name="menu_import_csv">CSV importieren</string>
-    <string name="menu_export_csv">CSV exportieren</string>
-    <string name="title_activity_open_file">Datei öffnen</string>
-    <string name="manage_regular">Reguläre Bewegungen verwalten</string>
-    <string name="new_regular_transaction">Neue reguläre Bewegung</string>
+
     <string name="day">Tag</string>
-    <string name="activity_category">Kategorie</string>
     <string name="no_category">keine Kategorie</string>
     <string name="subTitleTransaction">Fällig am %1$s. %2$s</string>
     <string name="wrongMonthInTheLine">Falschen Monat in der Zeile: %1$s</string>
@@ -59,11 +64,10 @@
     <string name="importFromFile">Import von der Datei: %1$s</string>
     <string name="importFail">Import felerhaft. Fehlermeldung: %1$s</string>
     <string name="exportFail">Export felerhaft. Fehlermeldung: %1$s</string>
-    <string name="date">Datum</string>
+
     <string name="put_regular">Reguläre einplanen</string>
     <string name="activity_transaction_edit">Bearbeiten</string>
-    <string name="only_planned">nur offene</string>
-    <string name="all">alle</string>
+
     <string name="activity_transaction_amount">Betrag</string>
     <string name="importOK_filename">Import OK. Datei: %1$s</string>
     <string name="exportOK_filename">Export OK. Datei: %1$s</string>
@@ -72,25 +76,22 @@
 
     <string name="category_name_new">Name f. neue Kategorie</string>
     <string name="category_name">Kategoriename</string>
-    <string name="ok">OK</string>
-    <string name="cancel">Abbrechen</string>
+
     <string name="select">Auswählen</string>
     <string name="copy_amount">Betrag kopieren</string>
     <string name="month">Monat</string>
+
     <string name="import_export">Import / Export</string>
     <string name="import_regular">Import reguläre</string>
     <string name="export_regular">Export reguläre</string>
     <string name="import_normal">Import normale</string>
     <string name="export_normal">Export normale</string>
-    <string name="item_name">Item Name</string>
+
     <string name="activity_transaction_edit_planned">Geplante bearbeiten</string>
-    <string name="request_write_permission">Write External Storage permission allows us to do store images. Please allow this permission in App Settings.</string>
+
+
     <string name="mark_last_edited">Zuletzt geänderten Eintrag hervorheben</string>
-    <string name="overview_list">Übersichtsliste</string>
     <string name="close">Schließen</string>
-    <string name="all_transactions">Alle Bewegungen</string>
-    <string name="all_transactions_separated">Alle Bewegungen aufgeteilt</string>
-    <string name="regular">Reguläre</string>
     <string name="start_date">Startdatum</string>
     <string name="end_date">Enddatum</string>
     <string name="start">Start</string>
@@ -98,36 +99,17 @@
     <string name="not_setted">keine</string>
     <string name="exportOK">Export OK.</string>
     <string name="importOK">Import OK.</string>
-    <string name="yes">Ja</string>
-    <string name="no">Nein</string>
-    <string name="do_you_want_restore">Möchten Sie die Datenbank wiederherstellen?</string>
+
     <string name="db_restore">Datenbank wiederherstellen</string>
     <string name="receipts_planned_rest">Rest Einnahmen geplannt</string>
     <string name="spending_planned_rest">Rest Ausgaben geplannt</string>
     <string name="total_diff">Differenz gesamt</string>
     <string name="activity_transaction_note">Notiz</string>
     <string name="activity_transaction_close">Schließen</string>
-    <string name="clear_date_field">Datum löschen</string>
     <string name="db_backup">Backup Datenbank</string>
-    <string name="add_transaction_general">Bewegung</string>
-    <string name="add_transaction_income">Einkommen</string>
-    <string name="add_planned_income">eingeplannte Einkommen</string>
-    <string name="add_outgoings">Ausgaben</string>
-    <string name="add_outgoings_planned">eingeplannte Ausgaben</string>
-    <string name="ic_arrow_back">arrow back</string>
     <string name="drawer_menu_description">Menu navigation button</string>
     <string name="confirm">Bestätigen</string>
     <string name="dismiss">Abbrechen</string>
     <string name="confirm_restor_db_text">Sind Sie sicher, dass Sie die aktuelle Datenbank mit der Sicherung überschreiben möchten?</string>
 
-    <string-array name="navigation_drawer_items_array">
-        <item>Übersicht</item>
-        <item>Alle Bewegungen</item>
-        <item>Alle aufgeteilt</item>
-        <item>Reguläre</item>
-        <item></item>
-        <item>Kategorie</item>
-        <item>Extras</item>
-        <item>Einstellungen</item>
-    </string-array>
 </resources>

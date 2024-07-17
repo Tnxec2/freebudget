@@ -23,6 +23,9 @@ import de.kontranik.freebudget.ui.theme.paddingSmall
 fun AllTransactionSeparatedList(
     transactions: List<Transaction>,
     onClick: (position: Int, item: Transaction) -> Unit,
+    onEdit: (position: Int, item: Transaction) -> Unit,
+    onEditPlanned: (position: Int, item: Transaction) -> Unit,
+    onDelete: (position: Int, item: Transaction) -> Unit,
     modifier: Modifier = Modifier,
     stateLeft: LazyListState = rememberLazyListState(),
     stateRight: LazyListState = rememberLazyListState(),
@@ -38,13 +41,16 @@ fun AllTransactionSeparatedList(
                 }) { index, transaction ->
                     TransactionSeparatedItem(
                         transaction,
-                        onClick = {onClick(index, transaction)} ,
+                        onClick = {onClick(index, transaction)},
+                        onEdit = { onEdit(index, transaction)},
+                        onEditPlanned = {onEditPlanned(index, transaction)},
+                        onDelete = {onDelete(index, transaction)},
                         modifier)
                     if (index < transactions.lastIndex)
                         HorizontalDivider(color = MaterialTheme.colorScheme.primary, thickness = 0.5.dp)
                 }
             }
-            HorizontalDivider(color = MaterialTheme.colorScheme.primary, thickness = 1.dp)
+            HorizontalDivider(color = MaterialTheme.colorScheme.primary, thickness = 0.5.dp)
             Amount(
                 amount = transactions.map{ if (it.amountFact != 0.0) it.amountFact else it.amountPlanned }.filter { it > 0}.sumOf { it },
                 textAlign = TextAlign.Right,
@@ -60,13 +66,16 @@ fun AllTransactionSeparatedList(
                 }) { index, transaction ->
                     TransactionSeparatedItem(
                         transaction,
-                        onClick = {onClick(index, transaction)} ,
+                        onClick = {onClick(index, transaction)},
+                        onEdit = { onEdit(index, transaction)},
+                        onEditPlanned = {onEditPlanned(index, transaction)},
+                        onDelete = {onDelete(index, transaction)},
                         modifier)
                     if (index < transactions.lastIndex)
                         HorizontalDivider(color = MaterialTheme.colorScheme.primary, thickness = 0.5.dp)
                 }
             }
-            HorizontalDivider(color = MaterialTheme.colorScheme.primary, thickness = 1.dp)
+            HorizontalDivider(color = MaterialTheme.colorScheme.primary, thickness = 0.5.dp)
             Amount(
                 amount = transactions.map{ if (it.amountFact != 0.0) it.amountFact else it.amountPlanned }.filter { it < 0}.sumOf { it },
                 textAlign = TextAlign.Right,

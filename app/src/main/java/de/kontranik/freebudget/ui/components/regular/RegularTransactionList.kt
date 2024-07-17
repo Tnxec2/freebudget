@@ -29,7 +29,7 @@ fun RegularTransactionList(
                 onClick = {onClick(index, transaction)} ,
                 modifier)
             if (index < transactions.lastIndex)
-                HorizontalDivider(color = MaterialTheme.colorScheme.primary, thickness = 1.dp)
+                HorizontalDivider(color = MaterialTheme.colorScheme.primary, thickness = 0.5.dp)
         }
     }
 }

@@ -33,7 +33,7 @@ fun OverviewButtonBox(
                 onClick = onClickAllTransactionsSeparated,
                 Modifier.fillMaxWidth()
             ) {
-                Text(text = stringResource(id = R.string.all_transactions_separated).uppercase(), textAlign = TextAlign.Center)
+                Text(text = stringResource(id = R.string.title_all_transactions_separated).uppercase(), textAlign = TextAlign.Center)
             }
         }
         Row(Modifier.fillMaxWidth().padding(bottom = paddingSmall).height(intrinsicSize = IntrinsicSize.Max)) {
@@ -41,14 +41,14 @@ fun OverviewButtonBox(
                 onClick = onClickAllTransactions,
                 Modifier.weight(1f).fillMaxHeight()
             ) {
-                Text(text = stringResource(id = R.string.all_transactions).uppercase(), textAlign = TextAlign.Center)
+                Text(text = stringResource(id = R.string.title_all_transactions).uppercase(), textAlign = TextAlign.Center)
             }
             Spacer(modifier = Modifier.width(paddingSmall))
             Button(
                 onClick = onClickRegularTransactions,
                 Modifier.weight(1f).fillMaxHeight()
             ) {
-                Text(text = stringResource(id = R.string.regular).uppercase(), textAlign = TextAlign.Center)
+                Text(text = stringResource(id = R.string.title_regular_transactions).uppercase(), textAlign = TextAlign.Center)
             }
         }
     }

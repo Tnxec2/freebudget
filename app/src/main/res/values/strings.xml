@@ -1,14 +1,23 @@
 <resources>
     <string name="app_name">My free budget</string>
-    <string name="title_activity_main">Monthly overview</string>
-    <string name="title_activity_new_transaction">New transaction</string>
-    <string name="title_activity_transaction">transaction</string>
-    <string name="title_activity_all_transactions">All transactions</string>
-    <string name="title_activity_all_transactions_planned">Planned transactions</string>
-    <string name="title_activity_all_transactions_category">%1$s, all</string>
-    <string name="title_activity_all_transactions_category_planned">%1$s, planned</string>
 
-    <string name="activity_main_header">Monthly overview</string>
+
+    <string name="title_overview">Overview monthly</string>
+    <string name="title_all_transactions">All Transactions</string>
+    <string name="title_all_transactions_separated">All Transactions separated</string>
+    <string name="title_regular_transactions">Regular transactions</string>
+    <string name="title_category">Category</string>
+    <string name="title_tools">Tools</string>
+    <string name="title_settings">Settings</string>
+
+    <string name="title_new_transaction">New transaction</string>
+    <string name="title_transaction">Transaction</string>
+    <string name="title_all_transactions_planned">Planned transactions</string>
+    <string name="title_all_transactions_category">%1$s, all</string>
+    <string name="title_all_transactions_category_planned">%1$s, planned</string>
+
+    <string name="title_new_regular_transaction">New regular transaction</string>
+
     <string name="activity_main_receipts">Income</string>
     <string name="activity_main_receipts_planned">Income planned</string>
     <string name="activity_main_receipts_unplanned">Income unplanned</string>
@@ -24,16 +33,16 @@
     <string name="activity_transaction_note">Note</string>
     <string name="activity_transaction_amount_planned">Amount planned</string>
     <string name="activity_transaction_amount_fact">Amount fact</string>
-    <string name="activity_transaction_freq">repeat</string>
+
     <string name="activity_transaction_saveAclose">Save and close</string>
     <string name="activity_transaction_save">Save</string>
     <string name="activity_transaction_copy">Copy</string>
     <string name="activity_transaction_delete">Delete</string>
-    <string name="activity_transaction_not_define">not define</string>
+    <string name="category_not_defined">not define</string>
+
     <string name="prev">previous</string>
     <string name="next">next</string>
-    <string name="tools">Tools</string>
-    <string name="app_settings">Settings</string>
+
     <string name="app_settings_sort">Sort order by</string>
     <string name="app_settings_sort_description">Description</string>
     <string name="app_settings_sort_categoryname">Category</string>
@@ -44,14 +53,10 @@
     <string name="app_settings_save">save</string>
     <string name="app_settings_sort_notsort">don\'t sort</string>
     <string name="app_settings_sort_abs_amount">absolute amount</string>
-    <string name="menu_import_csv">Import csv</string>
-    <string name="menu_export_csv">Export csv</string>
-    <string name="title_activity_open_file">Open file</string>
-    <string name="manage_regular">Manage regular transactions</string>
-    <string name="new_regular_transaction">New regular transaction</string>
+
     <string name="day">day</string>
-    <string name="activity_category">Category</string>
     <string name="subTitleTransaction">Due on %1$s. %2$s</string>
+
     <string name="wrongMonthInTheLine">Wrong month in the line: %1$s</string>
     <string name="wrongDayInTheLine">Wrong day in the line: %1$s</string>
     <string name="wrongLineFormat">Wrong line format: %1$s</string>
@@ -62,73 +67,53 @@
     <string name="exportFail">Export fail. Error: %1$s</string>
     <string name="exportOK">Export OK.</string>
     <string name="exportOK_filename">Export OK. File: %1$s</string>
-    <string name="date">date</string>
+
     <string name="put_regular">put regular</string>
     <string name="activity_transaction_edit">Edit</string>
-    <string name="only_planned">only planned</string>
-    <string name="all">all</string>
+
     <string name="activity_transaction_amount">Amount</string>
     <string name="delete">Delete</string>
     <string name="save">Save</string>
     <string name="category_name_new">new category</string>
     <string name="category_name">category name</string>
     <string name="no_category">category not set</string>
-    <string name="confirm_category_delete">confirm delete category \"%1$s\"</string>
-    <string name="ok">OK</string>
-    <string name="cancel">Cancel</string>
+    <string name="confirm_category_delete">Are you sure to delete category \"%1$s\"</string>
+
     <string name="select">Select</string>
     <string name="copy_amount">Copy amount</string>
     <string name="month">Month</string>
+
     <string name="import_export">Import / Export</string>
     <string name="import_regular">Import regular</string>
     <string name="export_regular">Export regular</string>
     <string name="import_normal">Import normal</string>
     <string name="export_normal">Export normal</string>
-    <string name="item_name">Item Name</string>
+
     <string name="activity_transaction_edit_planned">Edit planned</string>
     <string name="mark_last_edited">Mark last edited</string>
-    <string name="overview_list">Overview List</string>
     <string name="close">Close</string>
-    <string name="request_write_permission">Write External Storage permission allows us to do store images. Please allow this permission in App Settings.</string>
-    <string name="all_transactions">All Transactions</string>
-    <string name="all_transactions_separated">All Transactions separated</string>
-    <string name="regular">Regular</string>
+
+
+
     <string name="start_date">start date</string>
     <string name="end_date">end date</string>
     <string name="start">start</string>
     <string name="end">end</string>
     <string name="not_setted">not set</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
-    <string name="do_you_want_restore">Do you want to restore the database?!</string>
+
     <string name="db_restore">Restore Database</string>
     <string name="receipts_planned_rest">Income planned rest</string>
     <string name="spending_planned_rest">Bills planned rest</string>
     <string name="total_diff">difference total</string>
     <string name="activity_transaction_close">Close</string>
-    <string name="clear_date_field">clear date field</string>
     <string name="db_backup">backup database</string>
-    <string name="add_transaction_general">add transaction general</string>
-    <string name="add_transaction_income">add income</string>
-    <string name="add_planned_income">add planned income</string>
-    <string name="add_outgoings">add outgoings</string>
-    <string name="add_outgoings_planned">add outgoings planned</string>
-    <string name="ic_arrow_back">arrow back</string>
+
     <string name="drawer_menu_description">Menu navigation button</string>
+
     <string name="confirm">Confirm</string>
     <string name="dismiss">Dismiss</string>
     <string name="confirm_restor_db_text">Are you sure you want to overwrite the current database with the backup?</string>
 
-    <string-array name="navigation_drawer_items_array">
-        <item>Overview</item>
-        <item>All transactions</item>
-        <item>All separated</item>
-        <item>Regular</item>
-        <item></item>
-        <item>Category</item>
-        <item>Extras</item>
-        <item>Settings</item>
-    </string-array>
 
 </resources>
 

@@ -8,6 +8,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.style.TextAlign
 import de.kontranik.freebudget.R
+import de.kontranik.freebudget.ui.theme.color_green
+import de.kontranik.freebudget.ui.theme.color_red
 import de.kontranik.freebudget.ui.theme.paddingSmall
 import java.util.Locale
 
@@ -19,11 +21,11 @@ fun Amount(amount: Double,
         text = String.format(Locale.getDefault(), "%.2f", if (amount==0.0) 0.0 else amount),
         textAlign = textAlign,
         color = if (amount > 0)
-            colorResource(R.color.colorGreen)
+            color_green
         else if (amount < 0)
-            colorResource(id = R.color.colorRed)
+            color_red
         else
-            colorResource(id = R.color.colorTextListItem),
+            MaterialTheme.colorScheme.onBackground,
         style = MaterialTheme.typography.bodyLarge,
         modifier = modifier
             .padding(start = paddingSmall)
