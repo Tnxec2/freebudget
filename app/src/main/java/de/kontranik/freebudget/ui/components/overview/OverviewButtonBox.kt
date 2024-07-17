@@ -25,7 +25,7 @@ fun OverviewButtonBox(
     onClickRegularTransactions: ()-> Unit,
     modifier: Modifier = Modifier) {
     Column(
-        Modifier
+        modifier
             .fillMaxWidth()
             .padding(horizontal = paddingSmall)) {
         Row(Modifier.fillMaxWidth()) {

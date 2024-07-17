@@ -46,7 +46,7 @@ fun TransactionItemPopupMenu(
         onDismissRequest = { onClose() },
     ) {
         Column(
-            Modifier
+            modifier
                 .clip(shape = RoundedCornerShape(16.dp))
                 .background(color = MaterialTheme.colorScheme.background)
                 .padding(4.dp)

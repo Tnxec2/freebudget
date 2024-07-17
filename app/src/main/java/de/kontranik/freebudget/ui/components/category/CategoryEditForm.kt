@@ -70,7 +70,7 @@ fun CategoryEditForm(
 
     val coroutineScope = rememberCoroutineScope()
 
-    Column {
+    Column(modifier = modifier) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()

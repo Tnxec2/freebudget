@@ -41,10 +41,6 @@ class CategoryItemViewModel(
     fun clearItem() {
         updateUiState(CategoryDetails())
     }
-
-    companion object {
-        private const val TIMEOUT_MILLIS = 5_000L
-    }
 }
 
 data class CategoryDetailsUiState(val categoryDetails: CategoryDetails = CategoryDetails())

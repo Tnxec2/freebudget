@@ -77,7 +77,7 @@ fun CategorySelectorBox(
             )
             IconButton(
                 onClick = {
-                    if (showCategoryDropdown.not()) searchCategory = null;
+                    if (showCategoryDropdown.not()) searchCategory = null
                     showCategoryDropdown = showCategoryDropdown.not()
                 }) {
                 Icon(imageVector = Icons.Filled.KeyboardArrowDown, contentDescription = "open select menu")

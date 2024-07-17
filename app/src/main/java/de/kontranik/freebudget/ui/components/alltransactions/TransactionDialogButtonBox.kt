@@ -22,7 +22,7 @@ fun TransitionDialogButtonBox(
     onClose: () -> Unit, // coroutineScope.launch {navigateBack()}
     onCopy: () -> Unit, // onValueChange(itemDetails.copy(id = null))
     modifier: Modifier = Modifier) {
-    Column(modifier = Modifier) {
+    Column(modifier = modifier) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()

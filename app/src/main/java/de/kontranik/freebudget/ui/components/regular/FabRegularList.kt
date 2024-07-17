@@ -28,7 +28,7 @@ fun FabRegularList(
     }
 
 
-    Row {
+    Row(modifier = modifier) {
         FabTransactionItem(
             fabItem = FabItem(
                 { onClick(TransactionType.INCOME_REGULAR) },

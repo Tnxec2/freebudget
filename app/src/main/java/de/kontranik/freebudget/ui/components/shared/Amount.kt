@@ -5,9 +5,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.style.TextAlign
-import de.kontranik.freebudget.R
 import de.kontranik.freebudget.ui.theme.color_green
 import de.kontranik.freebudget.ui.theme.color_red
 import de.kontranik.freebudget.ui.theme.paddingSmall
