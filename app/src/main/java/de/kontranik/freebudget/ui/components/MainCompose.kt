@@ -61,9 +61,7 @@ fun MainCompose(
                             MainNavOption.Categories,
                             MainNavOption.ToolScreen,
                             MainNavOption.SettingsScreen, -> {
-                                navController.navigate(onUserPickedOption.name) {
-                                    popUpTo(NavRoutes.MainRoute.name)
-                                }
+                                navController.navigate(onUserPickedOption.name)
                             }
                         }
                     }
