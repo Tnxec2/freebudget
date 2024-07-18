@@ -20,43 +20,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import de.kontranik.freebudget.R
 import de.kontranik.freebudget.model.Category
-import de.kontranik.freebudget.model.Transaction
 import de.kontranik.freebudget.ui.theme.paddingSmall
 import java.util.Locale
-import kotlin.math.abs
 
 @Composable
 fun OverviewCategorySummary(
-    transactions: List<Transaction>,
+    categoryList: MutableMap<String, Category>,
     onSelect: (categoryName: String) -> Unit,
     modifier: Modifier = Modifier,
     state: LazyListState = rememberLazyListState(),
     ) {
 
-    val categoryList = mutableMapOf<String, Category>()
-    var maxCategoryWeight = 0.0
-    val notDefined = stringResource(R.string.category_not_defined)
-
-    transactions.forEach { transaction ->
-        var categoryName = transaction.category.trim()
-        if (categoryName.isEmpty()) categoryName = notDefined
-        if (transaction.amountFact < 0) {
-            if (categoryList.containsKey(categoryName)) {
-                categoryList[categoryName]?.let {
-                    it.weight += abs(transaction.amountFact)
-                }
-            } else {
-                categoryList[categoryName] = Category(0, categoryName, abs(transaction.amountFact))
-            }
-            categoryList[categoryName]?.let {
-                if (it.weight > maxCategoryWeight) maxCategoryWeight = it.weight
-            }
-        }
-    }
+    val maxCategoryWeight = categoryList.values.maxOfOrNull { it.weight }
 
     LazyColumn(
         state = state,
@@ -66,11 +43,10 @@ fun OverviewCategorySummary(
         itemsIndexed(categoryList.values.sortedByDescending { it.weight }.toList()) { index, category ->
             CategoryRow(
                 category,
-                maxCategoryWeight = maxCategoryWeight,
+                maxCategoryWeight = maxCategoryWeight ?: 0.0,
                 onClick = onSelect,
             )
-            if (index < transactions.lastIndex)
-                HorizontalDivider(color = MaterialTheme.colorScheme.primary, thickness = 0.5.dp)
+            HorizontalDivider(color = MaterialTheme.colorScheme.primary, thickness = 0.5.dp)
         }
     }
 }

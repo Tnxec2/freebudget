@@ -20,6 +20,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import de.kontranik.freebudget.R
 import de.kontranik.freebudget.database.viewmodel.TransactionQuery
 import de.kontranik.freebudget.database.viewmodel.TransactionsUiState
+import de.kontranik.freebudget.model.Category
 import de.kontranik.freebudget.ui.components.appbar.AppBar
 import de.kontranik.freebudget.ui.components.shared.MonthSelector
 import de.kontranik.freebudget.ui.components.shared.TransactionType
@@ -91,7 +92,7 @@ fun OverviewScreenPortrait(
             )
             OverviewCategorySummary(
                 state = categoryListState,
-                transactions = uiState.value.itemList,
+                categoryList = uiState.value.categorySummary,
                 onSelect = { name ->
                     coroutineScope.launch {
                         navToAllTransactions(name)

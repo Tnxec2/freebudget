@@ -106,7 +106,7 @@ fun OverviewScreenLandscape(
                 }
                 OverviewCategorySummary(
                     state = categoryListState,
-                    transactions = uiState.value.itemList,
+                    categoryList = uiState.value.categorySummary,
                     onSelect = { name ->
                         coroutineScope.launch {
                             navToAllTransactions(name)

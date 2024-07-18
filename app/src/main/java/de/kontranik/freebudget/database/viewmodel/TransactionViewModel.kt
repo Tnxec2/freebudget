@@ -1,23 +1,25 @@
 package de.kontranik.freebudget.database.viewmodel
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.switchMap
+import de.kontranik.freebudget.R
 import de.kontranik.freebudget.database.FreeBudgetRoomDatabase
 import de.kontranik.freebudget.database.repository.RegularTransactionRepository
 import de.kontranik.freebudget.database.repository.TransactionRepository
+import de.kontranik.freebudget.model.Category
 import de.kontranik.freebudget.model.Transaction
 import de.kontranik.freebudget.ui.helpers.DateUtils
 import kotlinx.coroutines.flow.map
 import java.util.Calendar
 import java.util.GregorianCalendar
-import java.util.Locale
+import kotlin.math.abs
 
 
 class TransactionViewModel(
+    private val context: Context,
     private val transactionRepository: TransactionRepository,
     private val regularTransactionRepository: RegularTransactionRepository
 ) : ViewModel() {
@@ -36,8 +38,33 @@ class TransactionViewModel(
 
     val transactionsUiState = query.switchMap { query ->
         transactionRepository.getTransactions(query.year, query.month)
-            .map { list -> TransactionsUiState(list) }.asLiveData()
+            .map { list -> TransactionsUiState(list, getCategroySummary(list)) }.asLiveData()
     }
+
+    private fun getCategroySummary(transactionList: List<Transaction>): MutableMap<String, Category> {
+        var maxCategoryWeight = 0.0
+        val notDefined = context.getString(R.string.category_not_defined)
+        val categoryList = mutableMapOf<String, Category>()
+
+        transactionList.forEach { transaction ->
+            var categoryName = transaction.category.trim()
+            if (categoryName.isEmpty()) categoryName = notDefined
+            if (transaction.amountFact < 0) {
+                if (categoryList.containsKey(categoryName)) {
+                    categoryList[categoryName]?.let {
+                        it.weight += abs(transaction.amountFact)
+                    }
+                } else {
+                    categoryList[categoryName] = Category(0, categoryName, abs(transaction.amountFact))
+                }
+                categoryList[categoryName]?.let {
+                    if (it.weight > maxCategoryWeight) maxCategoryWeight = it.weight
+                }
+            }
+        }
+        return categoryList
+    }
+
 
     fun insert(transaction: Transaction) {
         transactionRepository.insert(transaction)
@@ -149,4 +176,7 @@ data class TransactionQuery(
 )
 
 
-data class TransactionsUiState(val itemList: List<Transaction> = listOf())
+data class TransactionsUiState(
+    val itemList: List<Transaction> = listOf(),
+    val categorySummary: MutableMap<String, Category> = mutableMapOf()
+)

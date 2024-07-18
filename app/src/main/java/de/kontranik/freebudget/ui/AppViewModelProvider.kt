@@ -44,6 +44,7 @@ object AppViewModelProvider {
 
         initializer {
             TransactionViewModel(
+                inventoryApplication().applicationContext,
                 inventoryApplication().container.transactionRepository,
                 inventoryApplication().container.regularTransactionRepository,
             )

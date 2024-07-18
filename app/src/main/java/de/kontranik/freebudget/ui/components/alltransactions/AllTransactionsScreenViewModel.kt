@@ -15,10 +15,14 @@ class AllTransactionsScreenViewModel(
 
     fun isValid(transaction: Transaction, showOnlyPlanned: Boolean): Boolean {
         return (
-                (categoryName == null || transaction.category.lowercase() == categoryName.lowercase())
-                        &&
-                        (!showOnlyPlanned || transaction.amountFact == 0.0)
-                )
+                isCategoryValid(categoryName, transaction)
+                    &&
+                (!showOnlyPlanned || transaction.amountFact == 0.0)
+            )
+    }
+
+    private fun isCategoryValid(categoryName: String?, transaction: Transaction): Boolean {
+        return (categoryName == null || transaction.category.lowercase().trim() == categoryName.lowercase().trim())
     }
 
     fun getTitle(showOnlyPlanned: Boolean, context: Context): String {
@@ -37,3 +41,5 @@ class AllTransactionsScreenViewModel(
                 context.getString(R.string.title_all_transactions_category, categoryName)
     }
 }
+
+
