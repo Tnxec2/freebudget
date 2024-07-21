@@ -12,6 +12,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.DrawerState
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
@@ -186,13 +187,13 @@ fun ToolsScreen(
                 .verticalScroll(
                     rememberScrollState()
                 )) {
-            Button(
+            OutlinedButton(
                 onClick = { importRegular() },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(text = stringResource(id = R.string.import_regular).uppercase(),)
             }
-            Button(
+            OutlinedButton(
                 onClick = {
                     exportRegular()
                 },
@@ -201,26 +202,26 @@ fun ToolsScreen(
                 Text(text = stringResource(id = R.string.export_regular).uppercase(),)
             }
             Spacer(modifier = Modifier.height(paddingBig))
-            Button(
+            OutlinedButton(
                 onClick = { importNormal() },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(text = stringResource(id = R.string.import_normal).uppercase(),)
             }
-            Button(
+            OutlinedButton(
                 onClick = { exportNormal() },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(text = stringResource(id = R.string.export_normal).uppercase(),)
             }
             Spacer(modifier = Modifier.height(paddingBig))
-            Button(
+            OutlinedButton(
                 onClick = { backupDB() },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(text = stringResource(id = R.string.db_backup).uppercase(),)
             }
-            Button(
+            OutlinedButton(
                 onClick = { pickFileForRestoreDB() },
                 modifier = Modifier.fillMaxWidth()
             ) {

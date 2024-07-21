@@ -14,6 +14,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -133,7 +134,7 @@ fun AllTransactionScreen(
                 )
             }
             if (uiState.value.itemList.isEmpty()) {
-                Button(
+                OutlinedButton(
                     onClick = {
                         coroutineScope.launch {
                             planRegular()

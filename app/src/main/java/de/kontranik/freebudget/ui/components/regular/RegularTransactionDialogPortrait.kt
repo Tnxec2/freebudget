@@ -3,6 +3,8 @@ package de.kontranik.freebudget.ui.components.regular
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -41,8 +43,11 @@ fun RegularTransactionDialogPortrait(
         modifier = modifier.fillMaxSize(),
     ) { padding ->
 
-        Column(modifier = Modifier.padding(padding).padding(paddingSmall)) {
-            RegularTransactionDialogForm(itemDetails = itemDetails, onValueChange = { onValueChange(it)})
+        Column(modifier = Modifier
+            .padding(padding)
+            .padding(paddingSmall)
+            ) {
+            RegularTransactionDialogForm(itemDetails = itemDetails, onValueChange = { onValueChange(it)}, modifier = Modifier.weight(1f))
             RegularTransactionDialogButtonBox(
                 canDelete = itemDetails.id != null,
                 onDelete = { itemDetails.id?.let { id -> coroutineScope.launch { viewModel.delete(id); navigateBack() } } },

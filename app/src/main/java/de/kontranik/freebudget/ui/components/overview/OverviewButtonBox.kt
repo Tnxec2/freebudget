@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -29,7 +29,7 @@ fun OverviewButtonBox(
             .fillMaxWidth()
             .padding(horizontal = paddingSmall)) {
         Row(Modifier.fillMaxWidth()) {
-            Button(
+            OutlinedButton(
                 onClick = onClickAllTransactionsSeparated,
                 Modifier.fillMaxWidth()
             ) {
@@ -37,14 +37,14 @@ fun OverviewButtonBox(
             }
         }
         Row(Modifier.fillMaxWidth().padding(bottom = paddingSmall).height(intrinsicSize = IntrinsicSize.Max)) {
-            Button(
+            OutlinedButton(
                 onClick = onClickAllTransactions,
                 Modifier.weight(1f).fillMaxHeight()
             ) {
                 Text(text = stringResource(id = R.string.title_all_transactions).uppercase(), textAlign = TextAlign.Center)
             }
             Spacer(modifier = Modifier.width(paddingSmall))
-            Button(
+            OutlinedButton(
                 onClick = onClickRegularTransactions,
                 Modifier.weight(1f).fillMaxHeight()
             ) {

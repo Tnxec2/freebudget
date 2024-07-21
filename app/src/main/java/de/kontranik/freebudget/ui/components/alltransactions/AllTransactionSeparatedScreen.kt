@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Button
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.FabPosition
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -67,7 +68,7 @@ fun AllTransactionSeparatedScreen(
                 )
             }
             if (uiState.value.itemList.isEmpty()) {
-                Button(
+                OutlinedButton(
                     onClick = { planRegular() },
                     modifier = modifier
                         .fillMaxWidth()

@@ -18,6 +18,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -101,7 +102,7 @@ fun CategoryEditForm(
         ) {
 
             if (categoryDetails.id != null) {
-                Button(
+                OutlinedButton(
                     onClick = {
                         openConfirmDeleteDialog.value = true
                     }
@@ -110,7 +111,7 @@ fun CategoryEditForm(
                 }
             }
             Spacer(modifier = Modifier.weight(1f))
-            Button(
+            OutlinedButton(
                 enabled = categoryDetails.name.isNotEmpty(),
                 onClick = {
                     save()

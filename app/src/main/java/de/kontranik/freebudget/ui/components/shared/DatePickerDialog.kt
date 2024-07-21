@@ -10,6 +10,7 @@ import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
@@ -50,7 +51,7 @@ fun DatePickerButton(
         .padding(start = paddingSmall)
         .fillMaxWidth()) {
 
-    Button(
+        OutlinedButton(
         onClick = { open = true },
         modifier = Modifier
             .padding(start = paddingSmall)
@@ -63,7 +64,7 @@ fun DatePickerButton(
             DatePickerDialog(
                 onDismissRequest = { open = false },
                 confirmButton = {
-                    Button(
+                    OutlinedButton(
                         onClick = {
                             onChangeDate(state.selectedDateMillis!!)
                             open = false
@@ -73,7 +74,7 @@ fun DatePickerButton(
                     }
                 },
                 dismissButton = {
-                    Button(
+                    OutlinedButton(
                         onClick = { open = false }
                     ) {
                         Text(text = stringResource(id = android.R.string.cancel))

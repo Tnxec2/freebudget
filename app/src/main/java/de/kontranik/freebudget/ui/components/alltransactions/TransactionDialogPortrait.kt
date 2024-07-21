@@ -50,6 +50,7 @@ fun TransactionDialogPortrait(
             TransactionDialogForm(
                 itemDetails = itemDetails,
                 onValueChange = { onValueChange(it) },
+                modifier = Modifier.weight(1f)
                 )
             TransitionDialogButtonBox(
                 canDelete = itemDetails.id != null,

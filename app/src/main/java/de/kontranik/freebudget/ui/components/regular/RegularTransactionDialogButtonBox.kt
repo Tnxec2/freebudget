@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -32,7 +32,7 @@ fun RegularTransactionDialogButtonBox(
                 .padding(bottom = paddingSmall)
                 .height(intrinsicSize = IntrinsicSize.Max)
         ) {
-            Button(
+            OutlinedButton(
                 onClick = {
                     onSaveAndExit()
                 },
@@ -43,7 +43,7 @@ fun RegularTransactionDialogButtonBox(
             ) {
                 Text(text = stringResource(id = R.string.activity_transaction_saveAclose).uppercase())
             }
-            Button(
+            OutlinedButton(
                 onClick = {
                     onClose()
                 },
@@ -53,7 +53,7 @@ fun RegularTransactionDialogButtonBox(
             ) {
                 Text(text = stringResource(id = R.string.activity_transaction_close).uppercase())
             }
-            if (canDelete) Button(
+            if (canDelete) OutlinedButton(
                 onClick = { onDelete() },
                 Modifier.weight(1f)
                     .fillMaxHeight()
@@ -62,7 +62,7 @@ fun RegularTransactionDialogButtonBox(
             }
         }
         Row(Modifier.fillMaxWidth().height(intrinsicSize = IntrinsicSize.Max)) {
-            Button(
+            OutlinedButton(
                 onClick = { onSave() },
                 Modifier
                     .weight(1f)
@@ -71,7 +71,7 @@ fun RegularTransactionDialogButtonBox(
             ) {
                 Text(text = stringResource(id = R.string.activity_transaction_save).uppercase())
             }
-            Button(
+            OutlinedButton(
                 onClick = { onCopy() },
                 Modifier.weight(1f)
                     .fillMaxHeight()
