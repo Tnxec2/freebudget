@@ -59,8 +59,8 @@ abstract class FreeBudgetRoomDatabase : RoomDatabase() {
 }
 
 val MIGRATION_1_2 = object : Migration(1, 2) {
-    override fun migrate(database: SupportSQLiteDatabase) {
+    override fun migrate(db: SupportSQLiteDatabase) {
         // delete double entries from category table
-        database.execSQL("DELETE FROM ${DatabaseHelper.TABLE_CATEGORY} WHERE ${DatabaseHelper.COLUMN_ID} NOT IN (SELECT MIN(${DatabaseHelper.COLUMN_ID}) FROM ${DatabaseHelper.TABLE_CATEGORY} GROUP BY ${DatabaseHelper.COLUMN_CATEGORY_NAME})")
+        db.execSQL("DELETE FROM ${DatabaseHelper.TABLE_CATEGORY} WHERE ${DatabaseHelper.COLUMN_ID} NOT IN (SELECT MIN(${DatabaseHelper.COLUMN_ID}) FROM ${DatabaseHelper.TABLE_CATEGORY} GROUP BY ${DatabaseHelper.COLUMN_CATEGORY_NAME})")
     }
 }
