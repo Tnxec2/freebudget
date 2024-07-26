@@ -7,13 +7,13 @@ plugins {
 
 android {
     namespace = "de.kontranik.freebudget"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         vectorDrawables.useSupportLibrary = true
         applicationId = "com.kontranik.freebudget"
-        minSdk = 21
-        targetSdk = 34
+        minSdk = 31
+        targetSdk = 35
         versionCode = 10
         versionName = "1.3.1"
 
