@@ -20,8 +20,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import de.kontranik.freebudget.model.Category
+import de.kontranik.freebudget.ui.theme.AppTheme
 import de.kontranik.freebudget.ui.theme.paddingSmall
 import java.util.Locale
 
@@ -78,5 +81,18 @@ fun CategoryRow(
                     .padding(start = paddingSmall))
             Text(text = String.format(Locale.getDefault(), "%.2f", category.weight), modifier = Modifier.padding(end = paddingSmall))
         }
+    }
+}
+
+@PreviewLightDark
+@Composable
+private fun OverviewCategorySummaryPreview() {
+    AppTheme {
+        OverviewCategorySummary(categoryList = mutableMapOf(
+            "Test" to Category(0, "test", 10.0),
+            "Test1" to Category(0, "test1", 200.0),
+            "Test2" to Category(0, "test2", 100.0),
+            "Test3" to Category(0, "test3", 50.0),
+        ), onSelect = {})
     }
 }

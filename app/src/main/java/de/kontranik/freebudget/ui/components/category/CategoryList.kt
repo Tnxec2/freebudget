@@ -11,10 +11,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import de.kontranik.freebudget.model.Category
+import de.kontranik.freebudget.ui.theme.AppTheme
 import de.kontranik.freebudget.ui.theme.paddingSmall
 
 @Composable
@@ -39,4 +43,21 @@ fun CategoryList(
             }
         }
     }
+}
+
+@Preview
+@Composable
+private fun CategoryListPreview() {
+    val state = remember {
+        mutableStateOf(listOf(
+            Category(1, "test", 10.0),
+            Category(2, "test1", 200.0),
+            Category(3, "test2", 100.0),
+            Category(4, "test3", 50.0),
+        ))
+    }
+    AppTheme {
+        CategoryList(categoryListState = state, selectItem = {})
+    }
+
 }

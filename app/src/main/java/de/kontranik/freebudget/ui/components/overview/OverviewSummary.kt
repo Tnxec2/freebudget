@@ -13,10 +13,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import de.kontranik.freebudget.R
 import de.kontranik.freebudget.model.Transaction
 import de.kontranik.freebudget.ui.components.shared.Amount
+import de.kontranik.freebudget.ui.components.shared.PreviewPortraitLightDark
 import de.kontranik.freebudget.ui.components.shared.swipableModifier
+import de.kontranik.freebudget.ui.theme.AppTheme
 import de.kontranik.freebudget.ui.theme.paddingSmall
 import kotlin.math.abs
 
@@ -143,8 +146,8 @@ fun OverviewSummary(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier
-                .weight(column1Weight)
-                .wrapContentWidth()
+                    .weight(column1Weight)
+                    .wrapContentWidth()
             )
             Amount(amount = incomePlannedRest, modifier = Modifier.weight(column2Weight))
             Text(text = "", modifier = Modifier.weight(column3Weight))
@@ -172,4 +175,13 @@ fun OverviewSummary(
             ))
         }
     }
+}
+
+@PreviewPortraitLightDark
+@Composable
+private fun OverviewSummaryPreview() {
+    AppTheme {
+        OverviewSummary(transactions = listOf(), onPrev = { }, onNext = {})
+    }
+    
 }
