@@ -11,12 +11,12 @@ import de.kontranik.freebudget.config.Config
 
 class SettingsViewModel(
     context: Context
-) : ViewModel() {
+) : ViewModel(), ISettingsViewModel {
 
-    val settings = context.getSharedPreferences(Config.PREFS_FILE, Context.MODE_PRIVATE)
-    var sortOrderState = mutableIntStateOf(0)
-    var descOrderState = mutableStateOf(false)
-    var markLastEditedState = mutableStateOf(false)
+    private val settings: SharedPreferences = context.getSharedPreferences(Config.PREFS_FILE, Context.MODE_PRIVATE)
+    override var sortOrderState = mutableIntStateOf(0)
+    override var descOrderState = mutableStateOf(false)
+    override var markLastEditedState = mutableStateOf(false)
 
     init {
         sortOrderState.intValue =
@@ -28,23 +28,23 @@ class SettingsViewModel(
         markLastEditedState.value = settings.getBoolean(Config.PREF_MARK_LAST_EDITED, false)
     }
 
-    fun changeSortOrderState(value: Int) {
+    override fun changeSortOrderState(value: Int) {
         sortOrderState.intValue = value
         saveConfig()
     }
 
-    fun changeDescOrderState(value: Boolean) {
+    override fun changeDescOrderState(value: Boolean) {
         descOrderState.value = value
         saveConfig()
     }
 
-    fun changeMarkLastEditedState(value: Boolean) {
+    override fun changeMarkLastEditedState(value: Boolean) {
         markLastEditedState.value = value
         saveConfig()
     }
 
 
-    private fun saveConfig() {
+    override fun saveConfig() {
         val prefEditor: SharedPreferences.Editor = settings.edit()
         prefEditor.putString(Config.PREF_ORDER_BY, Config.getSortStringForId(sortOrderState.intValue))
         prefEditor.putBoolean(Config.PREF_SORT_DESC, descOrderState.value)

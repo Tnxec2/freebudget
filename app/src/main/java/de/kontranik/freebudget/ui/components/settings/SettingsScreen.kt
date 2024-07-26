@@ -13,6 +13,7 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DrawerState
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
@@ -22,10 +23,18 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import de.kontranik.freebudget.R
 import de.kontranik.freebudget.config.Config
 import de.kontranik.freebudget.ui.components.appbar.AppBar
+import de.kontranik.freebudget.ui.components.settings.elements.SettingsCard
+import de.kontranik.freebudget.ui.components.settings.elements.SettingsCheckbox
+import de.kontranik.freebudget.ui.components.settings.elements.SettingsRadioButton
+import de.kontranik.freebudget.ui.components.shared.PreviewLandscapeLight
+import de.kontranik.freebudget.ui.components.shared.PreviewPortraitLightDark
+import de.kontranik.freebudget.ui.theme.AppTheme
 import de.kontranik.freebudget.ui.theme.paddingMedium
 import de.kontranik.freebudget.ui.theme.paddingSmall
 import kotlinx.coroutines.launch
@@ -35,7 +44,7 @@ import kotlinx.coroutines.launch
 fun SettingsScreen(
     drawerState: DrawerState,
     modifier: Modifier = Modifier,
-    settingsViewModel: SettingsViewModel,
+    settingsViewModel: ISettingsViewModel,
     ) {
 
     val coroutineScope = rememberCoroutineScope()
@@ -46,97 +55,69 @@ fun SettingsScreen(
                 title = R.string.title_settings,
                 drawerState = drawerState) }
     ) { padding ->
-        Column(modifier
-            .padding(padding)
-            .fillMaxSize()
-            .padding(paddingMedium)
-            .verticalScroll(rememberScrollState())
+        Column(
+            modifier
+                .padding(padding)
+                .fillMaxSize()
+                .padding(paddingMedium)
+                .verticalScroll(rememberScrollState())
         ) {
-            Text(
-                text = stringResource(id = R.string.app_settings_sort),
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.fillMaxWidth()
-            )
-            Column {
-                Config.sortMap.values.forEach { sortType ->
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .selectable(
-                                selected = (sortType == settingsViewModel.sortOrderState.intValue),
-                                onClick = {
-                                    coroutineScope.launch {
-                                        settingsViewModel.changeSortOrderState(sortType)
-                                    }
-                                }
-                            )
-                            .padding(start = paddingSmall)
+            SettingsCard(
+                title = stringResource(id = R.string.app_settings_sort)
+            ) {
 
-                    ) {
-                        RadioButton(
+                Column {
+                    Config.sortMap.values.forEach { sortType ->
+                        SettingsRadioButton(
                             selected = (sortType == settingsViewModel.sortOrderState.intValue),
+                            label = stringResource(id = sortType),
                             onClick = {
                                 coroutineScope.launch {
                                     settingsViewModel.changeSortOrderState(sortType)
                                 }
-                            },
-                            modifier = Modifier
-                                .height(30.dp)
-                                .padding(horizontal = 0.dp, vertical = 0.dp)
-                        )
-                        Text(
-                            text = stringResource(id = sortType),
-                        )
+                        })
                     }
                 }
-            }
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .clickable(
-                        onClick = {
-                            coroutineScope.launch {
-                                settingsViewModel.changeDescOrderState(settingsViewModel.descOrderState.value.not())
-                            }
-                        }
-                    )
-                    .fillMaxWidth()) {
-                Checkbox(
-                    checked = settingsViewModel.descOrderState.value,
-                    onCheckedChange = {
+
+                SettingsCheckbox(value = settingsViewModel.descOrderState.value,
+                    label = stringResource(id = R.string.app_settings_sort_desc),
+                    onChange = {
                         coroutineScope.launch {
-                            settingsViewModel.changeDescOrderState(settingsViewModel.descOrderState.value.not())
+                            settingsViewModel.changeMarkLastEditedState(settingsViewModel.descOrderState.value.not())
                         }
-                    })
-                Text(text = stringResource(id = R.string.app_settings_sort_desc))
+                    }
+                )
+
             }
 
             Spacer(modifier = Modifier.height(paddingMedium))
 
-            Text(
-                text = stringResource(id = R.string.title_all_transactions),
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.fillMaxWidth()
-            )
-            Row(verticalAlignment = Alignment.CenterVertically,
+            SettingsCard(
+                title = stringResource(id = R.string.title_all_transactions),
                 modifier = Modifier
-                    .clickable(
-                        onClick = {
-                            coroutineScope.launch {
-                                settingsViewModel.changeMarkLastEditedState(settingsViewModel.markLastEditedState.value.not())
-                            }
-                        }
-                    )
-                    .fillMaxWidth()) {
-                Checkbox(
-                    checked = settingsViewModel.markLastEditedState.value,
-                    onCheckedChange = {
+            ) {
+                SettingsCheckbox(value = settingsViewModel.markLastEditedState.value,
+                    label = stringResource(id = R.string.mark_last_edited),
+                    onChange = {
                         coroutineScope.launch {
                             settingsViewModel.changeMarkLastEditedState(settingsViewModel.markLastEditedState.value.not())
                         }
-                    })
-                Text(text = stringResource(id = R.string.mark_last_edited))
+                    }
+                )
             }
         }
+    }
+}
+
+@PreviewPortraitLightDark
+@Composable
+private fun SettingsScreenPreview() {
+    val viewModel = SettingsViewModelPreview()
+
+    AppTheme {
+        SettingsScreen(
+            drawerState = DrawerState(DrawerValue.Closed),
+            settingsViewModel = viewModel
+        )
     }
 }
