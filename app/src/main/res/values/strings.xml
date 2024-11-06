@@ -113,6 +113,8 @@
     <string name="confirm">Confirm</string>
     <string name="dismiss">Dismiss</string>
     <string name="confirm_restor_db_text">Are you sure you want to overwrite the current database with the backup?</string>
+    <string name="summary">Summary</string>
+    <string name="only_selected_month">Only selected month</string>
 
 
 </resources>

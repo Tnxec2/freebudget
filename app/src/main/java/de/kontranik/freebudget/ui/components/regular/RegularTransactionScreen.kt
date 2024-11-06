@@ -21,14 +21,18 @@ fun RegularTransactionScreen(
 ) {
 
     var income = 0.0
+    var incomeOnlyMonth = 0.0
     var bills = 0.0
+    var billsOnlyMonth = 0.0
 
     for (transaction in uiState.value.itemList) {
         if (transaction.isDateInScope(DateUtils.now())) {
             if (transaction.amount > 0) {
                 income += transaction.amount
+                if (transaction.month == monthState.value) incomeOnlyMonth += transaction.amount
             } else {
                 bills += transaction.amount
+                if (transaction.month == monthState.value) billsOnlyMonth += transaction.amount
             }
         }
     }
@@ -44,6 +48,8 @@ fun RegularTransactionScreen(
             modifier = modifier,
             income = income,
             bills = bills,
+            incomeOnlyMonth = incomeOnlyMonth,
+            billsOnlyMonth = billsOnlyMonth
         )
     }, landscapeLayout = {
         RegularTransactionScreenLandscape(
@@ -56,6 +62,8 @@ fun RegularTransactionScreen(
             modifier = modifier,
             income = income,
             bills = bills,
+            incomeOnlyMonth = incomeOnlyMonth,
+            billsOnlyMonth = billsOnlyMonth
         )
     })
 

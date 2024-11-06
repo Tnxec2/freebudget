@@ -28,7 +28,8 @@ interface RegularTransactionDao {
     fun updateCategory(name: String, newName: String)
 
     @Query("SELECT * FROM ${DatabaseHelper.TABLE_REGULAR} " +
-            "where ${DatabaseHelper.COLUMN_MONTH} = :month" +
+            " where ${DatabaseHelper.COLUMN_MONTH} = :month " +
+            " or (:month > 0 and ${DatabaseHelper.COLUMN_MONTH} = 0) " +
             " order by ${DatabaseHelper.COLUMN_DAY}")
     fun getByMonth(month: Int): Flow<List<RegularTransaction>>
 

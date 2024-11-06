@@ -111,5 +111,7 @@
     <string name="confirm">Bestätigen</string>
     <string name="dismiss">Abbrechen</string>
     <string name="confirm_restor_db_text">Sind Sie sicher, dass Sie die aktuelle Datenbank mit der Sicherung überschreiben möchten?</string>
+    <string name="summary">Gesamt</string>
+    <string name="only_selected_month">Nur ausgewählte Monat</string>
 
 </resources>

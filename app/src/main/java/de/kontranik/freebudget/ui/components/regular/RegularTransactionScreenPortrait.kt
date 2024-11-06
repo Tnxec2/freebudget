@@ -8,9 +8,11 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import de.kontranik.freebudget.R
 import de.kontranik.freebudget.database.viewmodel.RegularTransactionsUiState
 import de.kontranik.freebudget.ui.components.appbar.AppBar
@@ -29,9 +31,9 @@ fun RegularTransactionScreenPortrait(
     nextMonth: ()-> Unit,
     income: Double,
     bills: Double,
+    incomeOnlyMonth: Double,
+    billsOnlyMonth: Double,
 ) {
-
-
 
     val listState = rememberLazyListState()
 
@@ -56,18 +58,28 @@ fun RegularTransactionScreenPortrait(
                 month = monthState.value,
                 onPrev = { prevMonth() },
                 onNext = { nextMonth() },
-                modifier = modifier
             )
             RegularTransactionSummary(
+                title = stringResource(id = R.string.summary),
                 income = income,
                 bills = bills,
                 onPrev = { prevMonth() },
                 onNext = { nextMonth() },
-                modifier = modifier)
+                )
+            if (monthState.value > 0) {
+                RegularTransactionSummary(
+                    title = stringResource(id = R.string.only_selected_month),
+                    income = incomeOnlyMonth,
+                    bills = billsOnlyMonth,
+                    onPrev = { prevMonth() },
+                    onNext = { nextMonth() },
+                )
+            }
             Box(modifier = Modifier.padding(bottom = paddingSmall))
             RegularTransactionList(
                 state = listState,
                 transactions = uiState.value.itemList,
+                monthState = monthState,
                 onClick = { _, item ->
                     navigateToEdit(null,  null, item.id)
                 },
