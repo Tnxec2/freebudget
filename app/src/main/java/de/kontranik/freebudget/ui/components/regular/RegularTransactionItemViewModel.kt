@@ -121,7 +121,7 @@ fun RegularTransaction.toItemDetails(): RegularTransactionItem = RegularTransact
     description = description,
     category = category,
     note = note ?: "",
-    amount = abs(amount).toString(),
+    amount =  if (amount == 0.0) "" else abs(amount).toString(),
     dateCreate = dateCreate,
     dateStart = dateStart,
     dateEnd = dateEnd,
